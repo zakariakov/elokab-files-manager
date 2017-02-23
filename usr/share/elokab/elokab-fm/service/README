@@ -1,0 +1,23 @@
+Servise Name
+============
+
+ex : ark_ZIP_TAR__Archive.desktop
+ark=programme and "_" and any name and .desktop
+
+MimeType
+========
+
+all/all = all files and folders
+
+or any mimetype
+ex: application/gzip
+
+ex:application/png
+
+ARG
+===
+
+%F= files
+%f= file
+%u or %U=file
+%n= filename

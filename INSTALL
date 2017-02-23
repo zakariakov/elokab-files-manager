@@ -1,0 +1,12 @@
+ 
+To compile  you need Qt4 or QT5 and x11 libraries with the gnu c++ compiler.
+
+
+To build Elokab, you only have to run the following command:
+
+   qmake-qt4 Or qmake
+   make
+
+Then, as root:
+
+    make install
