@@ -12,6 +12,7 @@
 #include <QTextCodec>
 #include <QTimer>
 #include <QDateTime>
+#include <QListWidgetItem>
 #define NO_VALID "Invalidcolor"
 PropertiesDlg::PropertiesDlg(const QStringList &urls, QWidget *parent) :
      QDialog(parent),
@@ -272,6 +273,8 @@ void PropertiesDlg::on_toolButtonAdd_clicked()
                if(txt.isEmpty())
                     txt=proc;
 
+
+
                QString dFilename=openWithDlg->desktopFileName();
 
                item->setText(txt);
@@ -279,6 +282,7 @@ void PropertiesDlg::on_toolButtonAdd_clicked()
                item->setData(Qt::ToolTipRole,dFilename);
                item->setIcon(openWithDlg->desktopIcon());
 
+               qDebug()<<"PropertiesDlg::on_toolButtonAdd_clicked()"<<txt<<proc<<dFilename;
           }
 
      }
@@ -305,6 +309,7 @@ void PropertiesDlg::on_buttonBox_accepted()
           {
               QListWidgetItem *item= ui->listWidgetOpenWith->item(i);
               QString desktopFile=item->data(Qt::ToolTipRole).toString();
+              qDebug()<<"PropertiesDlg::on_toolButtonDelete_clicked"<<desktopFile;
               if(desktopFile.isEmpty()){
                   QString proc=item->data(Qt::UserRole).toString();
                   desktopFile=EMimIcon::createDescktopFile(proc);
@@ -312,11 +317,12 @@ void PropertiesDlg::on_buttonBox_accepted()
 
 
                list.append(desktopFile);
+
           }
 
           if(list.count()>0)
                EMimIcon::setMimeAssociatedApplication(ui->lineEditMime->text(),list);
-          qDebug()<<list;
+          qDebug()<<"PropertiesDlg::on_toolButtonDelete_clicked"<<list;
      }
 
      if(mPermsChanged)

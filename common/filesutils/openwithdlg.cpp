@@ -117,7 +117,7 @@ void OpenWithDlg::chargeTreeWidgetFillBack()
         QTreeWidgetItem *item=new QTreeWidgetItem;
         item->setData(1,1,exec);
         mListCompliter.append(exec);
-        item->setData(2,2,QFileInfo(file).fileName());
+        item->setData(2,2,QFileInfo(line.section("|",0,0)).fileName());
         item->setText(0,name);
         item->setIcon(0,EIcon::fromTheme(icon));
 
