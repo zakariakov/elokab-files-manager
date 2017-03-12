@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
-<defaultcodec>UTF-8</defaultcodec>
+<TS version="2.1">
 <context>
     <name>ConfirmDlg</name>
     <message>
@@ -82,37 +81,37 @@ Modified: %3
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="120"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="121"/>
         <source>Read only...cannot create file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="127"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="128"/>
         <source>Copy Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="358"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="359"/>
         <source>Move Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="387"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="388"/>
         <source>move to %1 failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="587"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="588"/>
         <source>File doesnt exists, cant move to trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="611"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="612"/>
         <source>move to trash failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="613"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="614"/>
         <source>move to trash succeced</source>
         <translation type="unfinished"></translation>
     </message>
@@ -133,7 +132,7 @@ Modified: %3
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/main.cpp" line="86"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/main.cpp" line="87"/>
         <source>Elokab Files Actions Gui Version 0.1 .
  
 Usage: elokab-fa [OPTION]..File(s)..

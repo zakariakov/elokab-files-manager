@@ -41,6 +41,7 @@
 #include <QXmlStreamReader>
 #include <QDateTime>
 #include <QImageWriter>
+#include <QStandardPaths>
 #define THEM_BACK   "Elokab"
 //______________________________________________________________________________________
 QIcon EMimIcon::icon(const QFileInfo &info, bool previw)
@@ -184,6 +185,7 @@ QIcon EMimIcon::iconFolder(const QString &f)
 
           return EIcon::fromTheme("user-home","folder");
      }
+
      //اذا كان المجلد مخصصا
      if(QFile::exists(f+"/.directory")){
 
@@ -207,6 +209,34 @@ QIcon EMimIcon::iconFolder(const QString &f)
           }
 
      }
+
+#if QT_VERSION >= 0x050000
+    if(dir.path()==QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
+         return EIcon::fromTheme("folder-documents","folder");
+    if(dir.path()==QStandardPaths::writableLocation(QStandardPaths::MusicLocation))
+         return EIcon::fromTheme("folder-music","folder");
+    if(dir.path()==QStandardPaths::writableLocation(QStandardPaths::MoviesLocation))
+         return EIcon::fromTheme("folder-video","folder");
+    if(dir.path()==QStandardPaths::writableLocation(QStandardPaths::PicturesLocation))
+         return EIcon::fromTheme("folder-pictures","folder");
+    if(dir.path()==QStandardPaths::writableLocation(QStandardPaths::DownloadLocation))
+         return EIcon::fromTheme("folder-download","folder");
+    if(dir.path()==QStandardPaths::writableLocation(QStandardPaths::DesktopLocation))
+         return EIcon::fromTheme("user-desktop","folder");
+
+#else
+
+     if(dir.path()==QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation))
+          return EIcon::fromTheme("folder-documents","folder");
+     if(dir.path()==QDesktopServices::storageLocation(QDesktopServices::MusicLocation))
+          return EIcon::fromTheme("folder-music","folder");
+     if(dir.path()==QDesktopServices::storageLocation(QDesktopServices::MoviesLocation))
+          return EIcon::fromTheme("folder-video","folder");
+     if(dir.path()==QDesktopServices::storageLocation(QDesktopServices::PicturesLocation))
+          return EIcon::fromTheme("folder-pictures","folder");
+     if(dir.path()==QDesktopServices::storageLocation(QDesktopServices::DesktopLocation))
+          return EIcon::fromTheme("user-desktop","folder");
+ #endif
 
      //الايقونة الافتراضية للمجلد
      return EIcon::fromTheme("folder");

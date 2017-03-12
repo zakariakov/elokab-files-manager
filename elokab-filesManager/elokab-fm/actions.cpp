@@ -52,7 +52,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      //MENU FILE ACTIONS-----------------------------------------------------------------------
      actNewTab = new QAction(tr("New tab"), this);
      connect(actNewTab, SIGNAL(triggered()), this, SLOT(openNewTab()));
-      actNewTab->setObjectName("New_Tab_Act");
+     actNewTab->setObjectName("New_Tab_Act");
      actNewTab->setStatusTip(tr("Open new tab  ")+actNewTab->shortcut().toString());
 
      actCloseTab = new QAction(tr("Close tab"), this);
@@ -91,14 +91,14 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      connect(actCut, SIGNAL(triggered()), this, SIGNAL(startCutFile()));
      connect(this,SIGNAL(selectionAvialable(bool)),actCut,SLOT(setEnabled(bool)));
      actCut->setEnabled(false);
-    actCut->setObjectName("Cut_Files_Act");
+     actCut->setObjectName("Cut_Files_Act");
      actCut->setStatusTip(tr("Move selected files   ")+actCut->shortcut().toString());
 
      actCopy = new QAction(tr("Copy"), this);
      connect(actCopy, SIGNAL(triggered()), this, SIGNAL(startCopyFile()));
      connect(this,SIGNAL(selectionAvialable(bool)),actCopy,SLOT(setEnabled(bool)));
      actCopy->setEnabled(false);
-      actCopy->setObjectName("Copy_Files_Act");
+     actCopy->setObjectName("Copy_Files_Act");
      actCopy->setStatusTip(tr("Copy selected files   ")+actCopy->shortcut().toString());
 
      actPaste = new QAction(tr("Paste"), this);
@@ -115,7 +115,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
 
      actProperties = new QAction(tr("Properties"), this);
      connect(actProperties, SIGNAL(triggered()),this, SIGNAL(showProperties()));
-    actProperties->setObjectName("Properties_Act");
+     actProperties->setObjectName("Properties_Act");
 
      actFind = new QAction(tr("Find..."), this);
      connect(actFind, SIGNAL(triggered()),this, SIGNAL(sendGoSearch()));
@@ -146,7 +146,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      actThumbnails = new QAction(tr("Preview"),this);
      actThumbnails->setStatusTip(tr("Show Preview of images files"));
      actThumbnails->setCheckable(true);
-   //  actThumbnails->setIcon(IconXdg::fromTheme("image-x-generic","image"));
+     //  actThumbnails->setIcon(IconXdg::fromTheme("image-x-generic","image"));
 
      actThumbnails->setChecked(mSettings->showThumbnails());
      connect(actThumbnails, SIGNAL(toggled(bool)),mSettings,SLOT(setshowThumbnails(bool)));
@@ -173,7 +173,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      actHiddenFiles->setCheckable(true);
      connect(actHiddenFiles, SIGNAL(toggled(bool)),mSettings,SLOT(setShowHidden(bool)));
      actHiddenFiles->setChecked(mSettings->showHidden());
-      actHiddenFiles->setObjectName("Show_Hidden_Act");
+     actHiddenFiles->setObjectName("Show_Hidden_Act");
      // TODO:Add Icons resource
      // add image 'folder-saved-search'
      actSortByName = new QAction(tr("Sort By Name"), this);
@@ -212,14 +212,14 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      actPlacesFolder->setObjectName("Show_Folders_Navigation_Act");
 
      actInformation= new QAction(tr("Information"), this);
-      actInformation->setStatusTip(tr("File Information ")+actInformation->shortcut().toString());
+     actInformation->setStatusTip(tr("File Information ")+actInformation->shortcut().toString());
      actInformation->setCheckable(true);
      actInformation->setChecked(mSettings->showInformation());
      connect(actInformation, SIGNAL(toggled(bool)), mSettings, SLOT(setShowInformation(bool)));
      actInformation->setObjectName("File_Information_Act");
 
      actToolBar= new QAction(tr("Toolbar"), this);
-      actToolBar->setStatusTip(tr("Show Hide Toolbar ")+actToolBar->shortcut().toString());
+     actToolBar->setStatusTip(tr("Show Hide Toolbar ")+actToolBar->shortcut().toString());
      actToolBar->setCheckable(true);
      actToolBar->setChecked(mSettings->showToolbar());
      connect(actToolBar, SIGNAL(toggled(bool)), mSettings, SLOT(setShowToolbar(bool)));
@@ -231,7 +231,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      actMenuBar->setCheckable(true);
      actMenuBar->setChecked(mSettings->showMenuBar());
      connect(actMenuBar, SIGNAL(toggled(bool)), mSettings, SLOT(setShowMenuBar(bool)));
-      actMenuBar->setObjectName("Show_MenuBar_Act");
+     actMenuBar->setObjectName("Show_MenuBar_Act");
 
 
      //MENU GO ACTIONS--------------------------------------------------------------------------------------
@@ -249,7 +249,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
 
 
      actGoForward = new QAction(tr("Forward"),this);
-      actGoForward->setStatusTip(tr("Go forward one directory ")+actGoForward->shortcut().toString());
+     actGoForward->setStatusTip(tr("Go forward one directory ")+actGoForward->shortcut().toString());
      connect(this, SIGNAL(forwardAvailable(bool)),actGoForward,SLOT(setEnabled(bool)));
      connect(actGoForward, SIGNAL(triggered()),this,SIGNAL(sendGoForwardDir()));
      actGoForward->setObjectName("Go_Forward_Act");
@@ -271,14 +271,14 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      connect(actFilter, SIGNAL(triggered()),this,SIGNAL(showFilterBar()));
      actFilter->setObjectName("Show_Filter_Act");
 
-     actOpenTerminal = new QAction(tr("Terminal"),this);
+     actOpenTerminal = new QAction(tr("Open terminal"),this);
      actOpenTerminal->setStatusTip(tr("Terminal ToolBar"));
-//     connect(actOpenTerminal, SIGNAL(toggled(bool)), mSettings, SLOT(setShowTerminalTool(bool)));
-//     connect(mSettings, SIGNAL(showTerminalToolChanged(bool)), actOpenTerminal, SLOT(setChecked(bool)));
- connect(actOpenTerminal, SIGNAL(triggered()), this, SLOT(openInTerminal()));
+     //     connect(actOpenTerminal, SIGNAL(toggled(bool)), mSettings, SLOT(setShowTerminalTool(bool)));
+     //     connect(mSettings, SIGNAL(showTerminalToolChanged(bool)), actOpenTerminal, SLOT(setChecked(bool)));
+     connect(actOpenTerminal, SIGNAL(triggered()), this, SLOT(openInTerminal()));
      actOpenTerminal->setObjectName("Open_Terminal_Act");
-//     actOpenTerminal->setCheckable(true);
-//     actOpenTerminal->setChecked(mSettings->showTerminalTool());
+     //     actOpenTerminal->setCheckable(true);
+     //     actOpenTerminal->setChecked(mSettings->showTerminalTool());
 
 
      //OTHER ACTIONS--------
@@ -322,7 +322,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      mMenufile->addAction(actDelete);
      mMenufile->addSeparator();
      mMenufile->addAction(actProperties);
-      mMenufile->addAction(actOpenTerminal);
+     mMenufile->addAction(actOpenTerminal);
      //-----------mMenuViewfile--------
 
      mMenuViewfile=new QMenu(tr("&File"));
@@ -386,20 +386,20 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      mMenuPanels->addAction(actInformation);
      mMenuPanels->addAction(actToolBar);
      mMenuPanels->addAction(actMenuBar);
-      mMenuPanels->addAction(actOpenTerminal);
+     //   mMenuPanels->addAction(actOpenTerminal);
      mMenuSettings->addMenu(mMenuPanels);
      mMenuSettings->addSeparator();
      mMenuSettings->addAction(actConfigTool);
      mMenuSettings->addAction(actSingleClick);
      mMenuSettings->addAction(actExpandableFolder);
-        mMenuSettings->addSeparator();
-         mMenuSettings->addAction(actShooseTerminal);
-         mMenuSettings->addSeparator();
+     mMenuSettings->addSeparator();
+     mMenuSettings->addAction(actShooseTerminal);
+     mMenuSettings->addSeparator();
      //     mMenuSettings->addAction(actStandardIcon);
      //-----------mMenuTools--------
      mMenuTools=new QMenu(tr("&Tools"));
      mMenuTools->addAction(actFilter);
-   //  mMenuTools->addAction(actOpenTerminal);
+     //  mMenuTools->addAction(actOpenTerminal);
 
      //-----------mMenuGo--------
      mMenuGo=new QMenu(tr("&Go"));
@@ -427,9 +427,9 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
 
 
      QString serviceLocal=Edir::dataHomeAppDir()+"/service/";
-    QString serviceUser=  Edir::dataAppDir()+"/service/";
-    chargeAppService(serviceLocal);
-    chargeAppService (serviceUser);
+     QString serviceUser=  Edir::dataAppDir()+"/service/";
+     chargeAppService(serviceLocal);
+     chargeAppService (serviceUser);
 
 
 

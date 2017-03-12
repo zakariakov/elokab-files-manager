@@ -29,9 +29,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
         QUrl url(args.at(1));
 
-        pathUrl=url.toLocalFile();
+      //  pathUrl=url.toLocalFile();
 
-
+         pathUrl=url.toString();
+         if(pathUrl.startsWith("file://"))
+             pathUrl.remove("file://");
     }
 
     qWarning("***********************************************************************************************\n"
@@ -55,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent) :
         mElokabSettings=new ElokabSettings(this);
         mElokabSettings->sync();
         connect(mElokabSettings,SIGNAL(iconThemeChanged()) ,this,SLOT(refreshIcons()));
-        //   loadIconThems();
+           loadIconThems();
 
     }
     mSettings=new Settings ;
@@ -592,10 +594,18 @@ void MainWindow::loadIconThems()
      Messages::showMessage(Messages::BEGIN,"MainWindow::loadIconThems()");// MainWindow::loadIconThems()";
 #endif
 
-     QSettings setting("elokab","elokabsettings");
-     setting.beginGroup("Themes");
-     QString icnThem=  setting.value("iconsTheme",QIcon::themeName()).toString();
-     setting.endGroup();
+     QString icnThem=QIcon::themeName();
+
+     QByteArray sS=qgetenv("DESKTOP_SESSION");
+
+     if(sS=="elokab-session"){
+         QSettings setting("elokab","elokabsettings");
+         setting.beginGroup("Themes");
+         icnThem=  setting.value("iconsTheme",QIcon::themeName()).toString();
+         setting.endGroup();
+
+     }
+
 
      if(icnThem=="hicolor"||icnThem.isEmpty()){
 

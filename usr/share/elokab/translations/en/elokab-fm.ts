@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
-<defaultcodec>UTF-8</defaultcodec>
+<TS version="2.1">
 <context>
     <name>Actions</name>
     <message>
@@ -306,6 +305,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="274"/>
+        <source>Open terminal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="290"/>
         <source>Single-click to open files and folders</source>
         <translation type="unfinished"></translation>
@@ -331,17 +335,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="406"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="407"/>
         <source>&amp;Bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1123"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1126"/>
         <source>Shoose Terminaml</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1124"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1127"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -391,11 +395,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="274"/>
-        <source>Terminal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="275"/>
         <source>Terminal ToolBar</source>
         <translation type="unfinished"></translation>
@@ -407,7 +406,7 @@
     </message>
     <message>
         <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="312"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="327"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="328"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -417,37 +416,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="340"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="341"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="349"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="350"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="382"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="383"/>
         <source>&amp;Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="383"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="384"/>
         <source>Pa&amp;nels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="399"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="400"/>
         <source>&amp;Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="404"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="405"/>
         <source>&amp;Go</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="405"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="406"/>
         <source>&amp;Closed tab</source>
         <translation type="unfinished"></translation>
     </message>
@@ -457,19 +456,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="803"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="804"/>
         <source>New File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="804"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="830"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="805"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="831"/>
         <source>Enter name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="829"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="831"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="830"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="832"/>
         <source>New Folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -703,77 +702,67 @@ height: %5</source>
     </message>
     <message>
         <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.ui" line="80"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="521"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="522"/>
         <source>Places</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="72"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="73"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="83"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="84"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="85"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="86"/>
         <source>&amp;About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="87"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="88"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="119"/>
-        <source>Copy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="124"/>
-        <source>Past</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="357"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="358"/>
         <source>root</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="360"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="361"/>
         <source>Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="362"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="363"/>
         <source>ElokabFm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="463"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="464"/>
         <source> Folders </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="463"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="464"/>
         <source> Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="519"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="520"/>
         <source>Folders</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="643"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="644"/>
         <source>File Manager Based on Qt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="644"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="645"/>
         <source>Elokab File manager</source>
         <translation type="unfinished"></translation>
     </message>
@@ -781,22 +770,22 @@ height: %5</source>
 <context>
     <name>MyFileSystemModel</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="71"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="275"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="72"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="276"/>
         <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="73"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="277"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="74"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="278"/>
         <source>Date Modified</source>
         <translation type="unfinished"></translation>
     </message>
@@ -887,13 +876,13 @@ height: %5</source>
 <context>
     <name>PageWidget</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="366"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="362"/>
         <source>%1 Folders selected %2 Files selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="455"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="525"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="451"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="521"/>
         <source>this path is no valid </source>
         <translation type="unfinished"></translation>
     </message>
@@ -931,62 +920,62 @@ height: %5</source>
 <context>
     <name>PlaceTree</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="45"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="50"/>
         <source>Places</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="50"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="55"/>
         <source>Bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="55"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="60"/>
         <source>Devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="88"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="93"/>
         <source>Home</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="104"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="109"/>
         <source>Root</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="145"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="150"/>
         <source>Trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="403"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="463"/>
         <source>Add Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="413"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="473"/>
         <source>Remove Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="421"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="483"/>
         <source>Mount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="425"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="487"/>
         <source>UnMount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="431"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="493"/>
         <source>open in new tab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="436"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="498"/>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1079,7 +1068,7 @@ height: %5</source>
     </message>
     <message>
         <location filename="../../../../../common/filesutils/propertiesdlg.ui" line="435"/>
-        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="38"/>
+        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="39"/>
         <source>Permissions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1141,7 +1130,7 @@ height: %5</source>
     </message>
     <message>
         <location filename="../../../../../common/filesutils/propertiesdlg.ui" line="616"/>
-        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="72"/>
+        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="73"/>
         <source>Open With</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1166,23 +1155,51 @@ height: %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="65"/>
+        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="66"/>
         <source>%1 free Of %2 %p%</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="162"/>
+        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="163"/>
         <source> folders, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="163"/>
+        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="164"/>
         <source> files, </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="216"/>
+        <location filename="../../../../../common/filesutils/propertiesdlg.cpp" line="217"/>
         <source>Calculating...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/udiskdevice.cpp" line="18"/>
+        <source>%1 TB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/udiskdevice.cpp" line="19"/>
+        <source>%1 GB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/udiskdevice.cpp" line="20"/>
+        <source>%1 MB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/udiskdevice.cpp" line="21"/>
+        <source>%1 KB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/udiskdevice.cpp" line="22"/>
+        <source>%1 bytes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1320,17 +1337,17 @@ height: %5</source>
 <context>
     <name>Tab</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="371"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="634"/>
         <source>Trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="377"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="640"/>
         <source>root</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="381"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="644"/>
         <source>Home</source>
         <translation type="unfinished"></translation>
     </message>

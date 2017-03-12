@@ -53,11 +53,12 @@ int main(int argc, char *argv[])
 
          QString  pathUrl;
 
-         if(url.isLocalFile())
-             pathUrl=url.toLocalFile();
-         else
+//         if(url.isLocalFile())
+//             pathUrl=url.toLocalFile();
+//         else
              pathUrl= url.toString();
-
+             if(pathUrl.startsWith("file://"))
+                 pathUrl.remove("file://");
          QFileInfo fi(pathUrl);
          if(!fi.isDir()){
 
