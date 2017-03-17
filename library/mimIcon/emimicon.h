@@ -129,7 +129,7 @@ public:
 
 
     //!
-    static QHash<QString ,QString> desktopFile(const QString &filePath, const QString &lc=QString());
+    static QHash<QString, QVariant> desktopFile(const QString &filePath, const QString &lc=QString());
 
     //!
     static QString desktopFilePath(const QString &file);
@@ -172,6 +172,7 @@ public:
     //!
     static QString mimLang(const QString &mim,const QString &local);
     static QString createDescktopFile(const QString &exec);
+    static QString defaultTerminal();
 signals:
 
 

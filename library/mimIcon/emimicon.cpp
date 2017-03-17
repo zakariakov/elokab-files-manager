@@ -190,16 +190,16 @@ QIcon EMimIcon::iconFolder(const QString &f)
      if(QFile::exists(f+"/.directory")){
 
 
-          QHash<QString ,QString> hash=desktopFile(f+"/.directory");
+          QHash<QString ,QVariant> hash=desktopFile(f+"/.directory");
 
 
-          QString folderColor=hash.value("FolderColor");
+          QString folderColor=hash.value("FolderColor").toString();
           if(!folderColor.isEmpty()){
               QColor color(folderColor);
                if(color.isValid())
                   return iconColorized(EIcon::fromTheme("folder"),color);
           }
-           QString iconXdg=hash.value("Icon");
+           QString iconXdg=hash.value("Icon").toString();
           if(!iconXdg.isEmpty()){
               if(QFile::exists(iconXdg.replace("./",f+"/"))){
                   return QIcon(iconXdg);
@@ -360,9 +360,9 @@ QIcon EMimIcon::iconColorized(QIcon icon,QColor color)
 QIcon EMimIcon::iconDesktopFile(const QString &f)
 {
 
-    QHash<QString ,QString> hash=desktopFile(f);
+    QHash<QString ,QVariant> hash=desktopFile(f);
    // QString iconXdg=hash["Icon"];
-    return EIcon::fromTheme(hash.value("Icon"),"application-x-desktop");
+    return EIcon::fromTheme(hash.value("Icon").toString(),"application-x-desktop");
 }
 
 //______________________________________________________________________________________
@@ -514,9 +514,9 @@ QString EMimIcon::iconFillBack(QString mimeType)
 }
 
 //______________________________________________________________________________________
-QHash<QString ,QString> EMimIcon::desktopFile(const QString &filePath,const QString &lc)
+QHash<QString ,QVariant> EMimIcon::desktopFile(const QString &filePath,const QString &lc)
 {
-     QHash<QString ,QString> hash;
+     QHash<QString ,QVariant> hash;
     QFile files(filePath);
     QString name;
     QString nameLc;
@@ -540,6 +540,10 @@ QHash<QString ,QString> EMimIcon::desktopFile(const QString &filePath,const QStr
             }else if(line.startsWith("Icon=")){
 
                  hash ["Icon"]=line.section('=', 1).trimmed();
+
+            }else if(line.startsWith("Terminal=")){
+
+                 hash ["Terminal"]=line.section('=', 1).trimmed();
 
             }else if(line.startsWith("FolderColor=")){
 
@@ -608,7 +612,7 @@ bool EMimIcon::launchApp(const QString & fileName,const QString & mimetype)
 
     QProcess process;
 
-    QHash<QString ,QString> hash;
+    QHash<QString ,QVariant> hash;
 qDebug()<<fileName;
     QString scheme = QUrl(fileName).scheme();
     if (    scheme == "http"   || scheme == "https" || scheme == "shttp"  ||
@@ -625,7 +629,7 @@ qDebug()<<fileName;
                 QString f=list.at(0);
 
                 hash=  desktopFile( desktopFilePath(f));
-                QString proc=hash ["Exec"];
+                QString proc=hash ["Exec"].toString();
                 if(!proc.isEmpty()){
 
                     proc=replaceArgument(proc);
@@ -678,11 +682,15 @@ qDebug()<<fileName;
 
         hash= desktopFile(fileName);
 
-        QString proc=replaceArgument(hash ["Exec"]);
+        QString proc=replaceArgument(hash ["Exec"].toString());
         qDebug()<<mimetype<<hash ["Exec"]<<proc;
         if(proc.contains("su-to-root")){
-            proc=QString("ekbsudo %1 -i %2").arg(proc).arg(hash["Icon"]);
+            proc=QString("ekbsudo %1 -i %2").arg(proc).arg(hash["Icon"].toString());
         }
+         QString term=defaultTerminal();
+        if(hash.value("Terminal",false).toBool()==true)
+            process.startDetached(QString("%1 -e %2").arg(term).arg(proc.trimmed()));//Todo remplace xfce4-terminal
+        else
         process.startDetached(QString("%1").arg(proc));
 
         return true;
@@ -714,7 +722,7 @@ qDebug()<<fileName;
             QString f=list.at(0);
 
             hash= desktopFile(desktopFilePath(f));
-            QString proc=hash ["Exec"];
+            QString proc=hash ["Exec"].toString();
             if(!proc.isEmpty()){
                 //here replaceArgument
                 proc=replaceArgument(proc);
@@ -1132,3 +1140,63 @@ settings.endGroup();
 
     return QFileInfo(fileName).fileName();
 }
+
+QString EMimIcon::defaultTerminal()
+{
+    QByteArray sS=qgetenv("DESKTOP_SESSION");
+    qDebug()<<"envirenment"<<sS;
+    QString terminal;
+    if(sS=="elokab-session"){
+        QSettings setting("elokab","elokabsettings");
+        setting.beginGroup("Terminal");
+        terminal=  setting.value("Default","xterm").toString();
+        setting.endGroup();
+        return terminal;
+    }
+
+    //search in enverenment
+    if(sS=="xfce")
+        terminal="xfce4-terminal";
+    else if(sS=="Enlightenment"||sS.contains("enlightenment"))
+        terminal="terminology";
+    else if(sS==" plasma-wayland-session"||sS==" plasma-session"||sS.contains("plasma"))
+        terminal="konsole";
+    else if(sS=="gnome-session"||sS.contains("gnome"))
+        terminal="gnome-terminal";
+    else if(sS=="cinnamon-session")
+        terminal="gnome-terminal";
+    else if(sS.contains("deepin"))
+        terminal="gnome-terminal";
+    else if(sS==("lxsession"))
+        terminal="lxterminal";
+    //search list of terminal
+
+    if(terminal.isEmpty()){
+        //TODO remplace this list
+        QStringList list;
+        list<<"elokab-terminal"<<"gnome-terminal"<<"konsole"<<"deepin-terminal"<<"terminology"<<"xfce4-terminal"
+           << "lxterminal"<<"qterminal"<<"mate-terminal"<<"pantheon-terminal"<<"terminator"<<"theterminal"<<"aterm"
+           <<"eterm"<<"mlterm"<<" tilda";
+
+        QStringList dirs = QString(getenv("PATH")).split(":");
+
+        foreach(QString dir,dirs)
+        {
+            foreach (QString term, list) {
+                if(QFile::exists(dir+"/"+term)){
+                    terminal=term;
+                    qDebug()<<"terminal exist"<<dir+"/"+term;
+                    break;
+                }
+            }
+            if(!terminal.isEmpty())break;
+        }
+    }
+    if(terminal.isEmpty())
+        terminal="xtem";
+
+    qDebug()<<"defaultTerminal"<<terminal;
+    return terminal;
+
+}
+

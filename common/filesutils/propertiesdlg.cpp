@@ -113,7 +113,7 @@ void PropertiesDlg::setupOpenWith(const QString &mim)
      ui->lineEditMime->setText(mim);
 
      QStringList list=EMimIcon::associatedApplication(mim);
-     QHash<QString ,QString> hash;
+     QHash<QString ,QVariant> hash;
 
      foreach (QString f, list)
      {
@@ -122,10 +122,10 @@ void PropertiesDlg::setupOpenWith(const QString &mim)
                continue;
           hash=EMimIcon:: desktopFile(fp,this->locale().name().section("_",0,0));
           QListWidgetItem* item=new QListWidgetItem(ui->listWidgetOpenWith);
-          item->setText(hash["Name"]);
+          item->setText(hash["Name"].toString());
           item->setData(Qt::UserRole,hash["Exec"]);
           item->setData(Qt::ToolTipRole,f);
-          item->setIcon(EIcon::fromTheme(hash["Icon"]));
+          item->setIcon(EIcon::fromTheme(hash["Icon"].toString()));
      }
 
 }

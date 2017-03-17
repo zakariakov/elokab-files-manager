@@ -633,7 +633,7 @@ QMenu *Actions::menuOpenWith(const QString &url,const QString &type)
 
      //get the associated applications
      QStringList list=EMimIcon::associatedApplication(type);
-     QHash<QString ,QString> hash;
+     QHash<QString ,QVariant> hash;
      QList<QAction *>listActs;
      foreach (QString desktopFN, list)
      {
@@ -643,8 +643,8 @@ QMenu *Actions::menuOpenWith(const QString &url,const QString &type)
 
           hash=EMimIcon:: desktopFile(fpath,m_lC);
 
-          QAction *actProc=new QAction(EIcon::fromTheme(hash["Icon"]),hash["Name"],this);
-          actProc->setData(hash["Exec"]+" \""+url+"\"");
+          QAction *actProc=new QAction(EIcon::fromTheme(hash["Icon"].toString()),hash["Name"].toString(),this);
+          actProc->setData(hash["Exec"].toString()+" \""+url+"\"");
           connect(actProc,SIGNAL(triggered()),this,SLOT(actionOpenwith()));
           listActs.append(actProc);
           // menuOpenW->addAction(actProc);
