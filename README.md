@@ -1,7 +1,7 @@
 # elokab-files-manager
 A lightweight  file manager for Linux desktops built in Qt.
 
-#مدير ملفات العقاب
+# مدير ملفات العقاب
 
 ![Screenshots](https://github.com/zakariakov/screenshots/blob/master/elokab-fm.png)
 
