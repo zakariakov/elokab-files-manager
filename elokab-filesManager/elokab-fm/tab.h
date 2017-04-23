@@ -18,7 +18,7 @@ public:
     explicit MyFileSystemModel(IconProvider *iconProvider,QObject *parent = 0);
     QIcon iconSymLink(QIcon icon,QSize size);
 void loadIcons(QModelIndexList indexes);
-void loadIcon(QModelIndex item) const;
+void loadIcon(QFileInfo minfo) ;
 void refreshIcons(const QString &dir);
 void clearCache();
 void setPreview(bool preview){mPreview=preview;}

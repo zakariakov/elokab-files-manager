@@ -34,6 +34,9 @@ PageWidget::PageWidget(QFileSystemModel *model,
 #endif
 
 
+
+    setObjectName("PageWidget");
+
      mViewMode=mSettings->viewMode();
      //seup tools
      QVBoxLayout *vLayout = new QVBoxLayout(this);

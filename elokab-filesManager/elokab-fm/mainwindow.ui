@@ -41,7 +41,7 @@
      <x>0</x>
      <y>0</y>
      <width>972</width>
-     <height>28</height>
+     <height>27</height>
     </rect>
    </property>
    <property name="contextMenuPolicy">
@@ -69,6 +69,9 @@
   <widget class="QDockWidget" name="dockWidget">
    <property name="contextMenuPolicy">
     <enum>Qt::CustomContextMenu</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
    <property name="features">
     <set>QDockWidget::NoDockWidgetFeatures</set>
