@@ -131,7 +131,7 @@ void showProgress(bool arg);
           IconProvider *mIconProvider;
 
           //!
-          QFileSystemWatcher *m_fileWatcher;
+      //    QFileSystemWatcher *m_fileWatcher;
 
           //!
           ElokabSettings *mElokabSettings;

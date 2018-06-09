@@ -49,24 +49,47 @@ QIcon iconHiden(QIcon icon)
 QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 {
 
-    if (!index.isValid()) return QVariant();
+    if (!index.isValid())
+        return QVariant();
 
-    if (role == Qt::ToolTipRole)return fileName(index);
-    if (role == Qt::StatusTipRole) return filePath(index)+"/"+fileName(index);
+    if (role == Qt::ToolTipRole){
+        if (!index.isValid())
+            return QVariant();
+
+        return fileName(index);
+    }
+
+    if (role == Qt::StatusTipRole)
+    {
+        if (!index.isValid())
+            return QVariant();
+
+        return filePath(index)+"/"+fileName(index);
+    }
+
     if (role == Qt::DisplayRole){
+        if (!index.isValid())
+            return QVariant();
+
         if(index.column() == 2) {
 
             return mIconProvider->type(fileInfo(index));
         }
     }
+
     if (role == Qt::DecorationRole) {
+        if (!index.isValid())
+             return QVariant();
+
         if(index.column() == 0) {
+
 
             QIcon reticon;//= iconProvider()->icon(fileInfo(index));
 
             if(fileInfo(index).isDir()){
                 reticon= EMimIcon::iconFolder(fileInfo(index).filePath());
             }else if(mPreview){
+
                 if(hashIcons->contains(fileInfo(index).filePath())){
                     QPixmap pix;
                     pix.loadFromData(hashIcons->value(fileInfo(index).filePath()));
@@ -80,13 +103,8 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
                 reticon= iconCach->value(fileInfo(index).filePath());
             }
 
-            //        if(reticon.isNull())
-            //            QtConcurrent::run(this,&MyFileSystemModel::loadIcon,index);
-            //        if(reticon.isNull())
-            //            reticon=  mIconProvider->iconStandard(fileInfo(index));
-
-            //        if(reticon.isNull())
-            //            reticon= QIcon::fromTheme("unknown",QIcon(":/icons/unknown"));;
+            if (!index.isValid())
+                 return QVariant();
 
             if(reticon.isNull())
                 reticon= iconProvider()->icon(fileInfo(index));
@@ -105,6 +123,9 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
     }
 
+    if (!index.isValid())
+         return QVariant();
+
     return QFileSystemModel::data(index,role);
 }
 
@@ -116,32 +137,34 @@ void MyFileSystemModel::loadIcon(QFileInfo minfo)
 
     //images-----------------------------------------------
 
-if(!minfo.exists()){
-    qDebug()<<"MyFileSystemModel::loadIcon: no exist"<<minfo.fileName();
-    return;
-}
+    if(!QFile::exists(minfo.absoluteFilePath())){
+        qDebug()<<"MyFileSystemModel::loadIcon: no exist";
+        return;
+    }
 
-        if( !hashIcons->contains(minfo.filePath())){
-            hashIcons->insert(minfo.filePath(),EMimIcon::iconThambnail(minfo.absoluteFilePath()));
+    QString path=minfo.absoluteFilePath();
+
+    if( !hashIcons->contains(minfo.filePath())){
+        hashIcons->insert(minfo.filePath(),EMimIcon::iconThambnail(path));
 
 
-            QPixmap pix;
-            pix.loadFromData(EMimIcon::iconThambnail(minfo.absoluteFilePath()));
-            QIcon icon=QIcon(pix);
+        QPixmap pix;
+        pix.loadFromData(EMimIcon::iconThambnail(path));
+        QIcon icon=QIcon(pix);
 
-           // QIcon icon=EMimIcon::iconThambnail(minfo.absoluteFilePath());
-            if(!icon.isNull())
-            {
+        // QIcon icon=EMimIcon::iconThambnail(path);
+        if(!icon.isNull())
+        {
 
-                hashIcons->insert(minfo.filePath(),EMimIcon::iconThambnail(minfo.absoluteFilePath()));
-            }
-
+            hashIcons->insert(minfo.filePath(),EMimIcon::iconThambnail(path));
         }
 
+    }
 
 
-        if(minfo.exists())
-              emit iconUpdate(index(minfo.filePath()));
+
+    if(minfo.exists())
+        emit iconUpdate(index(minfo.filePath()));
 
 
 
@@ -195,8 +218,15 @@ void MyFileSystemModel::loadIcons(QModelIndexList indexes)
 
     foreach (QModelIndex item, indexes)
     {
+        if(!item.isValid())
+            continue;
+
+
         //---------------------------------------------------
         QFileInfo minfo=fileInfo(item);
+
+        if(!QFile::exists(minfo.filePath()))
+            continue;
 
         if(minfo.isSymLink()){
             if(QFile::exists(minfo.symLinkTarget()))
@@ -216,14 +246,16 @@ void MyFileSystemModel::loadIcons(QModelIndexList indexes)
             else
                 retIcon=EMimIcon::iconByMimType(mim,minfo.absoluteFilePath());
 
-            if(!retIcon.isNull())
+            if(!retIcon.isNull() && minfo.exists())
                 iconCach->insert(minfo.filePath(),retIcon);
 
         }
 
         //images-----------------------------------------------
-        if(mPreview && mim.startsWith("image")){
-            QtConcurrent::run(this,&MyFileSystemModel::loadIcon,minfo);
+        if(mPreview && mim.startsWith("image")&& QFile::exists(minfo.absoluteFilePath())){
+    //        QtConcurrent::run(this,&MyFileSystemModel::loadIcon,minfo);
+            loadIcon(minfo);
+
 /*
             if( !hashIcons->contains(fileInfo(item).filePath())){
 
@@ -236,8 +268,12 @@ void MyFileSystemModel::loadIcons(QModelIndexList indexes)
 
 
         //------------------------------------------------
-      if  (minfo.exists())
-        emit iconUpdate(index(minfo.filePath()));
+      if  (QFile::exists(minfo.filePath()) )
+          if(index(minfo.filePath()).isValid())
+             emit iconUpdate(index(minfo.filePath()));
+
+       qApp->processEvents();
+
     }
 
 
@@ -504,15 +540,17 @@ void Tab::loadIcons(const QString &currentPath)
     for(int x = 0; x < myModel->rowCount(myModel->index(currentPath)); ++x)
         indexes.append(myModel->index(x,0,myModel->index(currentPath)));
 
- //myModel->loadIcons(indexes);
- QtConcurrent::run(myModel,&MyFileSystemModel::loadIcons,indexes);
+ myModel->loadIcons(indexes);
+ //TODO FIX QtConcurrent
+ //QtConcurrent::run(myModel,&MyFileSystemModel::loadIcons,indexes);
 
 }
 void Tab::iconUpdate(QModelIndex index)
 {
-    if(index.isValid())
-        if(pageWidget)
+    if(index.isValid()){
+           if(pageWidget)
             pageWidget->iconUpdate(index);
+    }
 
 }
 

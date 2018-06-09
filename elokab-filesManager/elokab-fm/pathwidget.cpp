@@ -16,7 +16,7 @@ PathWidget::PathWidget(QWidget *parent) :
      ui->setupUi(this);
      QColor color=this->palette().dark().color();
      QColor color2=this->palette().light().color();
-     QColor color3=this->palette().midlight().color();
+     QColor color3=this->palette().shadow().color();
      QString style=QString("QWidget #widgetPath {"
                            "\n      border:1px inset rgba(%7, %8, %9, 150);"
                            " border-radius: 5px;"

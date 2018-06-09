@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QSettings>
+#include <QAction>
 #include <QDebug>
 DialogActions::DialogActions(QWidget *parent) :
      QDialog(parent),

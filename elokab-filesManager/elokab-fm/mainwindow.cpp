@@ -19,7 +19,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
      QMainWindow(parent),
-     ui(new Ui::MainWindow),m_fileWatcher(0)
+     ui(new Ui::MainWindow)/*,m_fileWatcher(0)*/
 {
    // qDebug()<<QStyleFactory::keys();
     QStringList args = QApplication::arguments();

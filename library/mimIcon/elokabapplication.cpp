@@ -47,6 +47,8 @@ ElokabApplication::ElokabApplication(int &argc, char **argv):
     if (translatorsys->load(translatorFileName, QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
             QApplication::installTranslator(translatorsys);
      qDebug()<<dirPath+"/translations/"+locale+"/"+applicationName();
+
+         qDebug()<<locale<<layoutDirection();
     return dirPath+"/translations/"+locale+"/"+applicationName();
 
 }
