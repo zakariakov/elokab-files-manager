@@ -17,7 +17,7 @@ PlaceTree::PlaceTree(QWidget *parent) :
 {
      setObjectName("PlaceTree");
      setHeaderHidden(true);
-     setIconSize(QSize(22,22));
+     setIconSize(QSize(16,16));
      setContextMenuPolicy(Qt::CustomContextMenu);
      setStyleSheet("QTreeView{"
                    "background-color: transparent;"
@@ -84,6 +84,11 @@ void PlaceTree::chargeFoldersPlaces()
 {
     QString homeDir=QDir::homePath();
     QString DesktopDir=Edir::desktopDir();
+    QString MusicDir=Edir::musicDir();
+    QString PicturesDir=Edir::picturesDir();
+    QString DocumentsDir=Edir::documentsDir();
+    QString MoviesDir=Edir::moviesDir();
+
 
 
      QDir dir;
@@ -96,7 +101,6 @@ void PlaceTree::chargeFoldersPlaces()
      mHashItems[homeDir]=itemHomeFolder;
      //مجلد سطح المكتب
      dir.setPath(DesktopDir);
-
           itemDesktopFolder=new QTreeWidgetItem(mPlacesItem);
           itemDesktopFolder->setText(0,dir.dirName());
           itemDesktopFolder->setData(0,Qt::ToolTipRole,DesktopDir);
@@ -111,7 +115,7 @@ void PlaceTree::chargeFoldersPlaces()
   //   QIcon icon=   EMimIcon::iconColorized(EIcon::fromTheme("folder"),QColor(255,0,0,150));
      itemRoot->setIcon(0,EMimIcon::iconFolder(QDir::rootPath()));
      mHashItems[QDir::rootPath()]=itemRoot;   //QDir::rootPath()
-     /*
+
     //مجلد الصوت
     dir.setPath(MusicDir);
     if(dir.exists()){
@@ -119,6 +123,7 @@ void PlaceTree::chargeFoldersPlaces()
         itemMusicFolder->setText(0,dir.dirName());
         itemMusicFolder->setData(0,Qt::ToolTipRole,MusicDir);
         itemMusicFolder->setIcon(0,QIcon::fromTheme("folder-music",QIcon::fromTheme("folder-sound")));
+         mHashItems[MusicDir]=itemMusicFolder;
     }
     //مجلد الصور
     dir.setPath(PicturesDir);
@@ -127,6 +132,7 @@ void PlaceTree::chargeFoldersPlaces()
         itemPicturesFolder->setText(0,dir.dirName());
         itemPicturesFolder->setData(0,Qt::ToolTipRole,PicturesDir);
         itemPicturesFolder->setIcon(0,QIcon::fromTheme("folder-images",QIcon::fromTheme("folder-image")));
+    mHashItems[PicturesDir]=itemPicturesFolder;
     }
     //مجلد المستندات
     dir.setPath(DocumentsDir);
@@ -135,6 +141,8 @@ void PlaceTree::chargeFoldersPlaces()
         itemDocumentsFolder->setText(0,dir.dirName());
         itemDocumentsFolder->setData(0,Qt::ToolTipRole,DocumentsDir);
         itemDocumentsFolder->setIcon(0,QIcon::fromTheme("folder-documents",QIcon::fromTheme("folder_documents")));
+        mHashItems[DocumentsDir]=itemDocumentsFolder;
+
     }
     //مجلد الفيديو
     dir.setPath(MoviesDir);
@@ -143,9 +151,9 @@ void PlaceTree::chargeFoldersPlaces()
         itemMoviesFolder->setText(0,dir.dirName());
         itemMoviesFolder->setData(0,Qt::ToolTipRole,MoviesDir);
         itemMoviesFolder->setIcon(0,QIcon::fromTheme("folder-video",QIcon::fromTheme("folder-videos")));
-
+mHashItems[MoviesDir]=itemMoviesFolder;
     }
-*/
+
      itemTrashFolder=new QTreeWidgetItem(mPlacesItem);
      itemTrashFolder->setText(0,tr("Trash"));
      itemTrashFolder->setData(0,Qt::ToolTipRole,":/trash");
@@ -551,7 +559,7 @@ void PlaceTree::setCurentUrl(const QString &url)
      do{
           QString path=dir.absolutePath();
           if(mHashItems.contains(path)){
-               setCurrentItem(mHashItems[path]);
+             setCurrentItem(mHashItems[path]);
                break;
           }
      }while (dir.cdUp());

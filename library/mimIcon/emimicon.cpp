@@ -1079,8 +1079,6 @@ QString EMimIcon::mimLang(const QString &mim,const QString &local)
                }
 
 
-
-
           }
 
      }

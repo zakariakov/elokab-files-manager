@@ -18,11 +18,13 @@ public:
     explicit MyFileSystemModel(IconProvider *iconProvider,QObject *parent = 0);
     QIcon iconSymLink(QIcon icon,QSize size);
 void loadIcons(QModelIndexList indexes);
-void loadIcon(QFileInfo minfo) ;
+void loadImage(QString path) const;
+void loadIcon(QFileInfo fi, QString mim) const;
 void refreshIcons(const QString &dir);
 void clearCache();
 void setPreview(bool preview){mPreview=preview;}
 signals:
+void imageLoaded(QFileInfo minfo);
     void dragDropFiles(bool copy,QString path, QStringList list);
  void iconUpdate(const QModelIndex index)const;
 
@@ -41,8 +43,8 @@ protected:
 private:
     IconProvider *mIconProvider;
    QHash<QString,QIcon>*iconCach;
-   QHash<QString,QIcon>*imageCach;
-   QHash<QString,QByteArray> *hashIcons;
+      QHash<QString,QIcon>*iconDesktopCach;
+   QHash<QString,QByteArray> *hashImages;
    bool mPreview;
 };
 

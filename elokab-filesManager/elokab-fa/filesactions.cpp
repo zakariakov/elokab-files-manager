@@ -177,7 +177,7 @@ void FilesActions::pastFiles(const QStringList &files,const QString &distDir)
 
 
 
-              if(info.size()<50000000){
+              if(info.size()<10000000){
                   progress->setCopyVisible(false);
                   QFile::copy(i.key(),destination);
 

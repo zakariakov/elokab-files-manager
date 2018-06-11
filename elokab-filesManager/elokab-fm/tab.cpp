@@ -23,8 +23,9 @@ MyFileSystemModel::MyFileSystemModel(IconProvider *iconProvider,QObject *parent)
     mIconProvider(iconProvider), QFileSystemModel(parent)
 {
     iconCach=new QHash<QString,QIcon>;
+      iconDesktopCach=new QHash<QString,QIcon>;
     //imageCach=new QHash<QString,QIcon>;
-    hashIcons=new QHash<QString,QByteArray>;
+    hashImages=new QHash<QString,QByteArray>;
 
     setRootPath("/");
     setNameFilterDisables(false);
@@ -42,69 +43,99 @@ QIcon iconHiden(QIcon icon)
     QPainter painter(&pix);
     painter.setOpacity(0.6);
     painter.drawPixmap(pix.rect(),pixIcon,pixIcon.rect());
-
     return QIcon((pix));
 }
+
 
 QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 {
 
-    if (!index.isValid())
-        return QVariant();
+
+
+    if (!index.isValid())  return QVariant();
+
+
+   //  QFileInfo fi=fileInfo(index);
+
+
 
     if (role == Qt::ToolTipRole){
-        if (!index.isValid())
-            return QVariant();
+        if (!index.isValid())  return QVariant();
 
         return fileName(index);
     }
 
     if (role == Qt::StatusTipRole)
     {
-        if (!index.isValid())
-            return QVariant();
+        if (!index.isValid())  return QVariant();
 
-        return filePath(index)+"/"+fileName(index);
+        return filePath(index);
     }
 
     if (role == Qt::DisplayRole){
-        if (!index.isValid())
-            return QVariant();
+        if (!index.isValid()) return QVariant();
 
         if(index.column() == 2) {
-
             return mIconProvider->type(fileInfo(index));
         }
     }
 
     if (role == Qt::DecorationRole) {
-        if (!index.isValid())
-             return QVariant();
+
+        if (!index.isValid()) return QVariant();
 
         if(index.column() == 0) {
 
 
-            QIcon reticon;//= iconProvider()->icon(fileInfo(index));
 
+            QString mim= EMimIcon::mimeTyppe(fileInfo(index));
+            QIcon reticon;//= iconProvider()->icon(fi);
+
+            //DIR---------------------------
             if(fileInfo(index).isDir()){
-                reticon= EMimIcon::iconFolder(fileInfo(index).filePath());
-            }else if(mPreview){
 
-                if(hashIcons->contains(fileInfo(index).filePath())){
+                reticon= EMimIcon::iconFolder(filePath(index));
+
+            }
+            //IMAGE-------------------------
+            else if(mPreview && mim.startsWith("image")  ){
+                if(hashImages->contains(filePath(index))){
                     QPixmap pix;
-                    pix.loadFromData(hashIcons->value(fileInfo(index).filePath()));
-                    reticon=QIcon(pix);
-                    if(reticon.isNull())
-                        reticon= iconCach->value(fileInfo(index).filePath());
-                    // reticon=imageCach->value(fileInfo(index).filePath());
-                } else if(iconCach->contains(fileInfo(index).filePath()))
-                    reticon= iconCach->value(fileInfo(index).filePath());
-            }else{
-                reticon= iconCach->value(fileInfo(index).filePath());
+                    pix.loadFromData(hashImages->value(filePath(index)));
+                    if(!pix.isNull())
+                        reticon=QIcon(pix);
+
+                }else{
+                    QtConcurrent::run(this,&MyFileSystemModel::loadImage,filePath(index));
+//                    reticon=EMimIcon::iconByMimType(mim,filePath(index));
+//                    if(!reticon.isNull())
+//                        iconCach->insert(mim,reticon);
+                }
+
+            }
+            //DX-DESKTOP---------------------
+            else if(mim.contains("x-desktop")){
+                if(iconDesktopCach->contains(filePath(index)))
+                    reticon=iconDesktopCach->value(filePath(index));
+                else
+                    QtConcurrent::run(this,&MyFileSystemModel::loadIcon,fileInfo(index),mim);
+
+            }
+            //MIM---------------------------
+            else{
+                if(iconCach->contains(mim)){
+                    reticon= iconCach->value(mim);
+                }else{
+                    QtConcurrent::run(this,&MyFileSystemModel::loadIcon,fileInfo(index),mim);
+                }
+
             }
 
-            if (!index.isValid())
-                 return QVariant();
+            if(reticon.isNull())
+                reticon= iconCach->value(mim);
+
+            if(reticon.isNull())
+                reticon= mIconProvider->iconStandard(fileInfo(index));
 
             if(reticon.isNull())
                 reticon= iconProvider()->icon(fileInfo(index));
@@ -123,61 +154,108 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
     }
 
-    if (!index.isValid())
-         return QVariant();
+    if (!index.isValid()) return QVariant();
+
 
     return QFileSystemModel::data(index,role);
 }
 
 
-void MyFileSystemModel::loadIcon(QFileInfo minfo)
+void MyFileSystemModel::loadImage(QString path)const
 {
-
-
 
     //images-----------------------------------------------
 
-    if(!QFile::exists(minfo.absoluteFilePath())){
-        qDebug()<<"MyFileSystemModel::loadIcon: no exist";
+    if(!QFile::exists(path)){
+        qDebug()<<"MyFileSystemModel::loadImage: no exist";
         return;
     }
 
-    QString path=minfo.absoluteFilePath();
+    //QString path=minfo.filePath();
 
-    if( !hashIcons->contains(minfo.filePath())){
-        hashIcons->insert(minfo.filePath(),EMimIcon::iconThambnail(path));
-
+    if( !hashImages->contains(path)){
 
         QPixmap pix;
         pix.loadFromData(EMimIcon::iconThambnail(path));
         QIcon icon=QIcon(pix);
 
         // QIcon icon=EMimIcon::iconThambnail(path);
-        if(!icon.isNull())
+        if(!icon.isNull() && QFile::exists(path))
         {
 
-            hashIcons->insert(minfo.filePath(),EMimIcon::iconThambnail(path));
+            hashImages->insert(path,EMimIcon::iconThambnail(path));
+
+             if(index(path).isValid())
+                emit iconUpdate(index(path));
+
         }
+
+    }
+
+}
+
+void MyFileSystemModel::loadIcon(QFileInfo fi,QString mim)const
+{
+    //---------------------------------------------------
+
+    QString fpath=fi.filePath();
+
+    if(!QFile::exists(fpath))
+        return;
+
+    if(fi.isSymLink()){
+        if(QFile::exists(fi.symLinkTarget()))
+            fi.setFile(fi.symLinkTarget());
+    }
+
+
+    if(mim.contains("x-desktop")){
+        if(!iconDesktopCach->contains(fpath))
+        {
+            QIcon  retIcon=EMimIcon::iconDesktopFile(fpath);
+            if(!retIcon.isNull() ){
+                iconDesktopCach->insert(fpath,retIcon);
+
+                if(index(fpath).isValid()&& QFile::exists(fpath)){
+                    emit iconUpdate(index(fpath));
+                    return;
+                }
+            }
+        }
+    }
+
+    //icons---------------------------------------------
+    if( !iconCach->contains(mim)){
+
+
+
+       QIcon retIcon=EMimIcon::iconByMimType(mim,fpath);
+
+        if(!retIcon.isNull() ){
+            iconCach->insert(mim,retIcon);
+
+
+            if(index(fpath).isValid()&& QFile::exists(fpath))
+                emit iconUpdate(index(fpath));
+
+        }
+
+
 
     }
 
 
 
-    if(minfo.exists())
-        emit iconUpdate(index(minfo.filePath()));
-
-
 
 }
-
 void MyFileSystemModel::refreshIcons(const QString &dir)
 {
     //    iconCach->clear();
     //    return;
 
-    QHash<QString, QByteArray>::const_iterator i = hashIcons->constBegin();
+    QHash<QString, QByteArray>::const_iterator i = hashImages->constBegin();
     QStringList list;
-    while (i != hashIcons->constEnd()) {
+    while (i != hashImages->constEnd()) {
         //   cout << i.key() << ": " << i.value() << endl;
 
         QFileInfo fi(i.key());
@@ -187,7 +265,7 @@ void MyFileSystemModel::refreshIcons(const QString &dir)
         ++i;
     }
     foreach (QString s, list) {
-        hashIcons->remove(s);
+        hashImages->remove(s);
     }
 
     QHash<QString, QIcon>::const_iterator r = iconCach->constBegin();
@@ -209,74 +287,23 @@ void MyFileSystemModel::refreshIcons(const QString &dir)
 
 void MyFileSystemModel::clearCache()
 {
-    hashIcons->clear();
+    hashImages->clear();
     iconCach->clear();
 }
 
 void MyFileSystemModel::loadIcons(QModelIndexList indexes)
 {
+qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
 
     foreach (QModelIndex item, indexes)
     {
         if(!item.isValid())
             continue;
-
-
-        //---------------------------------------------------
-        QFileInfo minfo=fileInfo(item);
-
-        if(!QFile::exists(minfo.filePath()))
-            continue;
-
-        if(minfo.isSymLink()){
-            if(QFile::exists(minfo.symLinkTarget()))
-                minfo.setFile(minfo.symLinkTarget());
-        }
-
-        QString mim= EMimIcon::mimeTyppe(minfo);
-
-        //icons---------------------------------------------
-        if( !iconCach->contains(minfo.filePath())){
-
-            QString suf=minfo.suffix().toLower();
-            QIcon retIcon;
-
-            if(suf=="desktop")
-                retIcon=EMimIcon::iconDesktopFile(minfo.absoluteFilePath());
-            else
-                retIcon=EMimIcon::iconByMimType(mim,minfo.absoluteFilePath());
-
-            if(!retIcon.isNull() && minfo.exists())
-                iconCach->insert(minfo.filePath(),retIcon);
-
-        }
-
-        //images-----------------------------------------------
-        if(mPreview && mim.startsWith("image")&& QFile::exists(minfo.absoluteFilePath())){
-    //        QtConcurrent::run(this,&MyFileSystemModel::loadIcon,minfo);
-            loadIcon(minfo);
-
-/*
-            if( !hashIcons->contains(fileInfo(item).filePath())){
-
-                hashIcons->insert(fileInfo(item).filePath(),
-                                  EMimIcon::iconThambnail(minfo.absoluteFilePath()));
-
-            }
-*/
-        }
-
-
-        //------------------------------------------------
-      if  (QFile::exists(minfo.filePath()) )
-          if(index(minfo.filePath()).isValid())
-             emit iconUpdate(index(minfo.filePath()));
-
-       qApp->processEvents();
+   //just wait for loading filles
+   qApp->processEvents();
 
     }
-
-
+  qApp->restoreOverrideCursor();
 }
 
 QVariant MyFileSystemModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -534,15 +561,15 @@ void Tab::directoryChanged(const QString &dir)
 
 void Tab::loadIcons(const QString &currentPath)
 {
-    // qDebug()<<"dir loaded"<<currentPath;
+     qDebug()<<"dir>>>>>>>>>>>>>>>>>>>>> loaded"<<currentPath;
     QModelIndexList indexes;
 
     for(int x = 0; x < myModel->rowCount(myModel->index(currentPath)); ++x)
         indexes.append(myModel->index(x,0,myModel->index(currentPath)));
 
- myModel->loadIcons(indexes);
+myModel->loadIcons(indexes);
  //TODO FIX QtConcurrent
- //QtConcurrent::run(myModel,&MyFileSystemModel::loadIcons,indexes);
+ // QtConcurrent::run(myModel,&MyFileSystemModel::loadIcons,indexes);
 
 }
 void Tab::iconUpdate(QModelIndex index)
