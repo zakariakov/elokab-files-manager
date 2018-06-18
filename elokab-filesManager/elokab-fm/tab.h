@@ -11,25 +11,73 @@
 #include <QUrl>
 #include <QDebug>
 #include <QApplication>
+#include <QFileSystemWatcher>
+#include <QFutureWatcher>
+
+
+class Thumbnail : public QObject
+{
+    Q_OBJECT
+public:
+    Thumbnail(QFileInfo fi,bool preview,QModelIndex index, QObject *parent = 0);
+ ~Thumbnail();
+    QIcon icon(){return m_icon;}
+
+//    QRectF boundingRect() const{}
+//    void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*){}
+
+signals:
+    void imageReady(QIcon icon);
+    void imageFiniched(QModelIndex index);
+protected slots:
+
+    void on_imageReady(QIcon icon);
+    void on_render_finished();
+public slots:
+
+    void startRender();
+    void cancelRender();
+
+private:
+     QFutureWatcher< void >* m_render;
+
+
+QModelIndex m_index;
+QFileInfo m_info;
+QIcon m_icon;
+bool mPreview;
+
+        void render();
+
+};
+
+
+
 class MyFileSystemModel :public QFileSystemModel
 {
  Q_OBJECT
 public:
     explicit MyFileSystemModel(IconProvider *iconProvider,QObject *parent = 0);
-    QIcon iconSymLink(QIcon icon,QSize size);
-void loadIcons(QModelIndexList indexes);
-void loadImage(QString path) const;
-void loadIcon(QFileInfo fi, QString mim) const;
-void refreshIcons(const QString &dir);
-void clearCache();
+  //  QIcon iconSymLink(QIcon icon,QSize size);
+//void loadIcons(QModelIndexList indexes);
+//void loadImage(QString path) const;
+//void loadIcon(QFileInfo fi, QString mim) const;
+//void geticon(QFileInfo fi)const;
+ //void clearCache();
+ QIcon imageThumbnail(QModelIndex index)const;
+
+//void refreshIcons(const QString &dir);
+
 void setPreview(bool preview){mPreview=preview;}
+
+
 signals:
-void imageLoaded(QFileInfo minfo);
-    void dragDropFiles(bool copy,QString path, QStringList list);
+ //void imageLoaded(QFileInfo minfo);
+ void dragDropFiles(bool copy,QString path, QStringList list);
  void iconUpdate(const QModelIndex index)const;
 
 protected:
-    QVariant data(const QModelIndex &index, int role) const ;
+   // QVariant data(const QModelIndex &index, int role) const ;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
@@ -40,29 +88,26 @@ protected:
                       int column,
                       const QModelIndex & parent );
 
+public slots:
+
+//    void updateIcons(const QString &file){
+//        if(index(file).isValid())
+//          iconUpdate(index(file));
+//    }
 private:
+
     IconProvider *mIconProvider;
-   QHash<QString,QIcon>*iconCach;
-      QHash<QString,QIcon>*iconDesktopCach;
-   QHash<QString,QByteArray> *hashImages;
    bool mPreview;
-};
+//  QHash<QString,QModelIndex> *hashIndex;
+   QHash< QModelIndex,Thumbnail* > *mThumbnails;
+     QHash<QString,QIcon>*iconCach;
+   //   QHash<QString,QIcon>*iconmimCach;
+   //      QHash<QString,QIcon>*iconDesktopCach;
+   //   QHash<QString,QByteArray> *hashImages;
 
-class DefaultIconProvider : public QFileIconProvider
-{
-     public:
-
-         virtual  QIcon icon(const QFileInfo &info) const
-          {
-               if(info.isDir())
-                    return QIcon::fromTheme("folder",QIcon::fromTheme("file"));
-               else if(info.isExecutable())
-                    return QIcon::fromTheme("application-x-executable",QIcon::fromTheme("file"));
-               else
-                    return QIcon::fromTheme("unknown",QIcon::fromTheme("file"));
-          }
 
 };
+
 
 /**
  * @brief The Tab class السنة البرنامج
@@ -92,7 +137,7 @@ class Tab : public QTabWidget
 
      public slots:
 
-          void refreshIcons();
+          void updateIcons();
           void closeAll();
 
           //!
@@ -110,16 +155,15 @@ class Tab : public QTabWidget
 
           //!
           void directoryChanged(const QString &dir);
+          void dataFileChanged(const QString &dir);
 void loadIcons(const QString &currentPath);
 void iconUpdate(QModelIndex index);
           //!
           void setLargeDirectory(const QString &dir);
 
           //!
-          void setShowThambnails(bool arg);
+          void setShowThumbnails(bool arg);
 
-          //!
-          void setStandardIcons(bool arg);
 
           //!
           void closeCurentTab();
@@ -206,9 +250,9 @@ void iconUpdate(QModelIndex index);
           PageWidget *pageWidget;
 
           /*!< cmment */
-          MyFileSystemModel *myModel;
+         MyFileSystemModel *myModel;
+        //    QFileSystemModel *myModel;
           //!
-          DefaultIconProvider *mDefaultprovider;
 
           //!
           QMimeData *mimData;
@@ -217,6 +261,8 @@ void iconUpdate(QModelIndex index);
           QStringList listDirectory;
 
           bool mSowTumbnails;
+
+          QFileSystemWatcher *mFileSystemWatcher;
 };
 
 #endif // TAB_H

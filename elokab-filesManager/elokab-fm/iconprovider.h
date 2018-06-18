@@ -38,16 +38,19 @@ public:
      */
     virtual  QString type(const QFileInfo &info)const ;
 
-      QIcon iconF(const QFileInfo &info) const ;
+   //   QIcon iconF(const QFileInfo &info) const ;
 
 public slots:
     void setShowThambnails(bool arg){mPreview=arg;}
     void setStandardIcon(bool arg){mStandardIcon=arg;}
     void setlocale(const QString &lc);
-    void largeDirectory(bool larg){mLargeIcon=larg;}
+
     void clearCache();
     void saveCacheIcons();
     QIcon iconStandard(const QFileInfo &info) const;
+
+  //  void updateIcons();
+  //  void updatePath(const QString &path);
 
 private  slots:
     /**
@@ -63,7 +66,7 @@ private:
     QHash<QString,QString> *mimeLanguage;
     bool mPreview;
     bool mStandardIcon;
-    bool mLargeIcon;
+
     QString mLc;
     QHash<QString,QIcon> *iconCach;
 };

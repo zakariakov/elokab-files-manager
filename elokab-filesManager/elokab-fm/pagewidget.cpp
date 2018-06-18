@@ -532,7 +532,7 @@ void PageWidget::urlChanged(const QString &url)
            * slot setLargeDirectory(QString)
            */
           QDir dir(m_dirPath);
-          if(dir.count()>1)
+          if(dir.count()>100)
               emit isLargeDirectory(m_dirPath);
 
           //-----------------------------------
@@ -1092,9 +1092,15 @@ void PageWidget::showOpenwithDlg(const QString &fileName)
  }
 void PageWidget::iconUpdate(QModelIndex index)
 {
-    if (focusWidget() == listView)
+     if(!index.isValid())return;
+    if (focusWidget() == listView){
+
         listView->update(index);
-    if (focusWidget() == treeView)
+    }
+    if (focusWidget() == treeView){
+
         treeView->update(index);
+
+    }
 
 }

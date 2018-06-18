@@ -268,14 +268,20 @@ QByteArray EMimIcon::iconThambnail(const QString &file)
     QSettings setting("elokab","thambnail");
     QBuffer buffer;
     QImage pix;
+bool hasThumb=false;
 
     if(QFile::exists(fileThumbnail)){
 
         QString fModified=setting.value(file).toString();
-        if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss"))
+        if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss")){
             pix.load(fileThumbnail);
+            hasThumb=true;
+        }
         // return QIcon(fileThambnail);
-    }else{
+    }
+
+
+    if(!hasThumb){
 
         //  QPixmap pixF(file);
         pix.load((file));
@@ -283,11 +289,11 @@ QByteArray EMimIcon::iconThambnail(const QString &file)
         if(pix.isNull()||pix.width()==0||pix.height()==0)
             return  buffer.buffer();
 
-        if(pix.width()>128 && pix.height()>128){
-
+        //if(pix.width()>128 && pix.height()>128){
+        if(qMax(pix.width(),pix.height())>128){
             //  pix= QImage(128,128,QImage::Format_ARGB32);
 
-            pix= pix.scaled(QSize(124,124),Qt::KeepAspectRatio);
+            pix= pix.scaled(QSize(128,128),Qt::KeepAspectRatio);
             if(fi.absolutePath()!=thumbnail){
                 QDir dir(thumbnail);
                 dir.mkpath(thumbnail);
@@ -297,40 +303,46 @@ QByteArray EMimIcon::iconThambnail(const QString &file)
         }
     }
     //    QPixmap pix(128,128);
-    QImage pixRet;
-    pixRet= QImage(128,128,QImage::Format_ARGB32);
-
-    pixRet.fill(Qt::transparent);
-
-    QSize size= pix.scaled(QSize(124,124),Qt::KeepAspectRatio).size();
-
-    int left=(128-size.width())/2;
-    int top=(128-size.height())/2;
-    QPainter p(&pixRet);
-
-    //    p.fillRect(0,0,259,259,QColor(229,239,255,50));
-
-    p.drawImage(QRect(left+2,top+2,size.width()-4,size.height()-4),pix,pix.rect());
-
-    p.setPen(Qt::lightGray);
-    p.drawRect(0,0,126,126);
-    p.setPen(Qt::gray);
-    p.drawRect(-1,-1,127,127);
-    p.setOpacity(0.3);
-    p.drawRect(-1,-1,128,128);
-    //   p.setPen(Qt::red);
-    //  p.drawPixmap(QRect(left+1,top+1,size.width()-1,size.height()-1),pixF,pixF.rect());
-
-    //p.end();
+//    QImage pixRet;
 
 
+//    if(qMax(pix.width(),pix.height())>128){
+//        pixRet= QImage(128,128,QImage::Format_ARGB32);
 
+//        pixRet.fill(Qt::transparent);
+//        QSize size= pix.scaled(QSize(124,124),Qt::KeepAspectRatio).size();
+//        //QSize size=pix.size();
+//        int left=(128-size.width())/2;
+//        int top=(128-size.height())/2;
+//        QPainter p(&pixRet);
 
+//        //    p.fillRect(0,0,259,259,QColor(229,239,255,50));
 
+//        p.drawImage(QRect(left+2,top+2,size.width()-4,size.height()-4),pix,pix.rect());
+
+//        p.setPen(Qt::lightGray);
+//        p.drawRect(0,0,126,126);
+//        p.setPen(Qt::gray);
+//        p.drawRect(-1,-1,127,127);
+//        p.setOpacity(0.3);
+//        p.drawRect(-1,-1,128,128);
+//        //   p.setPen(Qt::red);
+//        //  p.drawPixmap(QRect(left+1,top+1,size.width()-1,size.height()-1),pixF,pixF.rect());
+
+//        //p.end();
+//    }else{
+//        pixRet= QImage(pix.width(),pix.height(),QImage::Format_ARGB32);
+
+//        pixRet.fill(Qt::transparent);
+
+//         QPainter p(&pixRet);
+//         p.drawImage(QRect(0,0,pix.width(),pix.height()),pix,pix.rect());
+
+  //  }
 
     QImageWriter writer(&buffer,"png");
     writer.setQuality(50);
-    writer.write(pixRet);
+    writer.write(pix);
     return buffer.buffer();
 
 }

@@ -3,7 +3,7 @@
 #include <QIcon>
 #include <QHash>
 //#include "eiconengin.h"
-#define THEM_BACK   "Elokab"
+#define THEM_BACK   "Adwaita"
 #define APP_EXE "application-x-executable"
 #define THEM_PIXMAP   "/usr/share/pixmaps"
 class EIcon

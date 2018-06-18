@@ -22,6 +22,11 @@ public:
      * @return
      */
     QModelIndexList selectedIndexes() const;
+ virtual void startDrag(Qt::DropActions supportedActions);
+    virtual void dragEnterEvent(QDragEnterEvent* event);
+    virtual void dragMoveEvent(QDragMoveEvent* e);
+    virtual void dragLeaveEvent(QDragLeaveEvent* e);
+  virtual void dropEvent(QDropEvent* e);
 
 signals:
     /**

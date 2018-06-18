@@ -95,7 +95,7 @@ MainWindow::MainWindow(QWidget *parent) :
     myModel->setRootPath(QDir::root().absolutePath());
     myModel->setFilter(QDir::AllDirs|QDir::NoDotAndDotDot);
 
-    myModel->setIconProvider(mIconProvider);
+   myModel->setIconProvider(mIconProvider);
     myModel->setResolveSymlinks(true);
 
     ui->treeView->setModel(myModel);
@@ -636,7 +636,7 @@ void MainWindow::loadIconThems()
 void MainWindow::refreshIcons()
 {
 //    mIconProvider->clearCache();
-//    myModel->setIconProvider(mIconProvider);
+ //   myModel->setIconProvider(mIconProvider);
 //    mTab->refreshIcons();
     placesTree->refreshIcons();
 //    mActions->refreshIcons();

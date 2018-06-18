@@ -3,7 +3,7 @@
 //#include <EIcon>
 #include <EDir>
 //#ifdef DEBUG_APP
-//#include <QDebug>
+#include <QDebug>
 //#include <QDateTime>
 //#endif
 
@@ -17,34 +17,34 @@
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
-//QIcon iconHiden(QIcon icon)
-//{
-//    QPixmap pix(128,128);
-//    pix.fill(Qt::transparent);
-// QPixmap pixIcon=(icon.pixmap(128));
-// QPainter painter(&pix);
-//  painter.setOpacity(0.6);
-//  painter.drawPixmap(pix.rect(),pixIcon,pixIcon.rect());
+QIcon hidenIcon(QIcon icon)
+{
+    QPixmap pix(128,128);
+    pix.fill(Qt::transparent);
+ QPixmap pixIcon=(icon.pixmap(128));
+ QPainter painter(&pix);
+  painter.setOpacity(0.6);
+  painter.drawPixmap(pix.rect(),pixIcon,pixIcon.rect());
 
-//     return QIcon((pix));
-//}
+     return QIcon((pix));
+}
 
 IconProvider::IconProvider()
 {
-largeDirectory(false);
+//largeDirectory(false);
      mimeSufix = new QHash<QString,QString>;
      mimeLanguage = new QHash<QString,QString>;
      iconCach=new QHash<QString,QIcon>;
    //  qDebug( )<<"langagee========"<<mLc;
 
-//loadMimeTypes();
+//
+     loadMimeTypes();
 }
 void IconProvider::setlocale(const QString &lc)
   {
     mLc=lc;
-//    QString path=QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
-
-//    QFile fileIcons(path+"/"+QIcon::themeName()+"_Icons.cache");
+    QString path=Edir::cachDir();
+    QFile fileIcons(path+"/"+QIcon::themeName()+"_Icons.cache");
 
 //    fileIcons.open(QIODevice::ReadOnly);
 //    QDataStream out(&fileIcons);
@@ -124,96 +124,134 @@ QIcon  IconProvider::iconStandard(const QFileInfo &info) const
 
 QIcon IconProvider::icon(const QFileInfo &info)const
 {
-   // if(mLargeIcon)
-   // qApp->processEvents();
 
-    /*
-    QIcon retIcon=MimeTypeXdg::icon(info,mPreview);
-      if(info.isHidden())
-      {
-          retIcon= MimeTypeXdg::iconColorized(retIcon,QColor(255,255,255,100));
-      }
+    if(!QFile::exists(info.absoluteFilePath()))
+        return QIcon();
 
-     return retIcon;
-     */
+    if(info.fileName()=="." || info.fileName()==".." || info.fileName().isEmpty())
+        return QIcon();
 
+  // ---------------iconCach---------------------
+//    if(iconCach->contains(info.absoluteFilePath()))
+//       return   iconCach->value(info.absoluteFilePath());
+
+  //  if(mLargeIcon)
+  qApp->processEvents();
+
+
+    QIcon retIcon;
     QFileInfo minfo=info;
+
+
+
     if(info.isSymLink()){
+
         if(QFile::exists(minfo.symLinkTarget())){
             minfo.setFile(minfo.symLinkTarget());
         }else {
             return  EMimIcon::iconSymLink( EIcon::fromTheme("application-octet-stream","unknon"));
         }
+
     }
 
-    QIcon retIcon;
+
+    if(!QFile::exists(minfo.absoluteFilePath()))
+        return QIcon();
+
+
+
     if(minfo.isDir())
     {
         retIcon=  EMimIcon::iconFolder(minfo.absoluteFilePath());
 
     }else{
         QString suf=minfo.suffix().toLower();
-        if(suf=="desktop")
+        if(suf=="desktop"){
+
             return  EMimIcon::iconDesktopFile(minfo.absoluteFilePath()).pixmap(128).scaled(128,128);
 
-     QString mim= EMimIcon::mimeTyppe(minfo);
-/*
-        //---------------------------------------
-        QString mim="";
-
-        if(!suf.isEmpty()){
-            if(mimeSufix->contains(suf))
-                mim=mimeSufix->value(suf);
-            else{
-                mim= MimeTypeXdg::getMimeTypeBySufix(suf);
-                if(!mim.isEmpty())
-                    mimeSufix->insert(suf,mim);
-            }
-
         }
+        //---------------------------------------
+        //  QString mim= EMimIcon::mimeTyppe(minfo);
+        //---------------------------------------
+        QString mim;
+
+        if(!suf.isEmpty() && mimeSufix->contains(suf))
+                mim=mimeSufix->value(suf);
+
 
         if(mim.isEmpty())
-             mim= MimeTypeXdg:: getMimeTypeByFile(minfo.absoluteFilePath());
+             mim= EMimIcon:: getMimeTypeByFile(minfo.absoluteFilePath());
         //---------------------------------------
-    */
+
+
+
         if(mPreview && mim.startsWith("image"))
         {
            // qApp->processEvents();
             QPixmap pix;
             pix.loadFromData(EMimIcon::iconThambnail(minfo.absoluteFilePath()));
             QIcon icon=QIcon(pix);
-
-           // QIcon icon=EMimIcon::iconThambnail(minfo.absoluteFilePath());
             if(!icon.isNull())
                 retIcon=icon;
             else
                 retIcon=EIcon::fromTheme("image-x-generic");
 
         }else{
-//            if(iconCach->contains(mim)){
-//               retIcon= iconCach->value(mim);
-//            }else {
-               //    qDebug()<<">>Cach add Icon=========="<<mim;
+            if(iconCach->contains(info.absoluteFilePath()))
+                retIcon=iconCach->value(mim);
+            else{
              retIcon=   EMimIcon::iconByMimType(mim,minfo.absoluteFilePath());
-              //iconCach->insert(mim,retIcon);
-           // }
-
-
+               iconCach->insert(mim,retIcon);
+            }
 
         }
 
     }
 
+   // qDebug()<<"emimicon"<<minfo.fileName();
+
+    if(!QFile::exists(info.absoluteFilePath()))
+        return QIcon();
+
     if(info.isSymLink())
         retIcon=  EMimIcon::iconSymLink(retIcon);
-//    if(info.isHidden())
-//    {
-//      retIcon=iconHiden(retIcon) ;
-//    }
+
+
+
+    if(info.isHidden())
+          retIcon=hidenIcon(retIcon) ;
+
+
+     // ---------------iconCach---------------------
+    //iconCach->insert(info.absoluteFilePath(),retIcon);
+
     return retIcon;
 
 }
 
+//void IconProvider::updateIcons()
+//{
+//iconCach->clear();
+//qDebug()<<"IconProvider clear cach >>>>>>>>>>";
+//}
+//void IconProvider::updatePath(const QString &path)
+//{
+
+//        QDir dir(path);
+//        QStringList list=dir.entryList();
+//        foreach (QString s, list) {
+//            QString file=path+"/"+s;
+//            qDebug()<<"IconProvider remove"<<file;
+//            iconCach->remove(file);
+//        }
+
+
+//}
+
+
+
+/*
 QIcon IconProvider::iconF(const QFileInfo &info)const
 {
 
@@ -251,6 +289,7 @@ QIcon IconProvider::iconF(const QFileInfo &info)const
     return retIcon;
 
 }
+*/
 
 /**************************************************************************************
  *
@@ -273,6 +312,7 @@ QString IconProvider::type(const QFileInfo &info) const
      if(mimLang.isEmpty()){
           return QFileIconProvider::type(info);
      }
+
         //qDebug()<<">>Cach add mimLang=========="<<mim<<mimLang;
      mimeLanguage->insert(mim, mimLang);
 
@@ -309,10 +349,9 @@ void IconProvider::loadMimeTypes() const
 }
 void IconProvider::saveCacheIcons()
 {
-//    QString path=QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
-
-//    QFile file(path+"/"+QIcon::themeName()+"_Icons.cache");
-//    QDataStream out(&file);
+    QString path=Edir::cachDir();
+    QFile file(path+"/"+QIcon::themeName()+"_Icons.cache");
+    QDataStream out(&file);
 
 //            file.open(QIODevice::WriteOnly);
 //            out.setDevice(&file);
@@ -329,7 +368,7 @@ void IconProvider::saveCacheIcons()
 }
 void IconProvider::clearCache()
 {
-   // saveCacheIcons();
+    saveCacheIcons();
     iconCach->clear();
   //  setlocale(mLc);
 }

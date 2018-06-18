@@ -19,7 +19,7 @@
 
 #include "menugen.h"
 #include "desktopfile.h"
-#include "emimicon.h"
+//#include "emimicon.h"
 #include "edir.h"
 
 #include <QFileInfo>
@@ -35,11 +35,11 @@
 MenuGen::MenuGen(const QString &locale, QObject *parent) :
      QObject(parent), m_locale(locale)
 {
-     m_sWatcher=new QFileSystemWatcher;
-     mtimer=new QTimer;
-     mtimer->setInterval(1000);
-     connect(mtimer, SIGNAL(timeout()), this, SLOT(genirateAppFile()));
-     connect(m_sWatcher, SIGNAL(directoryChanged(const QString&)), mtimer, SLOT(start()));
+//     m_sWatcher=new QFileSystemWatcher;
+//     mtimer=new QTimer;
+//     mtimer->setInterval(1000);
+//     connect(mtimer, SIGNAL(timeout()), this, SLOT(genirateAppFile()));
+//     connect(m_sWatcher, SIGNAL(directoryChanged(const QString&)), mtimer, SLOT(start()));
 
      loadSettings();
      saveSettings();
@@ -47,8 +47,8 @@ MenuGen::MenuGen(const QString &locale, QObject *parent) :
 }
 void MenuGen::updatApp()
 {
-     mtimer->stop();
-     mtimer->start(1000);
+//     mtimer->stop();
+//     mtimer->start(1000);
 }
 
 /****************************************************************************
@@ -78,7 +78,7 @@ bool MenuGen::checkAppsDesktopFile()
           genirateAppFile();
           m_appCount=count;
           saveSettings();
-          EMimIcon::updateMimeAssociatedApplication();
+          //EMimIcon::updateMimeAssociatedApplication();
           return true;
      }
      return false;
@@ -112,8 +112,8 @@ void MenuGen::saveSettings()
  ****************************************************************************/
 int MenuGen::countDesktopDir(QString dir)
 {
-    if (!m_sWatcher->directories().contains(dir))
-         m_sWatcher->addPath(dir);
+//    if (!m_sWatcher->directories().contains(dir))
+//         m_sWatcher->addPath(dir);
 
      int count=0;
      QDir curdir(dir);
@@ -126,11 +126,11 @@ int MenuGen::countDesktopDir(QString dir)
 
      while(it.hasNext())
      {
-         if(it.fileInfo().isDir()){
-             if (!m_sWatcher->directories().contains(dir))
-                  m_sWatcher->addPath(it.filePath());
+//         if(it.fileInfo().isDir()){
+//             if (!m_sWatcher->directories().contains(dir))
+//                  m_sWatcher->addPath(it.filePath());
 
-         }
+//         }
           it.next();
           QString f=it.filePath();
           QDir curdir(f);
@@ -167,9 +167,9 @@ int MenuGen::countDesktopDir(QString dir)
  ****************************************************************************/
 void MenuGen::genirateAppFile()
 {
-     mtimer->stop();
+   //  mtimer->stop();
      qDebug()<<"(MenuGen)<<====BEGIN====genirateAppFile======================================================";
-     m_sWatcher->blockSignals(true);
+//     m_sWatcher->blockSignals(true);
      //-------------------------------------------------------------
      QFile fileApp( Edir::configDir()+"/applictions");
      //   QFile fileMim( QDir::homePath()+"/.config/elokab/mimeApp");
@@ -215,7 +215,7 @@ void MenuGen::genirateAppFile()
      m_desktopList.clear();
      fileApp.close();
      //fileMim.close();
-     m_sWatcher->blockSignals(false);
+   //  m_sWatcher->blockSignals(false);
 
      emit appDesktopChanged();
      qDebug()<<"(MenuGen)<<=====END=====genirateAppFile======================================================";
@@ -246,12 +246,12 @@ void MenuGen::chargeDesktopFile(QString   dir)
 {
      QString subfile;
      QDir dirS(dir);
-     if (!m_sWatcher->directories().contains(dir))
-          m_sWatcher->addPath(dir);
+//     if (!m_sWatcher->directories().contains(dir))
+//          m_sWatcher->addPath(dir);
 
      foreach ( subfile, dirS.entryList(QDir::AllEntries|  QDir::NoDotAndDotDot )){
           QFileInfo fi(dir+"/"+subfile);
-          if(!fi.isDir()&&fi.completeSuffix()=="desktop"){
+          if(!fi.isDir()&&fi.suffix()=="desktop"){
                if(!m_desktopList.contains(subfile)){
                     QString data=openDesktopEntry(dir+"/"+subfile);
                     if(!data.isEmpty()){
@@ -279,8 +279,6 @@ QString MenuGen::openDesktopEntry(QString file)
     QString icon=xdg.value("Icon").toString();
     QString type=xdg.value("Type").toString();
     bool NoDisplay=xdg.value("NoDisplay",false).toBool();
-
-
 
     if(type!="Application")return "";
     if(name.isEmpty())return "";

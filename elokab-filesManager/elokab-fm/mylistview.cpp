@@ -1,4 +1,4 @@
-#include "mylistview.h"
+﻿#include "mylistview.h"
 //#include "itemdelegate.h"
 //#include <EMimIcon>
 #include <QDebug>
@@ -20,38 +20,97 @@ MyListView::MyListView(QFileSystemModel *model, Actions *action,QWidget *parent)
     setContentsMargins(5,5,5,5);
      setViewMode(QListView::IconMode);
      setResizeMode(QListView::Adjust);
+    //   setUniformItemSizes(true);
      setSelectionMode(QAbstractItemView::ExtendedSelection);
      setSelectionRectVisible(true);
-     setWrapping(true);
-    // setMouseTracking(true);
-     setEditTriggers(QAbstractItemView::EditKeyPressed |
-                     QAbstractItemView::SelectedClicked);
+    // setWrapping(true);
+setMovement(QListView::Snap);
+//     setEditTriggers(QAbstractItemView::EditKeyPressed |
+//                     QAbstractItemView::SelectedClicked);
 
+//     setDragDropMode(QAbstractItemView::DragDrop);
+//     setDefaultDropAction(Qt::MoveAction);
+//     setDropIndicatorShown(true);
+
+     setSelectionMode(QAbstractItemView::ExtendedSelection);
      setDragDropMode(QAbstractItemView::DragDrop);
      setDefaultDropAction(Qt::MoveAction);
      setDropIndicatorShown(true);
+     setEditTriggers(QAbstractItemView::EditKeyPressed |
+                     QAbstractItemView::SelectedClicked);
+
     // setSpacing(5);
-     setWordWrap(true);
-     connect(this,SIGNAL(entered(QModelIndex)),this,SLOT(onItemEntered(QModelIndex)));
-     connect(this,SIGNAL(viewportEntered()),this,SLOT(viewEntered()));
+    // setWordWrap(true);
+//        setMouseTracking(true);
+//     connect(this,SIGNAL(entered(QModelIndex)),this,SLOT(onItemEntered(QModelIndex)));
+//     connect(this,SIGNAL(viewportEntered()),this,SLOT(viewEntered()));
 //setItemDelegate(new ItemDelegate);
 }
 
+
+void MyListView::startDrag(Qt::DropActions supportedActions) {
+//    if(movement() != Static) {
+//        QListView::startDrag(supportedActions);
+//    }
+//    else {
+        QAbstractItemView::startDrag(supportedActions);
+//    }
+    qDebug("startDrag");
+}
+void MyListView::dragEnterEvent(QDragEnterEvent* event) {
+
+//    if(movement() != Static) {
+//        QListView::dragEnterEvent(event);
+//    }
+//    else {
+        QAbstractItemView::dragEnterEvent(event);
+//   / }
+    qDebug("dragEnterEvent");
+
+            //static_cast<FolderView*>(parent())->childDragEnterEvent(event);
+}
+
+void MyListView::dragLeaveEvent(QDragLeaveEvent* e) {
+//    if(movement() != Static) {
+//        QListView::dragLeaveEvent(e);
+//    }
+//    else {
+        QAbstractItemView::dragLeaveEvent(e);
+//    }
+     qDebug("dragLeaveEvent");
+
+  //  static_cast<FolderView*>(parent())->childDragLeaveEvent(e);
+}
+void MyListView::dragMoveEvent(QDragMoveEvent* e) {
+//    if(movement() != Static) {
+//        QListView::dragMoveEvent(e);
+//    }
+//    else {
+        QAbstractItemView::dragMoveEvent(e);
+//    }
+     //qDebug("dragMoveEvent");
+  //  static_cast<FolderView*>(parent())->childDragMoveEvent(e);
+}
+
+void MyListView::dropEvent(QDropEvent* e) {
+
+   // static_cast<FolderView*>(parent())->childDropEvent(e);
+
+//    if(movement() != Static) {
+//        QListView::dropEvent(e);
+//    }
+//    else {
+        QAbstractItemView::dropEvent(e);
+//    }
+   qDebug("dropEvent");
+}
 /**************************************************************************************
  *
  **************************************************************************************/
 void MyListView::setListViewMode(ViewMode mode)
 {
-     switch (mode) {
-          case QListView::IconMode:
-               setViewMode(QListView::IconMode);
-          case QListView::ListMode:
+    setViewMode(mode);
 
-             setViewMode(QListView::ListMode);
-
-               break;
-
-     }
 }
 
 /**************************************************************************************
@@ -59,21 +118,20 @@ void MyListView::setListViewMode(ViewMode mode)
  **************************************************************************************/
 void   MyListView::setViewIconSize(int size)
 {
+  //  TODO FIX ViwIconSize
   //  16<<22<<24<<32<<48<<64<<72<<96<<128
     QFontMetrics fm(this->font());
 
   int defW=64;
-   int defH=5+(fm.height()*2);
-         if(size<=22)defW=6+106;
-    else if(size<=24)defW=6+104;
-    else if(size<=32)defW=6+96;
-    else if(size<=48)defW=6+80;
-    else if(size<=64)defW=6+64;
-    else if(size<=72)defW=6+56;
-    else if(size<=96)defW=6+32;
+   int defH=(fm.height()+6);
+         if(size<=22)defW=64;
+    else if(size<=24)defW=62;
+    else if(size<=32)defW=60;
+    else if(size<=48)defW=58;
+    else if(size<=64)defW=46;
+    else if(size<=72)defW=34;
+    else if(size<=96)defW=30;
     else if(size<=128)defW=16;
-
-
 
      if(viewMode()==QListView::IconMode){
           setGridSize(QSize(size +defW,size+defH));
