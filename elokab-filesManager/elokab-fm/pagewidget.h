@@ -7,7 +7,7 @@
 #include "searchview.h"
 #include "mylistview.h"
 #include "mytreeview.h"
-//#include "iconprovider.h"
+#include "itemdelegate.h"
 #include "filesutils/propertiesdlg.h"
 #include "filesutils/openwithdlg.h"
 #include "settings.h"
@@ -59,7 +59,7 @@ class PageWidget : public QWidget
           void isLargeDirectory(const QString &url);
 
           //! رسالة الى الاب بتغير المسار
-          void urlHasChanged(const QString &url);
+          void urlChanged(const QString &url);
 
           //!
           void indexHasChanged(QModelIndex);
@@ -91,7 +91,7 @@ class PageWidget : public QWidget
           void setUrl(const QString &url);
 
           //!
-          void urlChanged(const QString &url);
+          void setUrlChange(const QString &url);
 
           //!
           void viewChangged(int index);
@@ -187,7 +187,7 @@ class PageWidget : public QWidget
           SearchView *searchView;
 
           //!
-        //  QStringList mHistory;
+         ItemDelegate *mItemDelegate;
 
   QStack< QString > mHistoryBack;
   QStack< QString > mHistoryForward;

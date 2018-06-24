@@ -52,8 +52,6 @@ class MainWindow : public QMainWindow
           //!
           void toolCustomContextMenu(QPoint);
 
-          //!
-          void mainUrlChanged(QString url);
 
           //!
           void setSelectedFoldersFiles(QString msg);
@@ -62,13 +60,16 @@ class MainWindow : public QMainWindow
           void calculatFiles();
 
           //!
-          void urlChanged(const QString &url);
+         // void urlChanged(const QString &url);
 
           //!
           void stackSetCurrentIndex(bool arg);
 
           //!
           void setUrl(QModelIndex index);
+
+          //!
+          void setUrl(QString url);
 
          //!
           void showHidFilterBar();
@@ -87,7 +88,7 @@ class MainWindow : public QMainWindow
 
           //!
           void showHelp();
-void showProgress(bool arg);
+//void showProgress(bool arg);
           //!
           void refreshIcons();
 
@@ -137,7 +138,7 @@ void showProgress(bool arg);
           ElokabSettings *mElokabSettings;
 
           //!
-          QProgressBar *mProgressBar;
+     //     QProgressBar *mProgressBar;
 
           //!
 //          QTermWidget  *mTermWidget;

@@ -53,7 +53,8 @@ SOURCES += \
     ../../common/filesutils/dialogxdesktop.cpp \
 #  itemdelegate.cpp
  #    qitemdelegate.cpp
-    udiskdevice.cpp
+    udiskdevice.cpp \
+    itemdelegate.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -80,7 +81,8 @@ HEADERS  += \
     ../../common/filesutils/dialogxdesktop.h \
 #  itemdelegate.h
  #     qitemdelegate.h
-    udiskdevice.h
+    udiskdevice.h \
+    itemdelegate.h
 
 FORMS    += mainwindow.ui \
     pathwidget.ui \

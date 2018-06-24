@@ -41,6 +41,7 @@
 #include <QXmlStreamReader>
 #include <QDateTime>
 #include <QImageWriter>
+#include <QImageReader>
 #include <QStandardPaths>
 #define THEM_BACK   "Elokab"
 //______________________________________________________________________________________
@@ -281,27 +282,34 @@ bool hasThumb=false;
     }
 
 
-    if(!hasThumb){
+   if(!hasThumb){
 
-        //  QPixmap pixF(file);
-        pix.load((file));
-        //qDebug()<<pix.isNull()<<pix.size()<<file;
-        if(pix.isNull()||pix.width()==0||pix.height()==0)
-            return  buffer.buffer();
+      QImageReader reader(file);
 
-        //if(pix.width()>128 && pix.height()>128){
-        if(qMax(pix.width(),pix.height())>128){
-            //  pix= QImage(128,128,QImage::Format_ARGB32);
+     //  pix.load((file));
+       if(qMax(reader.size().width(),reader.size().height())<=128){
+           pix.load((file));
+       }
+   }
+//        //  QPixmap pixF(file);
+//        pix.load((file));
+//        //qDebug()<<pix.isNull()<<pix.size()<<file;
+//        if(pix.isNull()||pix.width()==0||pix.height()==0)
+//            return  buffer.buffer();
 
-            pix= pix.scaled(QSize(128,128),Qt::KeepAspectRatio);
-            if(fi.absolutePath()!=thumbnail){
-                QDir dir(thumbnail);
-                dir.mkpath(thumbnail);
-                setting.setValue(file,fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
-                pix.save(fileThumbnail,"png",50);
-            }
-        }
-    }
+//        //if(pix.width()>128 && pix.height()>128){
+//        if(qMax(pix.width(),pix.height())>128){
+//            //  pix= QImage(128,128,QImage::Format_ARGB32);
+
+//            pix= pix.scaled(QSize(128,128),Qt::KeepAspectRatio);
+//            if(fi.absolutePath()!=thumbnail){
+//                QDir dir(thumbnail);
+//                dir.mkpath(thumbnail);
+//                setting.setValue(file,fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
+//                pix.save(fileThumbnail,"png",50);
+//            }
+//        }
+//    }
     //    QPixmap pix(128,128);
 //    QImage pixRet;
 

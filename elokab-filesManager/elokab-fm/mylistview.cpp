@@ -10,41 +10,23 @@
 MyListView::MyListView(QFileSystemModel *model, Actions *action,QWidget *parent) :
      QListView(parent),mModel(model),mActions(action)
 {
-     //    int zoom=48;
+
      setModel(mModel);
-//QFont font;
-//font.setPointSize(12);
-//font.setBold(true);
-//setFont(font);
-//     connect(mModel,SIGNAL(fileRenamed(QString,QString,QString)),this,SLOT(setFileRenamed(QString,QString,QString)));
     setContentsMargins(5,5,5,5);
-     setViewMode(QListView::IconMode);
+
      setResizeMode(QListView::Adjust);
-    //   setUniformItemSizes(true);
+
      setSelectionMode(QAbstractItemView::ExtendedSelection);
      setSelectionRectVisible(true);
-    // setWrapping(true);
-setMovement(QListView::Snap);
-//     setEditTriggers(QAbstractItemView::EditKeyPressed |
-//                     QAbstractItemView::SelectedClicked);
-
-//     setDragDropMode(QAbstractItemView::DragDrop);
-//     setDefaultDropAction(Qt::MoveAction);
-//     setDropIndicatorShown(true);
-
-     setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setWrapping(true);
+   //  setMovement(QListView::Snap);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
      setDragDropMode(QAbstractItemView::DragDrop);
      setDefaultDropAction(Qt::MoveAction);
      setDropIndicatorShown(true);
      setEditTriggers(QAbstractItemView::EditKeyPressed |
                      QAbstractItemView::SelectedClicked);
-
-    // setSpacing(5);
-    // setWordWrap(true);
-//        setMouseTracking(true);
-//     connect(this,SIGNAL(entered(QModelIndex)),this,SLOT(onItemEntered(QModelIndex)));
-//     connect(this,SIGNAL(viewportEntered()),this,SLOT(viewEntered()));
-//setItemDelegate(new ItemDelegate);
+     setMouseTracking(true);
 }
 
 
@@ -120,23 +102,23 @@ void   MyListView::setViewIconSize(int size)
 {
   //  TODO FIX ViwIconSize
   //  16<<22<<24<<32<<48<<64<<72<<96<<128
-    QFontMetrics fm(this->font());
+  //  QFontMetrics fm(this->font());
 
-  int defW=64;
-   int defH=(fm.height()+6);
-         if(size<=22)defW=64;
-    else if(size<=24)defW=62;
-    else if(size<=32)defW=60;
-    else if(size<=48)defW=58;
-    else if(size<=64)defW=46;
-    else if(size<=72)defW=34;
-    else if(size<=96)defW=30;
-    else if(size<=128)defW=16;
+//  int defW=64;
+//   int defH=(fm.height()+6);
+//         if(size<=22)defW=64;
+//    else if(size<=24)defW=62;
+//    else if(size<=32)defW=60;
+//    else if(size<=48)defW=58;
+//    else if(size<=64)defW=46;
+//    else if(size<=72)defW=34;
+//    else if(size<=96)defW=30;
+//    else if(size<=128)defW=16;
 
-     if(viewMode()==QListView::IconMode){
-          setGridSize(QSize(size +defW,size+defH));
-     } else
-          setGridSize(QSize());
+//     if(viewMode()==QListView::IconMode){
+//          setGridSize(QSize(size +defW,size+defH));
+//     } else
+//          setGridSize(QSize());
 
  setIconSize(QSize(size, size));
 

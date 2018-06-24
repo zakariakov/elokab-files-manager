@@ -98,6 +98,7 @@ QIcon  IconProvider::iconStandard(const QFileInfo &info) const
     if(suf=="desktop") return icon(Desktop);
 
        QString mim=EMimIcon::mimeTyppe(info);
+
     if(mim=="application/x-executable") return icon(Exec);
 
 
@@ -214,13 +215,13 @@ QIcon IconProvider::icon(const QFileInfo &info)const
     if(!QFile::exists(info.absoluteFilePath()))
         return QIcon();
 
-    if(info.isSymLink())
-        retIcon=  EMimIcon::iconSymLink(retIcon);
+//    if(info.isSymLink())
+//        retIcon=  EMimIcon::iconSymLink(retIcon);
 
 
 
-    if(info.isHidden())
-          retIcon=hidenIcon(retIcon) ;
+//    if(info.isHidden())
+//          retIcon=hidenIcon(retIcon) ;
 
 
      // ---------------iconCach---------------------

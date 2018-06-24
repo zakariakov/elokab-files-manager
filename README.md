@@ -7,7 +7,7 @@ A lightweight  file manager for Linux desktops built in Qt.
 
 # Install
 
-git clone https://gitlab.com/zakariakov/elokab-files-manager.git
+git clone https://github.com/zakariakov/elokab-files-manager.git
 
 cd elokab-files-manager
 

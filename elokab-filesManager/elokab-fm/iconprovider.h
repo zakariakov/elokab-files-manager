@@ -30,7 +30,7 @@ public:
      * @param info
      * @return
      */
-    virtual  QIcon icon(const QFileInfo &info) const ;
+   virtual  QIcon icon(const QFileInfo &info) const ;
     /**
      * @brief type
      * @param info

@@ -69,5 +69,5 @@ void MyTreeView::setRootPath(const QString &url)
 {
      setRootIndex(mModel->index(url));
      collapseAll();
-     //    resizeColumnToContents(0);
+
 }

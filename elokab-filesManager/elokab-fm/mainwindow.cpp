@@ -45,11 +45,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
-    mProgressBar=new QProgressBar(ui->statusBar);
-    mProgressBar->setRange(0,1);
-    mProgressBar->setTextVisible(false);
-    mProgressBar->setMaximumHeight(15);
-    mProgressBar->setVisible(false);
+//    mProgressBar=new QProgressBar(ui->statusBar);
+//    mProgressBar->setRange(0,1);
+//    mProgressBar->setTextVisible(false);
+//    mProgressBar->setMaximumHeight(15);
+//    mProgressBar->setVisible(false);
 
     if(QIcon::themeName()=="hicolor"||QIcon::themeName().isEmpty())
     {
@@ -115,25 +115,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mActions->actPathWidget->setDefaultWidget(pathWidget);
 
-  //  mTermWidget =new QTermWidget(0,this);
-   // mTermWidget->setScrollBarPosition(0);
-   // ui->vLayoutTerminale->addWidget(mTermWidget);
-
-//    actionCopy=new QAction(tr("Copy"),this);
-//    actionCopy->setIcon(QIcon::fromTheme("edit-copy",QIcon(":/icons/edit-copy.png")));
-//    actionCopy->setShortcut(QKeySequence("Ctrl+Shift+C"));
-    //connect(actionCopy,SIGNAL(triggered()),mTermWidget,SLOT(CopySelection()));
-
-//    actionPast=new QAction (tr("Past"),this);
-//    actionPast->setIcon(QIcon::fromTheme("edit-paste",QIcon(":/icons/edit-paste.png")));
-//    actionPast->setShortcut(QKeySequence("Ctrl+Shift+V"));
-//    connect(actionPast,SIGNAL(triggered()),this,SLOT(terminalPastText()));
-    //connect(this,SIGNAL(clipboardAvailable(bool)),actionPast,SLOT(setEnabled(bool)));
-
-  //  mTermWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-  //  connect(mTermWidget,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(terminalCustomContextMenu(QPoint)));
-
-     setupToolBarActions();
+      setupToolBarActions();
 
 
     if(QApplication::layoutDirection()==Qt::RightToLeft)
@@ -149,15 +131,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->vLayoutCenter->addWidget(filterBar);
     filterBar->hide();
 
-    connect(placesTree,SIGNAL(urlPlacesChanged(QString)),this,SLOT(urlChanged(QString)));
+    connect(placesTree,SIGNAL(urlPlacesChanged(QString)),mTab,SLOT(setUrl(QString)));
     connect(placesTree,SIGNAL(slotOpenNewTab(QString)),mTab,SLOT(addNewTab(QString)));
 
-    connect(pathWidget,SIGNAL(urlChanged(QString)),this,SLOT(urlChanged(QString)));
+    connect(pathWidget,SIGNAL(urlChanged(QString)),mTab,SLOT(setUrl(QString)));
 
     connect(ui->treeView,SIGNAL(activated(QModelIndex)),this,SLOT(setUrl(QModelIndex)));
     connect(ui->treeView,SIGNAL(clicked(QModelIndex)),this,SLOT(setUrl(QModelIndex)));
-    connect(mTab,SIGNAL(urlHasChanged(QString)),this,SLOT(mainUrlChanged(QString)));
-    connect(mTab,SIGNAL(urlHasChanged(QString)),pathWidget,SLOT(setUrl(QString)));
+    connect(mTab,SIGNAL(urlChanged(QString)),this,SLOT(setUrl(QString)));
+    connect(mTab,SIGNAL(urlChanged(QString)),pathWidget,SLOT(setUrl(QString)));
     connect (this,SIGNAL(closeAll()),mTab,SLOT(closeAll()));
     connect(mTab,SIGNAL(  selectedFoldersFiles(QString)),this,SLOT(setSelectedFoldersFiles(QString)));
     connect(ui->mainToolBar,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(toolCustomContextMenu(QPoint)));
@@ -177,7 +159,7 @@ MainWindow::MainWindow(QWidget *parent) :
    // connect(ui->dockWidgetTerminal,SIGNAL(visibilityChanged(bool)),mSettings,SIGNAL(showTerminalToolChanged(bool)));
    // connect(ui->dockWidgetTerminal,SIGNAL(visibilityChanged(bool)),this,SLOT(terminalVisibilityChanged(bool)));
 
-    connect(mTab,SIGNAL(largeDirectoryChanged(bool)),this,SLOT(showProgress(bool)));
+   // connect(mTab,SIGNAL(largeDirectoryChanged(bool)),this,SLOT(showProgress(bool)));
 
 
 
@@ -205,7 +187,7 @@ MainWindow::MainWindow(QWidget *parent) :
    // mTermWidget->setInitialWorkingDirectory(pathUrl);
    // mTermWidget->startShellProgram();
 
-    mainUrlChanged(pathUrl);
+    setUrl(pathUrl);
 
 #ifdef DEBUG_APP
     Messages::showMessage(Messages::END,"MainWindow::MainWindow()");
@@ -296,7 +278,7 @@ MainWindow::~MainWindow()
     delete mActions;
     delete mIconProvider;
     delete mSettings;
-delete filterBar;
+    delete filterBar;
 //delete mTermWidget;
 
     delete ui;
@@ -343,15 +325,13 @@ void MainWindow::showHidFilterBar()
 /**************************************************************************************
  *
  **************************************************************************************/
-void MainWindow::mainUrlChanged(QString url)
+void MainWindow::setUrl(QString url)
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::mainUrlChanged()");
-#endif
+
 
      m_mainUrl=url;
      placesTree->setCurentUrl(url);
-
+     mTab->setUrl(url);
      QDir dir(url);
 
      QString name=dir.dirName();
@@ -367,28 +347,8 @@ void MainWindow::mainUrlChanged(QString url)
      ui->treeView->setCurrentIndex((index));
      calculatFiles();
 
-//     if(mTermWidget->isVisible()){
-//         QString command = "cd '";
-//         command+=url;
-//         command += "'\r";
-//         mTermWidget->sendText(command);
-//         qDebug()<<"comand"<<command;
-//     }
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::mainUrlChanged()");//
-#endif
-}
-//void MainWindow::terminalVisibilityChanged(bool arg)
-//{
-//    if(arg){
-//        QString command = "cd '";
-//        command+=m_mainUrl;
-//        command += "'\r";
-//        mTermWidget->sendText(command);
-//        qDebug()<<"comand"<<command;
-//    }
-//}
 
+}
 
 /**************************************************************************************
  *
@@ -490,22 +450,22 @@ void MainWindow::setUrl(QModelIndex index)
 /**************************************************************************************
  *
  **************************************************************************************/
-void MainWindow::urlChanged(const QString &url)
-{
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::urlChanged()"+url);
-#endif
+//void MainWindow::urlChanged(const QString &url)
+//{
+//#ifdef DEBUG_APP
+//     Messages::showMessage(Messages::BEGIN,"MainWindow::urlChanged()"+url);
+//#endif
 
-    mTab->setUrl(url);
- //  pathWidget->setUrl(url);
-  //  if(mTermWidget->isVisible()){
+//    mTab->setUrl(url);
+// //  pathWidget->setUrl(url);
+//  //  if(mTermWidget->isVisible()){
 
 
-   // }
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::urlChanged()"+url);
-#endif
-}
+//   // }
+//#ifdef DEBUG_APP
+//     Messages::showMessage(Messages::END,"MainWindow::urlChanged()"+url);
+//#endif
+//}
 
 /**************************************************************************************
  *
@@ -610,7 +570,7 @@ void MainWindow::loadIconThems()
      if(icnThem=="hicolor"||icnThem.isEmpty()){
 
           QStringList failback;
-          failback << "oxygen"<< "Mint-X"<< "Humanity"<< "Tango"<< "Prudence-icon"<< "elementary"<< "gnome";
+          failback <<"Adwaita"<< "oxygen"<< "Mint-X"<< "Humanity"<< "Tango"<< "Prudence-icon"<< "elementary"<< "gnome";
 
           QDir dir("/usr/share/icons/");
           foreach (QString s, failback)
@@ -673,28 +633,3 @@ void MainWindow::showHelp()
 {
  EMimIcon::launchApp("https://sourceforge.net/project/elokab/");
 }
-void MainWindow::showProgress(bool arg)
-{
-mProgressBar->setVisible(!arg);
-mProgressBar->setMaximum(arg);
-
-}
-
-//void MainWindow::terminalCustomContextMenu(QPoint)
-//{
-//    QMenu menu;
-//    menu.addAction(actionCopy);
-//    menu.addAction(actionPast);
-//    menu.exec(QCursor::pos());
-//}
-
-//void MainWindow::terminalPastText()
-//{
-//    const QClipboard *clipboard = QApplication::clipboard();
-//       const QMimeData *mimeData = clipboard->mimeData();
-
-//       if (mimeData->hasText()) {
-//           QString text =mimeData->text();
-//        //  mTermWidget->sendText(text);
-//       }
-//}

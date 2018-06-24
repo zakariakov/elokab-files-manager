@@ -13,7 +13,7 @@
 #include <QApplication>
 #include <QFileSystemWatcher>
 #include <QFutureWatcher>
-
+/*
 
 class Thumbnail : public QObject
 {
@@ -51,7 +51,7 @@ bool mPreview;
 
 };
 
-
+*/
 
 class MyFileSystemModel :public QFileSystemModel
 {
@@ -64,7 +64,7 @@ public:
 //void loadIcon(QFileInfo fi, QString mim) const;
 //void geticon(QFileInfo fi)const;
  //void clearCache();
- QIcon imageThumbnail(QModelIndex index)const;
+ //QIcon imageThumbnail(QModelIndex index)const;
 
 //void refreshIcons(const QString &dir);
 
@@ -99,7 +99,7 @@ private:
     IconProvider *mIconProvider;
    bool mPreview;
 //  QHash<QString,QModelIndex> *hashIndex;
-   QHash< QModelIndex,Thumbnail* > *mThumbnails;
+   //QHash< QModelIndex,Thumbnail* > *mThumbnails;
      QHash<QString,QIcon>*iconCach;
    //   QHash<QString,QIcon>*iconmimCach;
    //      QHash<QString,QIcon>*iconDesktopCach;
@@ -130,7 +130,7 @@ class Tab : public QTabWidget
      signals:
   void  largeDirectoryChanged(bool arg);
            //!
-          void   urlHasChanged(const QString &url);
+          void   urlChanged(const QString &url);
 
            //!
           void selectedFoldersFiles(QString);
@@ -152,7 +152,7 @@ class Tab : public QTabWidget
 
 
      private slots:
-
+void creatThumb(const QString &path);
           //!
           void directoryChanged(const QString &dir);
           void dataFileChanged(const QString &dir);

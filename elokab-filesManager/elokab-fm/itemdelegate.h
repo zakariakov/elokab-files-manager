@@ -1,54 +1,37 @@
-/* Copyright © 2006-2007 Fredrik Höglund <fredrik@kde.org>
- * (c)GPL2 (c)GPL3
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License version 2 or at your option version 3 as published 
- * by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; see the file COPYING.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- */
-/*
- * additional code: Ketmar // Vampire Avalon (psyc://ketmar.no-ip.org/~Ketmar)
- */
 #ifndef ITEMDELEGATE_H
 #define ITEMDELEGATE_H
-
 #include <QAbstractItemDelegate>
-#include <QPainter>
-#include <QCache>
-#include <QItemDelegate>
-class QPainter;
+#include <QStyledItemDelegate>
+//#include <QFutureWatcher>
+#include <QFileInfo>
 
 
-class ItemDelegate : public QItemDelegate
+class ItemDelegate : public QStyledItemDelegate
 {
-    Q_OBJECT
-    
+  Q_OBJECT
 public:
-    ItemDelegate(QObject *parent = 0);
-    ~ItemDelegate();
+    explicit ItemDelegate();
 
-  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-  void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-   // void setView(DocumentView *view){mDocumentView=view;}
-    void clear();
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    //    void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index) const ;
 
-    QString firstLine(const QModelIndex &index) const;
-
-    QIcon decoration(const QModelIndex &index) const;
-  QPalette::ColorRole foregroundRole(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QHash< QModelIndex, QPixmap > *m_cache;
 private:
+    QSize mMargins;
+    QIcon mSymlinkIcon;
+    QSize mItemSize;
+    QMap<QString ,QIcon>  *imageCache ;
+    QMap<QString ,QIcon>  *iconCache ;
+    QMap<QString ,QIcon>  *folderCache;
+    QMap<QString ,QIcon>  *deskCache;
 
+    bool mThumbnail;
+    static QIcon::Mode iconModeFromState(QStyle::State state);
+    QIcon decoration( QString filePath) const;
+  //  QByteArray iconThambnail(const QString &file)const;
+
+public slots:
+      void setTumbnail(bool thumb){mThumbnail=thumb;}
 };
 
-#endif
+#endif // ITEMDELEGATE_H

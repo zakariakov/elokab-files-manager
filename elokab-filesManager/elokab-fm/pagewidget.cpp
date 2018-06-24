@@ -1,5 +1,5 @@
 ﻿#include "pagewidget.h"
-//#include <EMimIcon>
+
 #include "filesutils/propertiesdlg.h"
 #include "filesutils/openwithdlg.h"
 //#include "itemdelegate.h"
@@ -49,9 +49,11 @@ PageWidget::PageWidget(QFileSystemModel *model,
      QVBoxLayout *vLayoutList = new QVBoxLayout(pageList);
      vLayoutList->setSpacing(6);
      vLayoutList->setContentsMargins(0,0,0,0);
-     listView = new MyListView(myModel,mActions,pageList);
 
-//     listView->setItemDelegate(new ItemDelegate);
+mItemDelegate=new ItemDelegate;
+
+     listView = new MyListView(myModel,mActions,pageList);
+listView->setItemDelegate(mItemDelegate);
 
      vLayoutList->addWidget(listView);
      stackedWidget->addWidget(pageList);
@@ -60,7 +62,10 @@ PageWidget::PageWidget(QFileSystemModel *model,
      QVBoxLayout *vLayoutTree = new QVBoxLayout(pageTree);
      vLayoutTree->setSpacing(6);
      vLayoutTree->setContentsMargins(0,0,0,0);
+
      treeView = new MyTreeView(myModel,pageTree);
+treeView->setItemDelegate(mItemDelegate);
+
      vLayoutTree->addWidget(treeView);
      stackedWidget->addWidget(pageTree);
 
@@ -76,7 +81,7 @@ PageWidget::PageWidget(QFileSystemModel *model,
 
      searchView = new SearchView(this);
      stackedWidget->addWidget(searchView);
-     connect(searchView,SIGNAL(searchingCanceled(QString)),this,SLOT(urlChanged(QString)));
+     connect(searchView,SIGNAL(searchingCanceled(QString)),this,SLOT(setUrlChange(QString)));
      connect(stackedWidget,SIGNAL(currentChanged(int)),this,SLOT(viewChangged(int)));
 
      vLayout->addWidget(stackedWidget);
@@ -100,6 +105,7 @@ PageWidget::PageWidget(QFileSystemModel *model,
      connect(mActions,SIGNAL(ZoomOutChanged()),this,SLOT(setZoomOut()));
 
      connect(mSettings,SIGNAL(rootDecorationChanged(bool)),treeView,SLOT(setExpandable(bool)));
+     connect(mSettings,SIGNAL(showThumbnailsChanged(bool)),mItemDelegate,SLOT(setTumbnail(bool))) ;
 
      connect(searchView,SIGNAL(setUrl(QString)),this,SLOT(setUrl(QString)));
      connect(searchView,SIGNAL(showOpenwithDlg(QString)),this,SLOT(showOpenwithDlg(QString)));
@@ -123,6 +129,7 @@ PageWidget::PageWidget(QFileSystemModel *model,
 
 
      treeView->setRootIsDecorated(mSettings->rootIsDecorated());
+     mItemDelegate->setTumbnail(mSettings->showThumbnails());
      setUrl(url);
 
 #ifdef DEBUG_APP
@@ -408,7 +415,7 @@ void PageWidget::setViewMode(int mode)
      }
 
 
-     urlChanged(m_dirPath);
+     setUrlChange(m_dirPath);
 
 
 }
@@ -465,7 +472,7 @@ void PageWidget::setUrl(const QString &url)
         emit  historyBackAvailable(!mHistoryBack.isEmpty());
     }
 
-    urlChanged(url);
+    setUrlChange(url);
 
 
     //     if(url!=":/search")
@@ -485,7 +492,7 @@ void PageWidget::setUrl(const QString &url)
 /**************************************************************************************
  *
  **************************************************************************************/
-void PageWidget::urlChanged(const QString &url)
+void PageWidget::setUrlChange(const QString &url)
 {
 
 
@@ -562,7 +569,7 @@ void PageWidget::urlChanged(const QString &url)
      }
 
 
-     emit urlHasChanged(m_dirPath);
+     emit urlChanged(m_dirPath);
      emit indexHasChanged(i);
     // listSelectionModel->clearSelection();
 
@@ -579,7 +586,7 @@ void PageWidget::updateSignals()
 
     emit historyBackAvailable(mbackEnabled);
     emit historyForwardAvailable(mForwardEnabled);
-    emit urlHasChanged(m_dirPath);
+    emit urlChanged(m_dirPath);
     setViewMode(mSettings->viewMode());
     emit selectedAvailabe(listSelectionModel->selection().count());
 
@@ -615,7 +622,7 @@ void PageWidget::goBack()
 
     emit  historyForwardAvailable(!mHistoryForward.isEmpty());
 
-    urlChanged(url);
+    setUrlChange(url);
 
 
 
@@ -652,7 +659,7 @@ void PageWidget::goForward()
 
       emit  historyForwardAvailable(!mHistoryForward.isEmpty());
 
-    urlChanged(url);
+    setUrlChange(url);
 
     /*
      int i= mHindex+1;
