@@ -1,4 +1,23 @@
-﻿#include "placetree.h"
+﻿/***************************************************************************
+ *   elokab Copyright (C) 2014 AbouZakaria <yahiaui@gmail.com>             *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+#include "placetree.h"
 #include <EMimIcon>
 #include "filesutils/propertiesdlg.h"
 //#include <EIcon>
@@ -89,54 +108,51 @@ void PlaceTree::chargeFoldersPlaces()
     QString DocumentsDir=Edir::documentsDir();
     QString MoviesDir=Edir::moviesDir();
 
+    qDebug()<<"MoviesDir>>>>>===========>>>>"<<MoviesDir;
 
+    QDir dir;
+    //HOME
+    dir.setPath(homeDir);
+    itemHomeFolder=new QTreeWidgetItem(mPlacesItem);
+    itemHomeFolder->setText(0,tr("Home"));
+    itemHomeFolder->setData(0,Qt::ToolTipRole,homeDir);
+    itemHomeFolder->setIcon(0,EIcon::fromTheme("folder-home",("user-home")));
+    mHashItems[homeDir]=itemHomeFolder;
 
-     QDir dir;
+    //مجلد سطح المكتب
+    dir.setPath(DesktopDir);
+    if(dir.exists()&& !DesktopDir.isEmpty() && DesktopDir!=homeDir){
+        itemDesktopFolder=new QTreeWidgetItem(mPlacesItem);
+        itemDesktopFolder->setText(0,dir.dirName());
+        itemDesktopFolder->setData(0,Qt::ToolTipRole,DesktopDir);
+        itemDesktopFolder->setIcon(0,EIcon::fromTheme("folder-desktop",("user-desktop")));
+        mHashItems[DesktopDir]=itemDesktopFolder;
 
-     dir.setPath(homeDir);
-     itemHomeFolder=new QTreeWidgetItem(mPlacesItem);
-     itemHomeFolder->setText(0,tr("Home"));
-     itemHomeFolder->setData(0,Qt::ToolTipRole,homeDir);
-     itemHomeFolder->setIcon(0,EIcon::fromTheme("folder-home",("user-home")));
-     mHashItems[homeDir]=itemHomeFolder;
-     //مجلد سطح المكتب
-     dir.setPath(DesktopDir);
-          itemDesktopFolder=new QTreeWidgetItem(mPlacesItem);
-          itemDesktopFolder->setText(0,dir.dirName());
-          itemDesktopFolder->setData(0,Qt::ToolTipRole,DesktopDir);
-          itemDesktopFolder->setIcon(0,EIcon::fromTheme("folder-desktop",("user-desktop")));
-          mHashItems[DesktopDir]=itemDesktopFolder;
-
-
-     dir.setPath(QDir::rootPath());
-     itemRoot=new QTreeWidgetItem(mPlacesItem);
-     itemRoot->setText(0,tr("Root"));
-     itemRoot->setData(0,Qt::ToolTipRole,QDir::rootPath());
-  //   QIcon icon=   EMimIcon::iconColorized(EIcon::fromTheme("folder"),QColor(255,0,0,150));
-     itemRoot->setIcon(0,EMimIcon::iconFolder(QDir::rootPath()));
-     mHashItems[QDir::rootPath()]=itemRoot;   //QDir::rootPath()
+    }
 
     //مجلد الصوت
     dir.setPath(MusicDir);
-    if(dir.exists()){
+    if(dir.exists()&& !MusicDir.isEmpty() && MusicDir!=homeDir){
         QTreeWidgetItem  *itemMusicFolder=new QTreeWidgetItem(mPlacesItem);
         itemMusicFolder->setText(0,dir.dirName());
         itemMusicFolder->setData(0,Qt::ToolTipRole,MusicDir);
         itemMusicFolder->setIcon(0,QIcon::fromTheme("folder-music",QIcon::fromTheme("folder-sound")));
-         mHashItems[MusicDir]=itemMusicFolder;
+        mHashItems[MusicDir]=itemMusicFolder;
     }
     //مجلد الصور
     dir.setPath(PicturesDir);
-    if(dir.exists()){
+    if(dir.exists()&& !PicturesDir.isEmpty() && PicturesDir!=homeDir){
         QTreeWidgetItem  *itemPicturesFolder=new QTreeWidgetItem(mPlacesItem);
         itemPicturesFolder->setText(0,dir.dirName());
         itemPicturesFolder->setData(0,Qt::ToolTipRole,PicturesDir);
         itemPicturesFolder->setIcon(0,QIcon::fromTheme("folder-images",QIcon::fromTheme("folder-image")));
-    mHashItems[PicturesDir]=itemPicturesFolder;
+        mHashItems[PicturesDir]=itemPicturesFolder;
     }
+
     //مجلد المستندات
-    dir.setPath(DocumentsDir);
-    if(dir.exists()){
+     dir.setPath(DocumentsDir);
+    if(dir.exists()&& !DocumentsDir.isEmpty() && DocumentsDir!=homeDir){
+
         QTreeWidgetItem  *itemDocumentsFolder=new QTreeWidgetItem(mPlacesItem);
         itemDocumentsFolder->setText(0,dir.dirName());
         itemDocumentsFolder->setData(0,Qt::ToolTipRole,DocumentsDir);
@@ -144,44 +160,56 @@ void PlaceTree::chargeFoldersPlaces()
         mHashItems[DocumentsDir]=itemDocumentsFolder;
 
     }
-    //مجلد الفيديو
+
+    //    مجلد الفيديو
     dir.setPath(MoviesDir);
-    if(dir.exists()){
+    if(dir.exists()&& !MoviesDir.isEmpty() && MoviesDir!=homeDir){
         QTreeWidgetItem  *itemMoviesFolder=new QTreeWidgetItem(mPlacesItem);
         itemMoviesFolder->setText(0,dir.dirName());
         itemMoviesFolder->setData(0,Qt::ToolTipRole,MoviesDir);
         itemMoviesFolder->setIcon(0,QIcon::fromTheme("folder-video",QIcon::fromTheme("folder-videos")));
-mHashItems[MoviesDir]=itemMoviesFolder;
+        mHashItems[MoviesDir]=itemMoviesFolder;
     }
 
-     itemTrashFolder=new QTreeWidgetItem(mPlacesItem);
-     itemTrashFolder->setText(0,tr("Trash"));
-     itemTrashFolder->setData(0,Qt::ToolTipRole,":/trash");
-     itemTrashFolder->setIcon(0,EIcon::fromTheme("user-trash","emptytrash"));
-     //--------------------------------------------------------------------------------------
-     QSettings setting("elokab","elokabFm");
+    //ROOT
+    dir.setPath(QDir::rootPath());
+    itemRoot=new QTreeWidgetItem(mPlacesItem);
+    itemRoot->setText(0,tr("Root"));
+    itemRoot->setData(0,Qt::ToolTipRole,QDir::rootPath());
+    //   QIcon icon=   EMimIcon::iconColorized(EIcon::fromTheme("folder"),QColor(255,0,0,150));
+    itemRoot->setIcon(0,EMimIcon::iconFolder(QDir::rootPath()));
+    mHashItems[QDir::rootPath()]=itemRoot;   //QDir::rootPath()
 
-     int count = setting.beginReadArray("Boukmarks");
-     if(count==0){
-          //        addBookmark(MusicDir);
-          //        addBookmark(PicturesDir);
-          //        addBookmark(DocumentsDir);
-          //       return;
-     }
+    //TRASH
+    itemTrashFolder=new QTreeWidgetItem(mPlacesItem);
+    itemTrashFolder->setText(0,tr("Trash"));
+    itemTrashFolder->setData(0,Qt::ToolTipRole,":/trash");
+    itemTrashFolder->setIcon(0,EIcon::fromTheme("user-trash","emptytrash"));
+    mHashItems[":/trash"]=itemTrashFolder;
+    //--------------------------------------------------------------------------------------
+    QSettings setting("elokab","elokabFm");
 
-     for (int i = 0; i < count; ++i){
+    int count = setting.beginReadArray("Boukmarks");
+    if(count==0){
+        //        addBookmark(MusicDir);
+        //        addBookmark(PicturesDir);
+        //        addBookmark(DocumentsDir);
+        //       return;
+    }
 
-          setting.setArrayIndex(i);
+    for (int i = 0; i < count; ++i){
 
-          QString   file = setting.value("file", "").toString();
+        setting.setArrayIndex(i);
 
-          if (! file.isEmpty()){
-               addBookmark(file);
-          }
+        QString   file = setting.value("file", "").toString();
 
-     } // for
+        if (! file.isEmpty()){
+            addBookmark(file);
+        }
 
-     setting.endArray();
+    } // for
+
+    setting.endArray();
 //TODO:add refresh icons
      //place folder ned  refresh icons
 }
@@ -462,7 +490,7 @@ QString PlaceTree::openDeviceUrl(QTreeWidgetItem* item)
 
 /**************************************************************************************
 *                                  MENUS
- **************************************************************************************/
+***************************************************************************************/
 void PlaceTree::customContextMenu(QPoint)
 {
      QTreeWidgetItem *item=currentItem();

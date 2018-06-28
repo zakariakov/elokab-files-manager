@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>380</width>
-    <height>612</height>
+    <height>658</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -100,7 +100,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="lineEdit"/>
+           <widget class="QLineEdit" name="lineEditFileName"/>
           </item>
          </layout>
         </widget>
@@ -635,7 +635,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEditMime"/>
+          <widget class="QLineEdit" name="lineEditMime">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

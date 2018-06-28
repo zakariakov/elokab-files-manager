@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   elokab Copyright (C) 2014 AbouZakaria <yahiaui@gmail.com>             *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #ifndef TAB_H
 #define TAB_H
 
@@ -74,10 +93,11 @@ void setPreview(bool preview){mPreview=preview;}
 signals:
  //void imageLoaded(QFileInfo minfo);
  void dragDropFiles(bool copy,QString path, QStringList list);
- void iconUpdate(const QModelIndex index)const;
+ //void iconUpdate(const QModelIndex index)const;
 
 protected:
-   // QVariant data(const QModelIndex &index, int role) const ;
+
+   QVariant data(const QModelIndex &index, int role) const ;
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
@@ -131,7 +151,7 @@ class Tab : public QTabWidget
   void  largeDirectoryChanged(bool arg);
            //!
           void   urlChanged(const QString &url);
-
+void  tabAdded(const QString &url);
            //!
           void selectedFoldersFiles(QString);
 
@@ -155,11 +175,11 @@ class Tab : public QTabWidget
 void creatThumb(const QString &path);
           //!
           void directoryChanged(const QString &dir);
-          void dataFileChanged(const QString &dir);
-void loadIcons(const QString &currentPath);
+          //void dataFileChanged(const QString &dir);
+//void loadIcons(const QString &currentPath);
 void iconUpdate(QModelIndex index);
           //!
-          void setLargeDirectory(const QString &dir);
+         // void setLargeDirectory(const QString &dir);
 
           //!
           void setShowThumbnails(bool arg);

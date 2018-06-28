@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   elokab Copyright (C) 2014 AbouZakaria <yahiaui@gmail.com>             *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 //#include <EMimIcon>
@@ -44,12 +63,6 @@ MainWindow::MainWindow(QWidget *parent) :
              , qPrintable(QApplication::applicationVersion()));
 
     ui->setupUi(this);
-
-//    mProgressBar=new QProgressBar(ui->statusBar);
-//    mProgressBar->setRange(0,1);
-//    mProgressBar->setTextVisible(false);
-//    mProgressBar->setMaximumHeight(15);
-//    mProgressBar->setVisible(false);
 
     if(QIcon::themeName()=="hicolor"||QIcon::themeName().isEmpty())
     {
@@ -133,13 +146,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(placesTree,SIGNAL(urlPlacesChanged(QString)),mTab,SLOT(setUrl(QString)));
     connect(placesTree,SIGNAL(slotOpenNewTab(QString)),mTab,SLOT(addNewTab(QString)));
-
     connect(pathWidget,SIGNAL(urlChanged(QString)),mTab,SLOT(setUrl(QString)));
 
     connect(ui->treeView,SIGNAL(activated(QModelIndex)),this,SLOT(setUrl(QModelIndex)));
     connect(ui->treeView,SIGNAL(clicked(QModelIndex)),this,SLOT(setUrl(QModelIndex)));
     connect(mTab,SIGNAL(urlChanged(QString)),this,SLOT(setUrl(QString)));
-    connect(mTab,SIGNAL(urlChanged(QString)),pathWidget,SLOT(setUrl(QString)));
+   connect(mTab,SIGNAL(tabAdded(QString)),this,SLOT(setUrl(QString)));
     connect (this,SIGNAL(closeAll()),mTab,SLOT(closeAll()));
     connect(mTab,SIGNAL(  selectedFoldersFiles(QString)),this,SLOT(setSelectedFoldersFiles(QString)));
     connect(ui->mainToolBar,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(toolCustomContextMenu(QPoint)));
@@ -178,16 +190,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuBar->setVisible(mSettings->showMenuBar());
   //  ui->dockWidgetTerminal->setVisible(mSettings->showTerminalTool());
     //--------------defaul-----------------
-    mTab->addNewTab(pathUrl);
+
 
     QFileInfo fi(pathUrl);
     if(!fi.isDir())
         pathUrl=fi.path();
 
-   // mTermWidget->setInitialWorkingDirectory(pathUrl);
-   // mTermWidget->startShellProgram();
+     mTab->addNewTab(pathUrl);
 
-    setUrl(pathUrl);
+//     setUrl(pathUrl);
 
 #ifdef DEBUG_APP
     Messages::showMessage(Messages::END,"MainWindow::MainWindow()");
@@ -327,11 +338,12 @@ void MainWindow::showHidFilterBar()
  **************************************************************************************/
 void MainWindow::setUrl(QString url)
 {
-
+qDebug()<<__FILE__<<__LINE__<<"setUrl"<<url;
 
      m_mainUrl=url;
      placesTree->setCurentUrl(url);
-     mTab->setUrl(url);
+     pathWidget->setUrl(url);
+     //mTab->setUrl(url);
      QDir dir(url);
 
      QString name=dir.dirName();
@@ -447,25 +459,6 @@ void MainWindow::setUrl(QModelIndex index)
 #endif
 }
 
-/**************************************************************************************
- *
- **************************************************************************************/
-//void MainWindow::urlChanged(const QString &url)
-//{
-//#ifdef DEBUG_APP
-//     Messages::showMessage(Messages::BEGIN,"MainWindow::urlChanged()"+url);
-//#endif
-
-//    mTab->setUrl(url);
-// //  pathWidget->setUrl(url);
-//  //  if(mTermWidget->isVisible()){
-
-
-//   // }
-//#ifdef DEBUG_APP
-//     Messages::showMessage(Messages::END,"MainWindow::urlChanged()"+url);
-//#endif
-//}
 
 /**************************************************************************************
  *

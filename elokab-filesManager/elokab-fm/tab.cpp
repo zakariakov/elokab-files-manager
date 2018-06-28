@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   elokab Copyright (C) 2014 AbouZakaria <yahiaui@gmail.com>             *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include "tab.h"
 //#include "filesactions.h"
 //#include <EMimIcon>
@@ -17,131 +36,6 @@
 #include <QDebug>
 //#endif
 
-/*
-Thumbnail::Thumbnail(QFileInfo fi,bool preview, QModelIndex index, QObject *parent)
-: QObject(parent)
-{
-
-    m_index=index;
-    m_info=fi;
-mPreview=preview;
-        m_render = new QFutureWatcher< void >(this);
-
-    connect(m_render, SIGNAL(finished()),
-            SLOT(on_render_finished()));
-
-    connect(this, SIGNAL(imageReady(QIcon))
-            , SLOT(on_imageReady(QIcon)));
-
-  //  qApp->processEvents();
-    startRender();
-
-}
-Thumbnail::~Thumbnail()
-{
-
-}
-
-void Thumbnail::on_render_finished()
-{
-    if(m_index.isValid())
-    imageFiniched(m_index);
-}
-
-void Thumbnail::on_imageReady(QIcon icon)
-{
-
-        if(!m_render->isCanceled())
-        {
-            m_icon = icon;
-        }
-
-}
-
-void Thumbnail::startRender()
-{
-    if(!m_render->isRunning())
-    {
-       // qApp->processEvents();
-        m_render->setFuture(QtConcurrent::run(this, &Thumbnail::render));
-    }
-}
-
-void Thumbnail::cancelRender()
-{
-    m_render->cancel();
-    m_icon = QIcon();
-}
-
-//____________________________________________________________________
-void Thumbnail::render()
-{
-
-
-    if(m_render->isCanceled()){ return; }
-
-
- QImage  image;
-
- QString fpath=m_info.filePath();
-
- if(fpath.isEmpty())return;
- if(!QFile::exists(fpath))return;
-
-
-
- QString mim= EMimIcon::mimeTyppe(m_info);
- if(mim.isEmpty())return;
-
- QIcon retIcon;//= iconProvider()->icon(fi);
-
- //DIR----------------------------
- if(m_info.isDir()){
-
-     retIcon= EMimIcon::iconFolder(fpath);
-
- }
- //X-DESKTOP---------------------
- else if(mim.contains("x-desktop")){
-
-     retIcon=EMimIcon::iconDesktopFile(fpath);
-
-
- }
- //IMAGE-------------------------
- else if(mPreview && mim.startsWith("image")  ){
-
-     QPixmap pix;
-     pix.loadFromData(EMimIcon::iconThambnail(fpath));
-     retIcon=QIcon(pix);
-
- }
- //MIM---------------------------
- else{
-
-     retIcon=EMimIcon::iconByMimType(mim,fpath);
-
- }
-
-
- if(m_info.isSymLink())
-     retIcon= EMimIcon::iconSymLink(retIcon);
-
-// if(!retIcon.isNull() ){
-//     iconCach->insert(fpath,retIcon);
-
-//     if(index(fpath).isValid()&& QFile::exists(fpath))
-//         emit iconUpdate(m_index(fpath));
-////qApp->processEvents();
-// }
-
-
-    if(m_render->isCanceled()){ return;  }
-
-
-    emit imageReady(retIcon);
-}
-*/
 /*****************************************************************************************************
  *
  *
@@ -152,44 +46,16 @@ MyFileSystemModel::MyFileSystemModel(IconProvider *iconProvider,QObject *parent)
 {
     qDebug()<<__FILE__<<__LINE__<<"MyFileSystemModel";
        iconCach=new QHash<QString,QIcon>;
-    //    iconmimCach=new QHash<QString,QIcon>;
-
-    //      iconDesktopCach=new QHash<QString,QIcon>;
-    //    //imageCach=new QHash<QString,QIcon>;
-    //    hashImages=new QHash<QString,QByteArray>;
-       //mThumbnails=new QHash< QModelIndex,Thumbnail* > ;
-    //    hashIndex=new QHash<QString, QModelIndex > ;
     setRootPath("/");
     setNameFilterDisables(false);
     setReadOnly(false);
     setResolveSymlinks(true);
-  //  setIconProvider(iconProvider);
-    //openIconsCache
-
-    //        QFile fileIcons(Edir::cachDir()+"/iconsCach.cache");
-    //    qDebug()<<"iconCach"<<fileIcons.fileName();
-    //        fileIcons.open(QIODevice::ReadOnly);
-    //        QDataStream out(&fileIcons);
-    //        out >> *iconCach;
-    //        fileIcons.close();
+   // setIconProvider(iconProvider);
 
     qDebug()<<__FILE__<<__LINE__<<"MyFileSystemModel end";
 }
 
-/*
-QIcon iconHiden(QIcon icon)
-{
-    QPixmap pix(128,128);
-    pix.fill(Qt::transparent);
-    QPixmap pixIcon=(icon.pixmap(128));
-    QPainter painter(&pix);
-    painter.setOpacity(0.6);
-    painter.drawPixmap(pix.rect(),pixIcon,pixIcon.rect());
-    return QIcon((pix));
-}
-
-
-
+//--------------------------------------------------------------
 QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 {
 
@@ -197,291 +63,32 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
     if (!index.isValid())  return QVariant();
 
-    
-       if (role == Qt::DecorationRole) {
-        if(index.column() == 0) {
-            if(fileName(index).isEmpty())return QFileSystemModel::data(index,role);
-            if(fileName(index)==".")return QFileSystemModel::data(index,role);
-            if(fileName(index)=="..")return QFileSystemModel::data(index,role);
 
-            QIcon reticon=imageThumbnail(index);
-            if(reticon.isNull())
-                reticon=QIcon::fromTheme("unknown");
-
-            if (index.isValid())
-            return reticon;
-
-
-        }
-
+    if(index.column()==0 && role == Qt::ToolTipRole){
+            return fileName(index);
     }
 
 
-        return QFileSystemModel::data(index,role);
+//    if(index.column()==0 && role == Qt::StatusTipRole){
+//            return filePath(index);
+//    }
+
+    //تحميل نوع الملف بالغة النظام
+    if(index.column()==2 && role == Qt::DisplayRole){
+            return mIconProvider->type(fileInfo(index));
+    }
+
+
+      return QFileSystemModel::data(index,role);
         
 
 }
 
-QIcon MyFileSystemModel::imageThumbnail( QModelIndex index)const
-{
 
-
-   if(mThumbnails->contains(index)){
-
-        Thumbnail *tb=mThumbnails->value(index);
-        if(tb){
-            QIcon image= tb->icon();
-
-            if(image.isNull())
-                tb->startRender();
-
-            return image;
-        }
-
-    }
-
-    //qApp->processEvents();
-    Thumbnail *tb=new Thumbnail(fileInfo(index),mPreview,index);
-    mThumbnails->insert(index,tb);
-     connect(tb,SIGNAL(imageFiniched(QModelIndex)),this,SIGNAL(iconUpdate(QModelIndex)));
-
-    return tb->icon();
-
-
-
-}
-*/
-/*
-void MyFileSystemModel::loadImage(QString path)const
-{
-
-    //images-----------------------------------------------
-
-    if(!QFile::exists(path)){
-        qDebug()<<"MyFileSystemModel::loadImage: no exist";
-        return;
-    }
-
-    //QString path=minfo.filePath();
-
-    if( !hashImages->contains(path)){
-
-        QPixmap pix;
-        pix.loadFromData(EMimIcon::iconThambnail(path));
-        QIcon icon=QIcon(pix);
-
-        // QIcon icon=EMimIcon::iconThambnail(path);
-        if(!icon.isNull() && QFile::exists(path))
-        {
-
-            hashImages->insert(path,EMimIcon::iconThambnail(path));
-
-             if(index(path).isValid())
-                emit iconUpdate(index(path));
-
-        }
-
-    }
-
-}
-void MyFileSystemModel::geticon(QFileInfo fi)const
-{
-//bool sym=false;
-//    if(fi.isSymLink()){
-//        if(QFile::exists(fi.symLinkTarget())){
-//            fi.setFile(fi.symLinkTarget());
-//            sym=true;
-//        }
-//    }
-
-    QString fpath=fi.filePath();
-
-    if(fpath.isEmpty())return;
-    if(!QFile::exists(fpath))return;
-    if( iconCach->contains(fpath))  return;
-
-
-    QString mim= EMimIcon::mimeTyppe(fi);
-    if(mim.isEmpty())return;
-
-    QIcon retIcon;//= iconProvider()->icon(fi);
-
-    //DIR----------------------------
-    if(fi.isDir()){
-
-        retIcon= EMimIcon::iconFolder(fpath);
-
-    }
-    //X-DESKTOP---------------------
-    else if(mim.contains("x-desktop")){
-
-        retIcon=EMimIcon::iconDesktopFile(fpath);
-
-
-    }
-    //IMAGE-------------------------
-    else if(mPreview && mim.startsWith("image")  ){
-
-        QPixmap pix;
-        pix.loadFromData(EMimIcon::iconThambnail(fpath));
-        retIcon=QIcon(pix);
-
-    }
-    //MIM---------------------------
-    else{
-      if(iconmimCach->contains(mim))
-          retIcon=iconmimCach->value(mim);
-      else{
-        retIcon=EMimIcon::iconByMimType(mim,fpath);
-        iconmimCach->insert(mim,retIcon);
-      }
-    }
-
-
-    if(fi.isSymLink())
-        retIcon= EMimIcon::iconSymLink(retIcon);
-
-    if(!retIcon.isNull() ){
-        iconCach->insert(fpath,retIcon);
-
-        if(index(fpath).isValid()&& QFile::exists(fpath))
-            emit iconUpdate(index(fpath));
-//qApp->processEvents();
-    }
-
-
-}
-void MyFileSystemModel::loadIcon(QFileInfo fi,QString mim)const
-{
-    //---------------------------------------------------
-
-    QString fpath=fi.filePath();
-
-    if(!QFile::exists(fpath))
-        return;
-
-    if(fi.isSymLink()){
-        if(QFile::exists(fi.symLinkTarget()))
-            fi.setFile(fi.symLinkTarget());
-    }
-
-
-    if(mim.contains("x-desktop")){
-        if(!iconDesktopCach->contains(fpath))
-        {
-            QIcon  retIcon=EMimIcon::iconDesktopFile(fpath);
-            if(!retIcon.isNull() ){
-                iconDesktopCach->insert(fpath,retIcon);
-
-                if(index(fpath).isValid()&& QFile::exists(fpath)){
-                    emit iconUpdate(index(fpath));
-                    return;
-                }
-            }
-        }
-    }
-
-    //icons---------------------------------------------
-    if( !iconCach->contains(mim)){
-
-
-
-     QIcon retIcon=EMimIcon::iconByMimType(mim,fpath);
-        // QIcon retIcon=mIconProvider->icon(fi);
-
-        if(!retIcon.isNull() ){
-            iconCach->insert(mim,retIcon);
-
-
-            if(index(fpath).isValid()&& QFile::exists(fpath))
-                emit iconUpdate(index(fpath));
-
-        }
-
-
-
-    }
-
-
-
-
-}
-
-void MyFileSystemModel::refreshIcons(const QString &dir)
-{
-    qDebug()<<__FILE__<<__LINE__<<"refreshIcons Begin";
-    //    iconCach->clear();
-  setIconProvider(mIconProvider);
-
-//    QDir mDir(dir);
-//    QStringList mlist=mDir.entryList();
-//    foreach (QString s, mlist) {
-//        QString file=dir+"/"+s;
-//        if(index(file).isValid()){
-//            qDebug()<<"updat:"<<file;
-//            QFileInfo fi(file);
-//              setData(index(file),mIconProvider->icon(fi),Qt::DisplayRole);
-
-
-//        }
-
-//    }
-
-    qDebug()<<__FILE__<<__LINE__<<"refreshIcons End";
-}
-
-
-void MyFileSystemModel::clearCache()
-{
-
-
-    QHash<QString, QIcon>::const_iterator r = iconCach->constBegin();
-    QStringList listIcons;
-    while (r != iconCach->constEnd()) {
-
-        if(!QFile::exists(r.key())){
-
-            listIcons.append(r.key());
-        }
-        ++r;
-    }
-    foreach (QString s, listIcons) {
-        qDebug()<<"removing"<<s;
-        iconCach->remove(s);
-    }
-
-
-
-    QFile file(Edir::cachDir()+"/iconsCach.cache");
-    qDebug()<<"saving"<<file.fileName();
-    QDataStream out(&file);
-
-    file.open(QIODevice::WriteOnly);
-    out.setDevice(&file);
-    out << *iconCach;
-    file.close();
-
-}
-
-void MyFileSystemModel::loadIcons(QModelIndexList indexes)
-{
-qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
-//this->blockSignals(true);
-    foreach (QModelIndex item, indexes)
-    {
-        if(!item.isValid())
-            continue;
-   //just wait for loading files
-          //  QtConcurrent::run(this,&MyFileSystemModel::geticon,fileInfo(item));
-//geticon(fileInfo(item));
-   qApp->processEvents();
-
-    }
-  qApp->restoreOverrideCursor();
-//  this->blockSignals(false);
-}
-*/
-QVariant MyFileSystemModel::headerData(int section, Qt::Orientation orientation, int role) const
+//--------------------------------------------------------------
+QVariant MyFileSystemModel::headerData(int section,
+                                       Qt::Orientation orientation,
+                                       int role) const
 {
 
     if(orientation==Qt::Horizontal)
@@ -497,8 +104,10 @@ QVariant MyFileSystemModel::headerData(int section, Qt::Orientation orientation,
             }
 
     return QVariant();
+
 }
-//   int columnCount(const QModelIndex &parent) const;
+
+//--------------------------------------------------------------
 bool MyFileSystemModel::dropMimeData(const QMimeData * data,
                                      Qt::DropAction action,
                                      int row,
@@ -542,6 +151,7 @@ bool MyFileSystemModel::dropMimeData(const QMimeData * data,
 
 /*****************************************************************************************************
  *
+ *                                   TAB
  *
  *****************************************************************************************************/
 
@@ -572,7 +182,7 @@ Tab::Tab(Settings *setting, IconProvider *iconProvider, Actions *actions, QWidge
     mimData=new QMimeData;
 
 
-    connect(this,SIGNAL(urlChanged(QString)),this,SLOT(directoryChanged(QString)));
+   // connect(this,SIGNAL(urlChanged(QString)),this,SLOT(directoryChanged(QString)));
     connect(this,SIGNAL(urlChanged(QString)),this,SLOT(setCurTabText(QString)));
     connect(this,SIGNAL(urlChanged(QString)),mActions,SIGNAL(urlChanged(QString))) ;
     connect(this,SIGNAL(currentChanged(int)),this,SLOT(currentTabChanged(int)));
@@ -596,6 +206,7 @@ Tab::Tab(Settings *setting, IconProvider *iconProvider, Actions *actions, QWidge
     connect(mActions,SIGNAL(showProperties()),this,SLOT(slotShowProperties())) ;
     connect(mActions,SIGNAL(showOpenwithDlg()),this,SLOT(slotShowOpenwithDlg())) ;
     connect(mActions,SIGNAL(reloadIcons()),this,SLOT(updateIcons())) ;
+
     connect(mActions,SIGNAL(sendNewPath(QString)),this,SLOT(setUrl(QString))) ;
     connect(mSettings,SIGNAL(viewModeChanged(int)),this,SLOT(setViewMode(int))) ;
     connect(mSettings,SIGNAL(showHiddenChanged(bool)),this,SLOT(setHiddenFile(bool))) ;
@@ -603,10 +214,10 @@ Tab::Tab(Settings *setting, IconProvider *iconProvider, Actions *actions, QWidge
    // connect(mSettings,SIGNAL(showStandardIconsChanged(bool)),this,SLOT(setStandardIcons(bool))) ;
     connect(mSettings,SIGNAL(sortingChanged()),this,SLOT(setSorting()));
 
-    connect(myModel,SIGNAL(directoryLoaded(QString)),this,SLOT(loadIcons(QString)));
+ //   connect(myModel,SIGNAL(directoryLoaded(QString)),this,SLOT(loadIcons(QString)));
     connect(myModel,SIGNAL(dragDropFiles(bool,QString,QStringList)),this,SLOT(dragDropFiles(bool,QString,QStringList)));
-   connect(myModel,SIGNAL(iconUpdate(QModelIndex)),this,SLOT(iconUpdate(QModelIndex)));
-    connect(myModel,SIGNAL(rootPathChanged(QString)),this,SLOT(directoryChanged(QString)));
+   //connect(myModel,SIGNAL(iconUpdate(QModelIndex)),this,SLOT(iconUpdate(QModelIndex)));
+ //  connect(myModel,SIGNAL(directoryLoaded(QString)),this,SLOT(directoryChanged(QString)));
    // connect(mFileSystemWatcher,SIGNAL(fileChanged(QString)),this,SLOT(dataFileChanged(QString)));
 
     setHiddenFile(mSettings->showHidden());
@@ -675,9 +286,8 @@ void Tab::addNewTab( const QString &url)
 
     pageWidget=new PageWidget(myModel,mSettings,mActions,mUrl,mIconProvider, this);
 
-    connect(pageWidget,SIGNAL(urlChanged(QString)),this,SIGNAL(urlChanged(QString)));
-    connect(pageWidget,SIGNAL(  selectedFoldersFiles(QString)),this,SIGNAL(  selectedFoldersFiles(QString)));
-    connect(pageWidget,SIGNAL(  isLargeDirectory(QString)),this,SLOT(setLargeDirectory(QString)));
+     // connect(pageWidget,SIGNAL(  isLargeDirectory(QString)),this,SLOT(setLargeDirectory(QString)));
+  //  connect(pageWidget,SIGNAL(urlBeginChanged(QString)),this,SLOT(directoryChanged(QString)));
 
     QDir dir(mUrl);
     addTab(pageWidget,EMimIcon::iconFolder(mUrl),dir.dirName());
@@ -686,63 +296,11 @@ void Tab::addNewTab( const QString &url)
     myModel->sort(mSettings->sortBy(),mSettings->sortOrder());
     setCurrentWidget(pageWidget);
     setCurrentIndex(currentIndex());
+
+    connect(pageWidget,SIGNAL(urlChanged(QString)),this,SIGNAL(urlChanged(QString)));
+    connect(pageWidget,SIGNAL(selectedFoldersFiles(QString)),this,SIGNAL(  selectedFoldersFiles(QString)));
+emit tabAdded(mUrl);
     qDebug()<<__FILE__<<__LINE__<<"addNewTab End";
-}
-
-/*****************************************************************************
- *
- *  TODO REMOVE THIS
- ****************************************************************************/
-void Tab::setLargeDirectory(const QString &dir)
-{
-    qDebug()<<__FILE__<<__LINE__<<"setLargeDirectory";
-
-    if(!listDirectory.contains(dir)){
-        listDirectory.append(dir);
-       // myModel->setIconProvider(new QFileIconProvider());
-        qApp->setOverrideCursor(QCursor(Qt::WaitCursor));
-
-    }
-
-    qDebug()<<__FILE__<<__LINE__<<"setLargeDirectory End";
-}
-
-/*****************************************************************************
- *
- *TODO REMOVE THIS
- ****************************************************************************/
-void Tab::dataFileChanged(const QString &dir)
-{
-    qDebug()<<"file changed>>"<<dir;
-   // myModel->setRootPath()
-}
-
-void Tab::directoryChanged(const QString &dir)
-{
-    if(pageWidget){
-        QtConcurrent::run(this, &Tab::creatThumb,dir);
-    }
-
-}
-
-//TODO REMOVE THIS
-void Tab::loadIcons(const QString &currentPath)
-{
-    qDebug()<<__FILE__<<__LINE__<<"loadIcons()>>>>> loaded"<<currentPath;
-
-    //     if(!listDirectory.contains(currentPath)){
-    //         listDirectory.append(currentPath);
-    //     }
-
-    qApp->restoreOverrideCursor();
-    if(myModel->iconProvider()!=mIconProvider){
-        //if(listDirectory.contains(currentPath))
-        qDebug()<<"dir>>>>>>>>>>>>>>>>>>>>> mIconProvider";
-     //  myModel->setIconProvider(mIconProvider);
-    }
-
-
-    qDebug()<<__FILE__<<__LINE__<<"loadIcons End";
 }
 
 void Tab::iconUpdate(QModelIndex index)
@@ -794,7 +352,9 @@ void Tab::updateIcons()
 
     if(!pageWidget)return;
 
-    QString currentPath=pageWidget->curentDir();
+      QString currentPath=pageWidget->curentDir();
+
+     QtConcurrent::run(this, &Tab::creatThumb,currentPath);
 
     QApplication::setOverrideCursor(Qt::WaitCursor) ;
 
@@ -803,7 +363,7 @@ void Tab::updateIcons()
         pageWidget->iconUpdate(idx);
     }
 
-    pageWidget->setUrl( pageWidget->dirPath());
+   // pageWidget->setUrl( pageWidget->dirPath());
 
     QApplication::restoreOverrideCursor();
 
@@ -860,6 +420,7 @@ void Tab::oncloseRequested(int index)
 void Tab::setCurTabText(const QString &title)
 {
     qDebug()<<__FILE__<<__LINE__<<"setCurTabText"<<title;
+
     QDir dir(title);
     QString name=dir.dirName();
     QIcon iconF;
@@ -889,10 +450,9 @@ void Tab::setCurTabText(const QString &title)
  ****************************************************************************/
 void Tab::currentTabChanged(int index)
 {
-    qDebug()<<__FILE__<<__LINE__<<"currentTabChanged"<<QString::number(index);
+    qDebug()<<__FILE__<<__LINE__<<"currentTabChanged"<<index;
 
-    qDebug()<<"Tab::currentTabChanged()"<<index;
-    setTabsClosable(count()-1);
+      setTabsClosable(count()-1);
 
     pageWidget= qobject_cast<PageWidget *>(widget(index));
     if(pageWidget)
@@ -908,7 +468,6 @@ void Tab::currentTabChanged(int index)
  ****************************************************************************/
 void Tab::setViewMode(int mode)
 {
-
     if(pageWidget)
         pageWidget->setViewMode(mode);
 }
@@ -921,74 +480,102 @@ void Tab::setUrl(const QString &url)
 {
     if(pageWidget){
        // QtConcurrent::run(this, &Tab::creatThumb,url);
+       QString path=pageWidget->curentDir();
 
-        pageWidget->setUrl(url);
-
+       if(url==path) return;
+           pageWidget->setUrl(url);
     }
 }
 
+
+void Tab::directoryChanged(const QString &dir)
+{
+    qDebug()<<__FILE__<<__LINE__<<"directoryChanged"<<dir;
+
+       if(pageWidget ){
+          //  QtConcurrent::run(this, &Tab::creatThumb,dir);
+        }
+
+    qDebug()<<__FILE__<<__LINE__<<"directoryChanged END";
+}
+
+/*****************************************************************************
+ *  انشاء مصغرات اذا لم تكن موجودة
+ *  عند فتح اي مجلد والبحث عن الصور اذا كانت كوجودة
+ ****************************************************************************/
+
 void Tab::creatThumb(const QString &path)
 {
+
+    qDebug()<<__FILE__<<__LINE__<<"creatThumb"<<path;
+    QString thumbnail=Edir::cachDir()+"/thambnail";
+    QDir dir(thumbnail);
+    dir.mkpath(thumbnail);
+    QImage pix;
+    QImageReader reader;
+//    qDebug()<<reader.supportedImageFormats();
+//    qDebug()<<reader.supportedMimeTypes();
+
+    QList<QByteArray> list=reader.supportedMimeTypes();
+
     QSettings setting("elokab","thambnail");
+    QDirIterator it(path ,QDir::Files|QDir::Hidden, QDirIterator::NoIteratorFlags);
+
+    while (it.hasNext()) {
+        QString file= it.next();
+        QFileInfo fi(file);
+        QString mim=EMimIcon::mimeTyppe(fi);
+
+        if(mim.startsWith("image")&& list.contains(mim.toLatin1())){
+
+            //-------------------------------------
+            QByteArray text=file.toUtf8();
+
+            QString fileThumbnail=thumbnail+"/"+text.toHex();
+
+            if(QFile::exists(fileThumbnail)){
+               reader.setFileName(fileThumbnail);
+                QString  fModified=reader.text("DATETIME");
+                qDebug()<<"exist"<<fModified<<file;
+                //QString fModified=setting.value(file).toString();
+                if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss"))
+                    continue;
+
+            }
+ reader.setFileName(file);
+
+            //  pix.load((file));
+            if(qMax(reader.size().width(),reader.size().height())>128){
+ qDebug()<<"created"<<reader.size()<<file;
+                if(fi.absolutePath()!=thumbnail){
+
+                    //  pix= QImage(128,128,QImage::Format_ARGB32);
+                    pix.load(file);
+                    pix.setText("DATETIME",fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
+                    pix= pix.scaled(QSize(128,128),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                    pix.setText("DATETIME",fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
+
+                    // setting.setValue(file,fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
+
+                    pix.save(fileThumbnail,"png",50);
+                    QModelIndex idx=myModel->index(file);
+
+                    if(idx.isValid() && pageWidget){
+                        pageWidget->iconUpdate(idx);
+                        qApp->processEvents();
+                    }
+
+                }
+            }
+
+            pix=QImage();
 
 
-  QDir dir(path);
-  QDirIterator it(path ,QDir::Files|QDir::Hidden, QDirIterator::NoIteratorFlags);
+            //---------------------------------------------------------------
+        }
 
-  while (it.hasNext()) {
-      QString file= it.next();
-      QFileInfo fi(file);
-      QPixmap pix;
-      QImageReader reader;
-      QString mim=EMimIcon::mimeTyppe(fi);
-      if(mim.startsWith("image")){
-
-          //-------------------------------------
-          QByteArray text=file.toUtf8();
-
-          QString thumbnail=Edir::cachDir()+"/thambnail";
-
-          QString fileThumbnail=thumbnail+"/"+text.toHex();
-
-
-          if(QFile::exists(fileThumbnail)){
-             // qDebug()<<"exist"<<file;
-              QString fModified=setting.value(file).toString();
-              if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss"))
-                  continue;
-
-          }
-
-
-          reader.setFileName(file);
-          //  pix.load((file));
-          if(qMax(reader.size().width(),reader.size().height())>128){
-              qDebug()<<"creat"<<file;
-              //  pix= QImage(128,128,QImage::Format_ARGB32);
-              pix=  pix.fromImageReader(&reader);
-              pix= pix.scaled(QSize(128,128),Qt::KeepAspectRatio);
-              if(fi.absolutePath()!=thumbnail){
-                  QDir dir(thumbnail);
-                  dir.mkpath(thumbnail);
-                  setting.setValue(file,fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
-                  pix.save(fileThumbnail,"png",50);
-                  QModelIndex idx=myModel->index(file);
-                  if(idx.isValid()){
-
-                      if(pageWidget)
-                          pageWidget->iconUpdate(idx);
-                       qApp->processEvents();
-                  }
-
-              }
-          }
-          pix=QPixmap();
-
-          //---------------------------------------------------------------
-      }
-
-  }
-
+    }
+    qDebug()<<__FILE__<<__LINE__<<"creatThumb END";
 
 }
 

@@ -1,4 +1,23 @@
-﻿#include "mylistview.h"
+﻿/***************************************************************************
+ *   elokab Copyright (C) 2014 AbouZakaria <yahiaui@gmail.com>             *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
+#include "mylistview.h"
 //#include "itemdelegate.h"
 //#include <EMimIcon>
 #include <QDebug>
@@ -13,7 +32,7 @@ MyListView::MyListView(QFileSystemModel *model, Actions *action,QWidget *parent)
 
      setModel(mModel);
     setContentsMargins(5,5,5,5);
-
+setSpacing(5);
      setResizeMode(QListView::Adjust);
 
      setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -100,7 +119,7 @@ void MyListView::setListViewMode(ViewMode mode)
  **************************************************************************************/
 void   MyListView::setViewIconSize(int size)
 {
-  //  TODO FIX ViwIconSize
+
   //  16<<22<<24<<32<<48<<64<<72<<96<<128
   //  QFontMetrics fm(this->font());
 

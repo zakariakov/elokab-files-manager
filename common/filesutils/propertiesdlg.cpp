@@ -1,3 +1,22 @@
+/***************************************************************************
+ *   elokab Copyright (C) 2014 AbouZakaria <yahiaui@gmail.com>             *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include "propertiesdlg.h"
 #include "ui_propertiesdlg.h"
 #include <EMimIcon>
@@ -45,7 +64,7 @@ PropertiesDlg::PropertiesDlg(const QStringList &urls, QWidget *parent) :
           ui->labelType->setText(EMimIcon::mimLang(mMim,locale().name().section("_",0,0)));
           mIcon=EMimIcon::icon(fi);
            ui->toolButton->setIcon(mIcon);
-          ui->lineEdit->setText(fi.fileName());
+          ui->lineEditFileName->setText(fi.fileName());
           ui->widgetDevice->setVisible(fi.isDir());
           ui->widgetFolderColor->setVisible(fi.isDir());
           ui->labelSymCaption->setVisible(fi.isSymLink());
@@ -358,6 +377,18 @@ void PropertiesDlg::on_buttonBox_accepted()
      }
 
 
+ if(ui->lineEditFileName->isModified()){
+      QFileInfo fi=mUrls.at(0);
+     QFile file(fi.absoluteFilePath());
+     QString oldfname=fi.filePath();
+     QString newname=fi.absolutePath()+"/"+ui->lineEditFileName->text();
+   //  file.rename(ui->lineEdit->text());
+     qDebug()<<"oldName"<<oldfname;
+     qDebug()<<"newName"<<newname;
+     file.rename(newname);
+ }
+
+
 }
 
 void PropertiesDlg::applyPermsToAll(const QString &path)
@@ -413,6 +444,7 @@ void PropertiesDlg::getPermission(const QFileInfo &info)
 
     ui->widgetPermission->setEnabled(setPermission(info.absoluteFilePath(),info.isExecutable()));
     ui->widgetFolderColor->setEnabled( ui->widgetPermission->isEnabled());
+    ui->lineEditFileName->setReadOnly(! ui->widgetPermission->isEnabled());
 
      connect(ui->comboBoxOwner,SIGNAL(currentIndexChanged(int)),this,SLOT(setChmod(int)));
      connect(ui->comboBoxGroup,SIGNAL(currentIndexChanged(int)),this,SLOT(setChmod(int)));

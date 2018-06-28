@@ -1,6 +1,24 @@
+/***************************************************************************
+ *   elokab Copyright (C) 2014 AbouZakaria <yahiaui@gmail.com>             *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include "itemdelegate.h"
 #include <EMimIcon>
-//#include "iconprovider.h"
 #include <QAbstractItemDelegate>
 #include <QStyledItemDelegate>
 #include <QDebug>
@@ -14,22 +32,25 @@
 #include <QImageWriter>
 #include <QImageReader>
 #include <QtConcurrent>
-
+#define MARGINS 3
 //____________________________________________________________________
 
 ItemDelegate::ItemDelegate()
 {
-    mMargins=QSize(3,3);
-    mSymlinkIcon=QIcon::fromTheme("emblem-symbolic-link");
 
-    imageCache=new QMap<QString ,QIcon>  ;
-    iconCache =new QMap<QString ,QIcon>  ;
+    mSymlinkIcon=EIcon::fromTheme("emblem-symbolic-link");
+
+    imageCache  =new QMap<QString ,QIcon>  ;
+
+    iconCache   =new QMap<QString ,QIcon>  ;
     folderCache =new QMap<QString ,QIcon>  ;
-    deskCache =new QMap<QString ,QIcon>  ;
+    deskCache   =new QMap<QString ,QIcon>  ;
+      listThumb =new QStringList;
 }
 
 int lineNumber(QString txt,QFont font,int _w)
 {
+    //! عدد الاسطر في نص الايقونة
     QFontMetrics fm1(font);
     QTextLayout txtlayout(txt, font);
     int numLines = 0;
@@ -60,7 +81,66 @@ int lineNumber(QString txt,QFont font,int _w)
 
 }
 
+void ItemDelegate::saveImageThumb(const QFileInfo &fi,const QString &fileThumbnail) const
+{
+qDebug()<<"creatthumb"<<fi.filePath();
 
+    QImage image;
+    image.load(fi.filePath());
+    image.setText("DATETIME",fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
+    image= image.scaled(QSize(128,128),Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    image.setText("DATETIME",fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
+    image.save(fileThumbnail,"png",50);
+    emit imageHasThumb(fi.filePath());
+    listThumb->removeAll(fi.filePath());
+}
+
+QByteArray ItemDelegate::iconThambnail(const QString &file) const
+{
+
+    QFileInfo fi(file);
+
+    QByteArray text=file.toUtf8();
+
+    QString thumbnail=Edir::thumbnaileCachDir();
+
+    QString fileThumbnail=thumbnail+"/"+text.toHex();
+
+    QImage image;
+    bool hasThumb=false;
+
+    if(QFile::exists(fileThumbnail)){
+        QImageReader reader(fileThumbnail);
+        QString fModified=reader.text("DATETIME");
+        if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss")){
+            image.load(fileThumbnail);
+            hasThumb=true;
+        }
+
+    }
+
+    if(!hasThumb){
+        QImageReader reader(file);
+
+        if(qMax(reader.size().width(),reader.size().height())<=128){
+            image.load((file));
+        }else{
+            if(fi.absolutePath()!=thumbnail){
+                if(!listThumb->contains(fi.filePath())) {
+                    listThumb->append(fi.filePath());
+                    QtConcurrent::run(this, &ItemDelegate::saveImageThumb,fi,fileThumbnail);
+                }
+            }
+        }
+    }
+
+    QBuffer buffer;
+    QImageWriter writer(&buffer, "png");
+    writer.setQuality(50);
+    writer.write(image);
+    return buffer.buffer();
+
+}
 
 //______________________________________________________________________________
 QIcon ItemDelegate::decoration(QString filePath)const
@@ -73,12 +153,7 @@ QIcon ItemDelegate::decoration(QString filePath)const
     if( info.fileName()=="." || info.fileName()==".." )
         return QIcon();
 
-
-    // ---------------iconCach---------------------
-    //    if(iconCache->contains(filePath))
-    //        return   iconCache->value(filePath);
-
-    if(info.isSymLink()){
+       if(info.isSymLink()){
 
         if(QFile::exists(info.symLinkTarget())){
             filePath=info.symLinkTarget();
@@ -122,27 +197,35 @@ QIcon ItemDelegate::decoration(QString filePath)const
         if(imageCache->contains(filePath))
             return imageCache->value(filePath);
 
-        QPixmap pix;
-        pix.loadFromData(EMimIcon::iconThambnail(filePath));
-        retIcon=QIcon(pix);
-        if(!retIcon.isNull()){
-            imageCache->insert(filePath,retIcon);
-            return retIcon;
 
+        //QImageReader reader;
+       // QList<QByteArray> list=QImageReader::supportedMimeTypes();
+        if( QImageReader::supportedMimeTypes().contains(mim.toLatin1())){
+
+             QPixmap pix;
+            pix.loadFromData(iconThambnail(filePath));
+
+            retIcon=QIcon(pix);
+            if(!retIcon.isNull()){
+                imageCache->insert(filePath,retIcon);
+                return retIcon;
+            }/*else{
+                emit imageHasThumb(filePath);
+            }*/
         }
     }
 
     if(iconCache->contains(mim))
         return iconCache->value(mim);
 
-    retIcon=   EMimIcon::iconByMimType(mim,filePath);
+    retIcon=EMimIcon::iconByMimType(mim,filePath);
 
+    // ---------------iconCach---------------------
     if(!retIcon.isNull()){
         iconCache->insert(mim,retIcon);
         return retIcon;
     }
 
-    // ---------------iconCach---------------------
 
     return QIcon::fromTheme("unknon");
 
@@ -203,11 +286,8 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         //  painter->save();
         painter->setClipRect(option.rect);
 
-//        option.decorationAlignment = Qt::AlignHCenter | Qt::AlignTop;
-//        option.displayAlignment = Qt::AlignTop | Qt::AlignHCenter;
-
         // draw the icon
-        QPoint iconPos(option.rect.x() + (option.rect.width() - option.decorationSize.width()) / 2, option.rect.y() + mMargins.height());
+        QPoint iconPos(option.rect.x() + (option.rect.width() - option.decorationSize.width()) / 2, option.rect.y() + MARGINS);
         // in case the pixmap is smaller than the requested size
         QSize margin = ((option.decorationSize - pixmap.size()) / 2).expandedTo(QSize(0, 0));
 
@@ -230,7 +310,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         //------------------------  رسم النص  --------------------------
         //مربع النص
         QRectF textRect(option.rect.x() + (option.rect.width() - itemSize.width()) / 2,
-                        option.rect.y() + mMargins.height() + option.decorationSize.height(),
+                        option.rect.y() + MARGINS + option.decorationSize.height(),
                         itemSize.width(),
                         itemSize.height() - option.decorationSize.height());
 
@@ -257,7 +337,6 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         txtLayout.setTextOption(textOption);
         int numLines=0;
         txtLayout.beginLayout();
-        //QString elidedText;
         int height=0;
         for(;;) {
             QTextLine txtLine = txtLayout.createLine();
@@ -273,17 +352,15 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
             height +=fm1.leading();
             txtLine.setPosition(QPointF(0, height));
 
-
+            //اذا كان النص اكبر من الحاوي
             if(txtLine.naturalTextWidth()>textRect.width()-2){
-                // QTextLine lastLine = txtLayout.lineAt(numLines );
+
                 textOption.setAlignment(Qt::AlignJustify);
                 QString  lastText;//=txt.mid(lastLine.textStart()); ;
                 lastText=fm1.elidedText(txt,Qt::ElideRight,textRect.width());
-                //    QPointF pos(textRect.x(),textRect.top()+height);
-                //QRect rrect=QRect(textRect.x(),textRect.top()+height,textRect.width(),textRect.height());
                 QRectF rrect=textRect;
                 rrect.adjust(2,height,0,0);
-               // qDebug()<<rrect<<textRect<<txt;
+
                 painter->drawText(rrect,lastText,textOption);
                 //break;
             }else{
@@ -298,7 +375,7 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         //  painter->drawText(textRect,txt,textOption);
 
     }
-    // منظر تفصيلي (tree view)-----------------------------------------------
+    //! منظر تفصيلي (tree view)-----------------------------------------------
     else {
 
         //رسم التحديد على كامل المربع
@@ -310,30 +387,28 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
         QRect rect;
 
         if(qApp->isRightToLeft()){
-            iconPos=QPoint(option.rect.x() + (option.rect.width() - option.decorationSize.width()-mMargins.width()),
+            iconPos=QPoint(option.rect.x() + (option.rect.width() - option.decorationSize.width()-MARGINS),
                            option.rect.y() +(option.rect.height()-option.decorationSize.height())/2);
 
             rect=QRect(option.rect.x(),
                        option.rect.y(),
-                       option.rect.width()-option.decorationSize.width()-(mMargins.width()*2),
+                       option.rect.width()-option.decorationSize.width()-(MARGINS*2),
                        option.rect.height());
 
             //      textOption.setTextDirection(Qt::RightToLeft);
             textOption.setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
         }else{
-            iconPos=QPoint(option.rect.x() + mMargins.width() ,
+            iconPos=QPoint(option.rect.x() + MARGINS ,
                            option.rect.y() +(option.rect.height()-option.decorationSize.height())/2);
 
-            rect=QRect(option.rect.x()+ option.decorationSize.width()+(mMargins.width()*2),
+            rect=QRect(option.rect.x()+ option.decorationSize.width()+(MARGINS*2),
                        option.rect.y(),
-                       option.rect.width()-option.decorationSize.width()-(mMargins.width()*2),
+                       option.rect.width()-option.decorationSize.width()-(MARGINS*2),
                        option.rect.height());
             //textOption.setTextDirection(Qt::LeftToRight);
             textOption.setAlignment(Qt::AlignLeft| Qt::AlignVCenter);
         }
-
-        //    rect.adjust(2, 2, -2, -2);
 
         //رسم النقاط الثلاث اذا كان النص اكبر من المربع
         if(fm1.width(txt)>=rect.width())
@@ -383,14 +458,26 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 
         QString txt=index.data(Qt::EditRole).toString();
 
+        int defW=70;
+int size=option.decorationSize.width();
+
+                 if(size<=24)defW=70;
+            else if(size<=32)defW=60;
+            else if(size<=48)defW=56;
+            else if(size<=64)defW=30;
+            else if(size<=72)defW=20;
+            else if(size<=96)defW=10;
+            else if(size<=128)defW=0;
+
+
         //طول الحاوي للنص
-        int _w=option.decorationSize.width()+(60);
+        int _w=option.decorationSize.width()+(defW);
 
 
         int line=lineNumber(txt,option.font,_w-4);
         //       qDebug()<<"line" <<line<<_w<<ln<<txt;
 
-        int _h=option.decorationSize.height()+(mMargins.height()*3)+line/*(fh*line)*/;
+        int _h=option.decorationSize.height()+(MARGINS*3)+line/*(fh*line)*/;
         return  QSize(_w,_h);
 
 
@@ -402,25 +489,36 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 }
 
 //______________________________________________________________________________
-QIcon::Mode ItemDelegate::iconModeFromState(const QStyle::State state) {
+QIcon::Mode ItemDelegate::iconModeFromState(const QStyle::State state)
+{
 
-//    if(state & QStyle::State_Enabled) {
-//        return (state & QStyle::State_Selected) ? QIcon::Selected : QIcon::Normal;
-//    }
     if(state & QStyle::State_Enabled) {
         if((state & QStyle::State_Selected) )
-            return  QIcon::Active;
-
+            return  QIcon::Selected;
 
         if((state & QStyle::State_MouseOver) )
-            return  QIcon::Normal;
+            return  QIcon::Selected;
 
-        return QIcon::Selected;
+        return QIcon::Normal;
     }
-
-
-
 
 
     return QIcon::Disabled;
 }
+
+ void ItemDelegate::clearCurentPath(const QString &path)
+ {
+     QDir dir(path);
+     QDirIterator it(path ,QDir::Files|QDir::Hidden, QDirIterator::NoIteratorFlags);
+
+     while (it.hasNext()) {
+         QString file= it.next();
+
+         imageCache->remove(file) ;
+         iconCache ->remove(file)  ;
+        // folderCache->remove(file)   ;
+         deskCache->remove(file)  ;
+
+     }
+
+ }

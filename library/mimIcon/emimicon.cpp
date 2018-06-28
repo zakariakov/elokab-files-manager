@@ -16,6 +16,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #include "emimicon.h"
 
 #include <magic.h>
@@ -269,11 +270,11 @@ QByteArray EMimIcon::iconThambnail(const QString &file)
     QSettings setting("elokab","thambnail");
     QBuffer buffer;
     QImage pix;
-bool hasThumb=false;
+    bool hasThumb=false;
 
     if(QFile::exists(fileThumbnail)){
-
-        QString fModified=setting.value(file).toString();
+        QImageReader reader(fileThumbnail);
+        QString fModified=reader.text("DATETIME");
         if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss")){
             pix.load(fileThumbnail);
             hasThumb=true;
