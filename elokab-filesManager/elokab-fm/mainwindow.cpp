@@ -31,38 +31,42 @@
 #include<QDesktopServices>
 #include<QUrl>
 #include<QClipboard>
-//#include<QStyleFactory>
+#include<QSplitter>
+
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow( QString pathUrl,QWidget *parent) :
      QMainWindow(parent),
      ui(new Ui::MainWindow)/*,m_fileWatcher(0)*/
 {
-   // qDebug()<<QStyleFactory::keys();
-    QStringList args = QApplication::arguments();
-    QString pathUrl=QDir::homePath();
-    if(args.count()>1)
-    {
 
-        QUrl url(args.at(1));
 
-      //  pathUrl=url.toLocalFile();
+    if(pathUrl.isEmpty())
+       pathUrl=QDir::homePath();
+//    if(args.count()>1)
+//    {
 
-         pathUrl=url.toString();
-         if(pathUrl.startsWith("file://"))
-             pathUrl.remove("file://");
-    }
+//        QUrl url(args.at(1));
 
-    qWarning("***********************************************************************************************\n"
-             "** ELOKAB FILES MANAGER VERTION %s BY ABOU ZAKARIA LICENCE GPL 3                            **\n"
-             "**ELOKAB FM WAS STARTED IN NORMAL MODE. IF YOU WANT TO SEE DEBUGGING INFORMATION, PLEASE USE:**\n"
-             "** elokab-fm --debug                                                                         **\n"
-             "***********************************************************************************************\n"
+//      //  pathUrl=url.toLocalFile();
+
+//         pathUrl=url.toString();
+//         if(pathUrl.startsWith("file://"))
+//             pathUrl.remove("file://");
+//    }
+
+    qWarning("***********************************************************************************\n"
+             "** ELOKAB FILES MANAGER VERTION %s BY ABOUZAKARIA LICENCE GPL 3                  **\n"
+             "** ELOKAB FM WAS STARTED IN NORMAL MODE.                                         **\n"
+             "** IF YOU WANT TO SEE DEBUGGING INFORMATION, PLEASE USE:  elokab-fm --debug      **\n"
+             "***********************************************************************************\n"
              , qPrintable(QApplication::applicationVersion()));
 
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
     ui->setupUi(this);
+
 
     if(QIcon::themeName()=="hicolor"||QIcon::themeName().isEmpty())
     {
@@ -87,8 +91,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->verticalLayoutPlace->addWidget(placesTree);
     QMenu  *menufile=new QMenu(tr("&File"));
     menufile->addActions(mActions->menuFile()->actions());
+     menufile->addAction(mActions->propertiesAction());
     menufile->addSeparator();
-    menufile->addAction(mActions->actQuit);
+    menufile->addAction(mActions->quitAction());
     ui->menuBar->addMenu(menufile);
 
     ui->menuBar->addMenu(mActions->menuView());
@@ -104,6 +109,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     addActions(mActions->listActions());
 
+    QToolButton *btn=new QToolButton;
+    btn->setIconSize(QSize(16,16));
+    btn->setAutoRaise(true);
+    btn->setDefaultAction(mActions->folderPlaceAction());
+    ui->hLayoutPlace->addWidget(btn);
+    //
     myModel = new QFileSystemModel(this);
     myModel->setRootPath(QDir::root().absolutePath());
     myModel->setFilter(QDir::AllDirs|QDir::NoDotAndDotDot);
@@ -126,13 +137,13 @@ MainWindow::MainWindow(QWidget *parent) :
     //     pathWidget->setUrl(path);
 
 
-    mActions->actPathWidget->setDefaultWidget(pathWidget);
-
+    mActions->pathWidgetAction()->setDefaultWidget(pathWidget);
+     //
       setupToolBarActions();
 
 
-    if(QApplication::layoutDirection()==Qt::RightToLeft)
-        addDockWidget(Qt::RightDockWidgetArea, ui->dockWidget);
+//    if(QApplication::layoutDirection()==Qt::RightToLeft)
+//        addDockWidget(Qt::RightDockWidgetArea, ui->dockWidget);
 
 
     for (int i = 1; i <  myModel->columnCount(); ++i)
@@ -155,9 +166,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (this,SIGNAL(closeAll()),mTab,SLOT(closeAll()));
     connect(mTab,SIGNAL(  selectedFoldersFiles(QString)),this,SLOT(setSelectedFoldersFiles(QString)));
     connect(ui->mainToolBar,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(toolCustomContextMenu(QPoint)));
-    connect(ui->dockWidget,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(toolCustomContextMenu(QPoint)));
+    //connect(ui->dockWidget,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(toolCustomContextMenu(QPoint)));
     connect(mFileInfo,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(toolCustomContextMenu(QPoint)));
-  //  connect(ui->dockWidgetTerminal,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(toolCustomContextMenu(QPoint)));
 
     connect(filterBar,SIGNAL(filterChanged(QString)),mTab,SLOT(setModelFiltrer(QString)));
     connect(mActions,SIGNAL(showFilterBar()),this,SLOT(showHidFilterBar()));
@@ -167,29 +177,24 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mSettings,SIGNAL(showMenuBarChanged(bool)),ui->menuBar,SLOT(setVisible(bool)));
     connect(mSettings,SIGNAL(showToolbarChanged(bool)),ui->mainToolBar,SLOT(setVisible(bool)));
     connect(mSettings,SIGNAL(singleclickChanged()),this,SLOT(changeSingleClick()));
-   // connect(mSettings,SIGNAL(showTerminalToolChanged(bool)),ui->dockWidgetTerminal,SLOT(setVisible(bool)));
-   // connect(ui->dockWidgetTerminal,SIGNAL(visibilityChanged(bool)),mSettings,SIGNAL(showTerminalToolChanged(bool)));
-   // connect(ui->dockWidgetTerminal,SIGNAL(visibilityChanged(bool)),this,SLOT(terminalVisibilityChanged(bool)));
-
-   // connect(mTab,SIGNAL(largeDirectoryChanged(bool)),this,SLOT(showProgress(bool)));
 
 
 
-
-    QSettings settings("elokab", "elokabFm");
+    ui->splitter->setSizes(QList<int>()<<1<<2);
+    QSettings settings(QApplication::organizationName(),QApplication::applicationName());
     settings.beginGroup("Window");
     restoreGeometry(settings.value("geometry").toByteArray());
+    ui->splitter->restoreState(settings.value("splitterSizes").toByteArray());
     settings.endGroup();
 
     changeSingleClick();
-    ui->dockWidget->setMinimumWidth(200);
+
     //user  settings
     mFileInfo->setVisible(mSettings->showInformation());
     ui->mainToolBar->setVisible(mSettings->showToolbar());
     stackSetCurrentIndex(mSettings->folderNavigation());
     ui->menuBar->setVisible(mSettings->showMenuBar());
-  //  ui->dockWidgetTerminal->setVisible(mSettings->showTerminalTool());
-    //--------------defaul-----------------
+     //--------------defaul-----------------
 
 
     QFileInfo fi(pathUrl);
@@ -199,10 +204,11 @@ MainWindow::MainWindow(QWidget *parent) :
      mTab->addNewTab(pathUrl);
 
 //     setUrl(pathUrl);
+  Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 
-#ifdef DEBUG_APP
-    Messages::showMessage(Messages::END,"MainWindow::MainWindow()");
-#endif
+//ui->widgetPlace->setGeometry(0,0,150,150);
+
+
 
 }
 
@@ -228,46 +234,53 @@ void MainWindow::changeSingleClick()
  **************************************************************************************/
 void MainWindow::closeEvent(QCloseEvent *)
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::closeEvent()");
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
 
      emit closeAll();
-     //
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::closeEvent()");
-#endif
 
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 }
 /**************************************************************************************
  *
  **************************************************************************************/
 MainWindow::~MainWindow()
 {
-    QSettings settings("elokab", "elokabFm");
+    Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
+
+    QSettings settings(QApplication::organizationName(),QApplication::applicationName());
     settings.beginGroup("Window");
     settings.setValue("geometry", saveGeometry());
+
+    settings.setValue("splitterSizes", ui->splitter->saveState());
+
     settings.endGroup();
 
-         QString homeThambnail=Edir::cachDir()+"/thambnail";
-         QDir dir(homeThambnail);
-         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-         foreach (QString subfile, dir.entryList(QDir::Files|QDir::NoDotAndDotDot))
-         {
-             QByteArray encodedString =QByteArray::fromHex(subfile.toUtf8());
+//         QString homeThambnail=Edir::cachDir()+"/thumbnails";
+//         QDir dir(homeThambnail);
+//         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+//         foreach (QString subfile, dir.entryList(QDir::Files|QDir::NoDotAndDotDot))
+//         {
+//             QByteArray encodedString =QByteArray::fromHex(subfile.toUtf8());
 
-             QString string = codec->toUnicode(encodedString);
-             QFile file(string);
-             if(!file.exists()){
-                QFile::remove(homeThambnail+"/"+subfile);
-              //  qDebug()<<subfile<<"noexist";
-             }
-         }
-         QSettings setting("elokab","thambnail");
+//             QString string = codec->toUnicode(encodedString);
+//             QFile file(string);
+//             if(!file.exists()){
+//                QFile::remove(homeThambnail+"/"+subfile);
+//              //  qDebug()<<subfile<<"noexist";
+//             }
+//         }
+     QString homeThumbnails=Edir::cachDir()+"/thumbnails";
+         QSettings setting(QApplication::organizationName(),"thumbnails");
          foreach (QString s, setting.allKeys()) {
          //    qDebug()<<"setting"<<"/"+s;
-             if(!QFile::exists("/"+s))
-                setting.remove(s);
+             if(!QFile::exists("/"+s)){
+
+                qDebug()<<s;
+                qDebug()<<setting.value(s);
+
+                QFile::remove(homeThumbnails+"/"+setting.value(s).toString());
+                 setting.remove(s);
+             }
          }
     //mIconProvider->saveCacheIcons();
     blockSignals(true);
@@ -293,7 +306,7 @@ MainWindow::~MainWindow()
 //delete mTermWidget;
 
     delete ui;
-
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 }
 /**************************************************************************************
  *
@@ -307,7 +320,7 @@ void MainWindow::toolCustomContextMenu(QPoint)
      QMenu menu;
      menu.addActions(mActions->menuPanels()->actions());
      menu.addSeparator();
-     menu.addAction(mActions->actConfigTool);
+     menu.addAction(mActions->configToolAction());
      menu.exec(QCursor::pos());
 
 #ifdef DEBUG_APP
@@ -320,31 +333,25 @@ void MainWindow::toolCustomContextMenu(QPoint)
  **************************************************************************************/
 void MainWindow::showHidFilterBar()
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::showHidFilterBar()");
-#endif
 
      if(filterBar->isHidden())
           filterBar->show();
      else
           filterBar->close();
 
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::showHidFilterBar()");
-#endif
 }
 /**************************************************************************************
  *
  **************************************************************************************/
 void MainWindow::setUrl(QString url)
 {
-qDebug()<<__FILE__<<__LINE__<<"setUrl"<<url;
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,url);
 
      m_mainUrl=url;
      placesTree->setCurentUrl(url);
      pathWidget->setUrl(url);
-     //mTab->setUrl(url);
-     QDir dir(url);
+     mActions->setUrl(url);
+    QDir dir(url);
 
      QString name=dir.dirName();
 
@@ -359,7 +366,7 @@ qDebug()<<__FILE__<<__LINE__<<"setUrl"<<url;
      ui->treeView->setCurrentIndex((index));
      calculatFiles();
 
-
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 }
 
 /**************************************************************************************
@@ -367,9 +374,8 @@ qDebug()<<__FILE__<<__LINE__<<"setUrl"<<url;
  **************************************************************************************/
 void MainWindow::setSelectedFoldersFiles(  QString msg)
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::setSelectedFoldersFiles()");//
-#endif
+
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
 
      if(!msg.isEmpty())
      {
@@ -400,9 +406,7 @@ void MainWindow::setSelectedFoldersFiles(  QString msg)
           calculatFiles();
      }
 
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::setSelectedFoldersFiles()");//
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 }
 
 /**************************************************************************************
@@ -410,9 +414,7 @@ void MainWindow::setSelectedFoldersFiles(  QString msg)
  **************************************************************************************/
 void MainWindow::calculatFiles()
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::calculatFiles()");
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
 
      QDir::Filters filter;
      if(mSettings->showHidden())
@@ -437,9 +439,7 @@ void MainWindow::calculatFiles()
 
      ui->statusBar->showMessage(QString::number(folder)+tr(" Folders ")+QString::number(file)+ tr(" Files"));
 
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::calculatFiles()");
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 }
 
 /**************************************************************************************
@@ -447,16 +447,12 @@ void MainWindow::calculatFiles()
  **************************************************************************************/
 void MainWindow::setUrl(QModelIndex index)
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::setUrl()");
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
 
      QString dir=  myModel->filePath(index);
      mTab->setUrl(dir);
 //  pathWidget->setUrl(dir);
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::setUrl()");
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 }
 
 
@@ -465,20 +461,16 @@ void MainWindow::setUrl(QModelIndex index)
  **************************************************************************************/
 void MainWindow::stackSetCurrentIndex(bool arg)
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::stackSetCurrentIndex()");
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
 
      ui->stackedWidget->setCurrentIndex(arg);
 
      if(arg)
-          ui->dockWidget->setWindowTitle(tr("Folders"));
+          ui->labelPlace->setText(tr("Folders"));
      else
-          ui->dockWidget->setWindowTitle(tr("Places"));
+          ui->labelPlace->setText(tr("Places"));
 
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::stackSetCurrentIndex()");
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 }
 
 /**************************************************************************************
@@ -486,9 +478,7 @@ void MainWindow::stackSetCurrentIndex(bool arg)
  **************************************************************************************/
 void MainWindow::showConfigureToolBar()
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::showConfigureToolBar()");// MainWindow::showConfigureToolBar()";
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
 
      DialogActions *dlg=new DialogActions(this);
 
@@ -503,9 +493,7 @@ void MainWindow::showConfigureToolBar()
 
      delete dlg;
 
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::showConfigureToolBar()");// MainWindow::showConfigureToolBar()\n";
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 }
 
 /**************************************************************************************
@@ -513,9 +501,7 @@ void MainWindow::showConfigureToolBar()
  **************************************************************************************/
 void MainWindow::setupToolBarActions()
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::setupToolBarActions()");// MainWindow::setupToolBarActions()";
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
 
      ui->mainToolBar->clear();
      foreach (QString s, mSettings->listActions()) {
@@ -534,57 +520,50 @@ void MainWindow::setupToolBarActions()
           }
      }
 
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::setupToolBarActions()");
-#endif
+Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 }
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
 void MainWindow::loadIconThems()
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::loadIconThems()");// MainWindow::loadIconThems()";
-#endif
+    Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
 
-     QString icnThem=QIcon::themeName();
+    QString icnThem=QIcon::themeName();
 
-     QByteArray sS=qgetenv("DESKTOP_SESSION");
+    QByteArray sS=qgetenv("DESKTOP_SESSION");
 
-     if(sS=="elokab-session"){
-         QSettings setting("elokab","elokabsettings");
-         setting.beginGroup("Themes");
-         icnThem=  setting.value("iconsTheme",QIcon::themeName()).toString();
-         setting.endGroup();
+    if(sS=="elokab-session"){
+        QSettings setting(QApplication::organizationName(),"elokabsettings");
+        setting.beginGroup("Themes");
+        icnThem=  setting.value("iconsTheme",QIcon::themeName()).toString();
+        setting.endGroup();
 
-     }
+    }
 
 
-     if(icnThem=="hicolor"||icnThem.isEmpty()){
+    if(icnThem=="hicolor"||icnThem.isEmpty()){
 
-          QStringList failback;
-          failback <<"Adwaita"<< "oxygen"<< "Mint-X"<< "Humanity"<< "Tango"<< "Prudence-icon"<< "elementary"<< "gnome";
+        QStringList failback;
+        failback <<"Adwaita"<< "oxygen"<< "Mint-X"<< "Humanity"<< "Tango"<< "Prudence-icon"<< "elementary"<< "gnome";
 
-          QDir dir("/usr/share/icons/");
-          foreach (QString s, failback)
-          {
-               if (dir.exists(s))
-               {
-                    icnThem=s;
+        QDir dir("/usr/share/icons/");
+        foreach (QString s, failback)
+        {
+            if (dir.exists(s))
+            {
+                icnThem=s;
 
-                    break;
-               }
-          }
-     }
-     if(icnThem.isEmpty())
-          icnThem="hicolor";
-     QIcon::setThemeName(icnThem);
+                break;
+            }
+        }
+    }
+    if(icnThem.isEmpty())
+        icnThem="hicolor";
+    QIcon::setThemeName(icnThem);
 
 
-  #ifdef DEBUG_APP
-     Messages::showMessage(Messages::NORMALE,"MainWindow::loadIconThems()",QIcon::themeName());
-     Messages::showMessage(Messages::END,"MainWindow::loadIconThems()");// MainWindow::loadIconThems()\n";
-#endif
+    Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"end");
 }
 void MainWindow::refreshIcons()
 {
@@ -600,23 +579,23 @@ void MainWindow::refreshIcons()
  **************************************************************************************/
 void MainWindow::showAboutThis()
 {
-     QDialog *dlg=new QDialog;
+    QDialog *dlg=new QDialog;
 
-     WidgetAbout *wid=new WidgetAbout(dlg);
-     wid->setPixmap(EIcon::fromTheme("system-file-manager",("folder")).pixmap(64));
-     wid->setDescription(tr("File Manager Based on Qt"));
-     wid->setApplicationText(tr("Elokab File manager"));
-     QVBoxLayout  *verticalLayout = new QVBoxLayout(dlg);
-     QDialogButtonBox *buttonBox = new QDialogButtonBox(dlg);
-     buttonBox->setOrientation(Qt::Horizontal);
-     buttonBox->setStandardButtons(QDialogButtonBox::Ok);
-     verticalLayout->addWidget(wid);
-     verticalLayout->addWidget(buttonBox);
-     QObject::connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
-     dlg->resize(380,380);
-     dlg->exec();
-     delete wid;
-     delete dlg;
+    WidgetAbout *wid=new WidgetAbout(dlg);
+    wid->setPixmap(EIcon::fromTheme("system-file-manager",("folder")).pixmap(64));
+    wid->setDescription(tr("File Manager Based on Qt"));
+    wid->setApplicationText(tr("Elokab File manager"));
+    QVBoxLayout  *verticalLayout = new QVBoxLayout(dlg);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(dlg);
+    buttonBox->setOrientation(Qt::Horizontal);
+    buttonBox->setStandardButtons(QDialogButtonBox::Ok);
+    verticalLayout->addWidget(wid);
+    verticalLayout->addWidget(buttonBox);
+    QObject::connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
+    dlg->resize(380,380);
+    dlg->exec();
+    delete wid;
+    delete dlg;
 }
 
 /**************************************************************************************

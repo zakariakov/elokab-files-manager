@@ -5,7 +5,7 @@
     <name>ConfirmDlg</name>
     <message>
         <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.ui" line="14"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="45"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="64"/>
         <source>File Already Exists</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,32 +20,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="27"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="46"/>
         <source>Skyp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="28"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="47"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="29"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="48"/>
         <source>OverWrite</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="30"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="49"/>
         <source>Write Into</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="43"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="62"/>
         <source>Folder Already Exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="61"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="80"/>
         <source>Source:
  %1 
  Size: %2 
@@ -54,7 +54,7 @@ Modified: %3
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="68"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="87"/>
         <source>Destination:
  %1 
  Size: %2 
@@ -63,12 +63,12 @@ Modified: %3
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="78"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="97"/>
         <source>This action will overwrite the destination:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="82"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/confirmdlg.cpp" line="101"/>
         <source>This action would overwrite %1:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,42 +76,42 @@ Modified: %3
 <context>
     <name>FilesActions</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="37"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="57"/>
         <source>Remove Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="121"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="148"/>
         <source>Read only...cannot create file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="128"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="155"/>
         <source>Copy Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="359"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="386"/>
         <source>Move Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="388"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="415"/>
         <source>move to %1 failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="588"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="615"/>
         <source>File doesnt exists, cant move to trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="612"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="639"/>
         <source>move to trash failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="614"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="641"/>
         <source>move to trash succeced</source>
         <translation type="unfinished"></translation>
     </message>
@@ -119,12 +119,12 @@ Modified: %3
 <context>
     <name>ProgressDlg</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/progressdlg.ui" line="14"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/progressdlg.ui" line="20"/>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/progressdlg.ui" line="27"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/progressdlg.ui" line="33"/>
         <source>Info:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -132,7 +132,7 @@ Modified: %3
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/main.cpp" line="87"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/main.cpp" line="107"/>
         <source>Elokab Files Actions Gui Version 0.1 .
  
 Usage: elokab-fa [OPTION]..File(s)..

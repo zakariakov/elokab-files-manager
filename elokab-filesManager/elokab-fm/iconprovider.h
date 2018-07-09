@@ -60,7 +60,7 @@ public:
    //   QIcon iconF(const QFileInfo &info) const ;
 
 public slots:
-    void setShowThambnails(bool arg){mPreview=arg;}
+    void setShowThumbnails(bool arg){mPreview=arg;}
     void setStandardIcon(bool arg){mStandardIcon=arg;}
     void setlocale(const QString &lc);
 

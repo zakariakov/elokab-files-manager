@@ -57,7 +57,7 @@ class PageWidget : public QWidget
                               IconProvider *iconProvider,
                               QWidget *parent = 0);
 
-          //! constructor
+          //!
           ~PageWidget();
 
 

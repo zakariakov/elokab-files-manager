@@ -54,7 +54,8 @@ SOURCES += \
 #  itemdelegate.cpp
  #    qitemdelegate.cpp
     udiskdevice.cpp \
-    itemdelegate.cpp
+    itemdelegate.cpp \
+    messages.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -82,7 +83,8 @@ HEADERS  += \
 #  itemdelegate.h
  #     qitemdelegate.h
     udiskdevice.h \
-    itemdelegate.h
+    itemdelegate.h \
+    defines.h
 
 FORMS    += mainwindow.ui \
     pathwidget.ui \

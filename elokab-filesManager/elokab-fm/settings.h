@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QSettings>
 #include <QStringList>
+#include <QApplication>
 #define SORT_BY_NAME 0
 #define ICON_VIEW_MODE 0
 /**
@@ -35,7 +36,7 @@ class Settings : public QSettings
 
            //!
           explicit Settings(QObject *parent = 0):
-               QSettings("elokab","elokabFm", parent)
+               QSettings(QApplication::organizationName(),QApplication::applicationName(), parent)
           {
                beginGroup("Main");
           }

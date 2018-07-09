@@ -223,8 +223,8 @@ void FileInformation::setImageInformation(const QFileInfo &fi,const QString &mim
 
      QDateTime time=fi.lastModified();
      QPixmap pix(mFile);
-     int w=0;
-     int h=0;
+//     int w=0;
+//     int h=0;
 
      if(pix.isNull()){
 
@@ -233,21 +233,19 @@ void FileInformation::setImageInformation(const QFileInfo &fi,const QString &mim
 
      }else{
           int scal=128;
-          w=pix.width();
-          h=pix.height();
-
-          if(w>=200||h>=200)
+//          w=pix.width();
+//          h=pix.height();
+int max=qMax(pix.width(),pix.height());
+          if(max>=200)
                scal=200;
-          else if(w<=128||h<=128)
+          else if(max<=200)
                scal=128;
           else
-               if(w>=h)
-                    scal=w;
-               else
-                    scal=h;
+              scal=max;
 
-          ui->labelPixmap->setPixmap(QPixmap(pix.scaled(QSize(scal,scal),Qt::KeepAspectRatio)));
+          ui->labelPixmap->setPixmap(QPixmap(pix.scaled(QSize(scal,scal),Qt::KeepAspectRatio,Qt::SmoothTransformation)));
      }
+
      QString sym;
      if(fi.isSymLink())
          sym=tr("Point To: ")+fi.symLinkTarget()+"\n";
@@ -260,8 +258,8 @@ void FileInformation::setImageInformation(const QFileInfo &fi,const QString &mim
                arg(EMimIcon::mimLang(mim,locale().name().section("_",0,0))).
                arg(EMimIcon::formatSize(fi.size())).
                arg(time.toString("dd.MM.yyyy hh:mm")).
-               arg(w).
-               arg(h).
+               arg(pix.width()).
+               arg(pix.height()).
                arg(sym)  ;
 
      ui->labelInfo->setText(info);

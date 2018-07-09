@@ -83,7 +83,7 @@ PathWidget::PathWidget(QWidget *parent) :
      completer->setModel(fsModel);
 
      ui->lineEdit->setCompleter(completer);
-     QSettings settings("elokab", "elokabFm");
+     QSettings settings(QApplication::organizationName(),QApplication::applicationName());
      settings.beginGroup("Main");
      ui->toolButtonEdit->setChecked(settings.value("ShowEditLocation",false).toBool());
      settings.endGroup();
@@ -95,7 +95,7 @@ PathWidget::PathWidget(QWidget *parent) :
 PathWidget::~PathWidget()
 {
     qDebug()<<"PathWidget deleted";
-     QSettings settings("elokab", "elokabFm");
+     QSettings settings(QApplication::organizationName(),QApplication::applicationName());
      settings.beginGroup("Main");
      settings.setValue("ShowEditLocation",ui->toolButtonEdit->isChecked());
      //   ui->toolButtonEdit->setChecked(settings.value("ShowEditLocation",false).toBool());

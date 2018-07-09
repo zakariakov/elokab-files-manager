@@ -19,6 +19,7 @@
 
 #include "pagewidget.h"
 
+#include "defines.h"
 #include "filesutils/propertiesdlg.h"
 #include "filesutils/openwithdlg.h"
 //#include "itemdelegate.h"
@@ -32,6 +33,7 @@
 #include <QImageReader>
 #include <QDateTime>
 #include <QtConcurrent>
+#include <QMessageBox>
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
@@ -186,6 +188,39 @@ void PageWidget::closeAll()
 /**************************************************************************************
  *
  **************************************************************************************/
+bool isArchive(const QString &mim)
+{
+    QStringList listArchive;
+    listArchive<<"application/x-7z-compressed"<<"application/x-7z-compressed-tar"
+              <<"application/x-ace"<<"application/x-alz"<<"application/x-ar"
+             <<"application/x-arj"<<"application/x-bzip"<<"application/x-bzip-compressed-tar"
+            <<"application/x-bzip1"<<"application/x-bzip1-compressed-tar"
+           <<"application/x-cabinet"<<"application/x-cd-image"<<"application/x-compress"
+          <<"application/x-compressed-tar"<<"application/x-cpio"<<"application/x-deb"
+         <<"application/x-ear"<<"application/x-ms-dos-executable"<<"application/x-gtar"
+        <<"application/x-gzip"<<"application/x-gzpostscript"<<"application/x-java-archive"
+       <<"application/x-lha"<<"application/x-lhz"<<"application/x-lrzip"
+      <<"application/x-lrzip-compressed-tar"<<"application/x-lzma"
+      <<"application/x-lz4"<<"application/x-lzip"<<"application/x-lzip-compressed-tar"
+     <<"application/x-lzma-compressed-tar"<<"application/x-lzop"<<"application/x-lz4-compressed-tar"
+    <<"application/x-lzop-compressed-tar"<<"application/x-ms-wim"
+    <<"application/x-rar"<<"application/x-rar-compressed"
+    <<"application/x-rpm"<<"application/x-source-rpm"<<"application/x-rzip"
+    <<"application/x-rzip-compressed-tar"<<"application/x-tar"
+    <<"application/x-tarz"<<"application/x-stuffit"<<"application/x-war"
+    <<"application/x-xz"<<"application/x-xz-compressed-tar"
+    <<"application/x-zip"<<"application/x-zip-compressed"
+    <<"application/x-zoo"<<"application/zip"<<"application/x-archive"
+    <<"application/vnd.ms-cab-compressed"<<"application/vnd.debian.binary-package"
+    <<"application/gzip"<<"application/vnd.rar";
+
+    if(listArchive.contains(mim))
+        return true;
+    return false;
+}
+/**************************************************************************************
+ *
+ **************************************************************************************/
 void PageWidget::customContextMenu(QPoint)
 {
 
@@ -218,90 +253,109 @@ void PageWidget::customContextMenu(QPoint)
     default:
         return;
     }
-    /*
-     if(focusWidget()==listView)
-     {
-          QModelIndex cIndex=   listView->currentIndex();
-          selectedPath=myModel->filePath(cIndex);
-          info=myModel->fileInfo(cIndex);
-          count=listSelectionModel->selectedIndexes().count();
-     }else if(focusWidget()==treeView){
-          QModelIndex cIndex=  treeView->currentIndex();
-          selectedPath=myModel->filePath(cIndex);
-          info=myModel->fileInfo(cIndex);
-          count=listSelectionModel->selectedIndexes().count();
-     }else if(focusWidget()==searchView->searchTreeView()){
-          selectedPath=searchView->selectedFile();
-          info=QFileInfo(selectedPath);
-          count=searchView->selectedFilesCount();
-          isSearch=true;
-     }else{
-          return;
-     }
 
-*/
+    QModelIndex idx=myModel->index(info.filePath());
+    QString mim;
 
-    QString mim=EMimIcon::mimeTyppe(info);
+    //qDebug()<<"absoluteFilePath"<<info.absoluteFilePath();
+    //qDebug()<<"filePath"<<info.filePath();
+    //qDebug()<<"path"<<info.path();
+
+    if(idx.isValid())
+        mim=idx.data(_MMIM).toString();
+    else
+        mim=EMimIcon::mimeTyppe(info);
+
     if(!isSearch)
         menu.addMenu(mActions->menuNew());//nonsearch
 
+    if (count==0 ){
+        if (isSearch) return;
 
-    if(count>0)
-    {
-        if(isSearch){
-            emit selectedAvailabe(true);
-            mActions->actPaste->setEnabled(false);
-            if(info.isDir())
-            {
-                menu.addAction(mActions->actOpenTerminal);
-                menu.addAction(mActions->actOpenInNewTab);
-                menu.addSeparator();
-                mActions->setcurDir(selectedPath);
+        menu.addMenu(mActions->menuService(QStringList()<<m_dirPath,"inode/directory"));
+        menu.addAction(mActions->openInNewTabAction(m_dirPath));
+        menu.addAction(mActions->openTerminalAction(m_dirPath));
+        menu.addSeparator();
+        menu.addActions(mActions->menuViewfile()->actions());
+         menu.addAction(mActions->propertiesAction());
+        menu.exec(QCursor::pos());
+        return;
 
-            }else{
-                menu.addAction(mActions->actOpenInNewTab);
-                QFileInfo fi(selectedPath);
-                mActions->setcurDir(fi.path());
-                if(mim!= "application/x-executable" )
-                    menu.addMenu(mActions->menuOpenWith(selectedPath, mim))  ;
+    }
 
-            }
 
-        }
-        else
+
+    if(isSearch){
+        emit selectedAvailabe(true);
+        mActions->pasteAction()->setEnabled(false);
+        if(info.isDir())
         {
 
-            //     menu.addMenu(mActions->menuNew());//nonsearch
+            menu.addAction(mActions->openTerminalAction(selectedPath));
+            menu.addAction(mActions->openInNewTabAction(info.filePath()));
+            menu.addSeparator();
+            //mActions->setcurPath(selectedPath);
+
+
+        }else{
+
+            menu.addAction(mActions->openTerminalAction(info.path()));
+            if(mim!= "application/x-executable" )
+                menu.addMenu(mActions->menuOpenWith(selectedPath, mim))  ;
+
+        }
+
+    }// search
+    else  //non search
+    {
+        if(count==1){
             if(info.isDir())
             {
                 //   menu.addAction(mActions->actOpenInTerminal);
-                menu.addAction(mActions->actOpenInNewTab);
-                menu.addAction(mActions->actOpenTerminal);
-                mActions->setcurDir(selectedPath);
+                menu.addAction(mActions->openInNewTabAction(info.filePath()));
+                menu.addAction(mActions->openTerminalAction(selectedPath));
+                // mActions->setcurPath(selectedPath);
 
             }else{
-                mActions->setcurDir(m_dirPath);
+                // mActions->setcurPath(m_dirPath);
                 if(mim!= "application/x-executable" )
                     menu.addMenu(mActions->menuOpenWith(selectedPath, mim))  ;
 
             }
-            if(selectedFiles().count()>0)
-                menu.addMenu(mActions->menuService(selectedFiles(),mim));//nonsearch
-            else
-                menu.addMenu(mActions->menuService(QStringList()<<m_dirPath,mim));
+            menu.addMenu(mActions->menuService(QStringList()<<m_dirPath,mim));
+            menu.addSeparator();
 
+
+
+        }else{
+            qDebug()<<"selectedFiles="<<selectedFiles();
+
+            menu.addMenu(mActions->menuService(selectedFiles(),mim));
+            menu.addSeparator();
         }
 
-        menu.addSeparator();
-    }
-    else{
-        menu.addMenu(mActions->menuService(QStringList()<<m_dirPath,"inode/directory"));
-        menu.addAction(mActions->actOpenTerminal);
+
     }
 
+    menu.addSeparator();
+
+
+    //----------------------------------------------
     menu.addActions(mActions->menuViewfile()->actions());
+
+    if(count==1 && isArchive(mim))
+        menu.addAction(mActions->extractHereAction(info.filePath()));
+
+    menu.addAction(mActions->AddArchiveAction(selectedFiles()));
+
+    menu.addSeparator();
+
+    menu.addAction(mActions->propertiesAction());
+
+
     menu.exec(QCursor::pos());
 
+//        mActions->setUrl(m_dirPath);
 
 
 
@@ -323,8 +377,8 @@ void PageWidget::slotItemActivated(QModelIndex index)
         {
             setUrl(myModel->filePath(index));
         }else{
-
-            QString mim=EMimIcon::mimeTyppe(myModel->fileInfo(index));
+           QString mim=index.data(_MMIM).toString();
+           // QString mim=EMimIcon::mimeTyppe(myModel->fileInfo(index));
             if (EMimIcon::launchApp(myModel->filePath(index),mim)==false)
                 showOpenwithDlg(myModel->filePath(index));
 
@@ -399,8 +453,8 @@ void PageWidget::selectionHasChanged(const QItemSelection &/*selected*/,
     if(!QFileInfo(m_dirPath).isWritable())
     {
         emit selectedAvailabe(false);
-        mActions->actCopy->setEnabled(listSelectionModel->selectedIndexes().count());
-        mActions->actPaste->setEnabled(false);
+        mActions->copyAction()->setEnabled(listSelectionModel->selectedIndexes().count());
+        mActions->pasteAction()->setEnabled(false);
     }else{
         emit selectedAvailabe(listSelectionModel->selectedIndexes().count());
     }
@@ -417,19 +471,21 @@ void PageWidget::setViewMode(int mode)
     switch (mode)
     {
     case IconView:
-
-        listView->setViewMode(QListView::IconMode);
+        mItemDelegate->setTreeView(false);
+        listView->setListViewMode(QListView::IconMode);
         listView->setViewIconSize( mSettings->viewIconSize());
+
         break;
     case CompactView:
-
-        listView->setViewMode(QListView::ListMode);
+        mItemDelegate->setTreeView(false);
+        listView->setListViewMode(QListView::ListMode);
         listView->setViewIconSize( mSettings->viewIconSize());
+
         //               listView-> setFocus();
         //                stackedWidget->setCurrentIndex(WListView);
         break;
     case DetailView:
-
+        mItemDelegate->setTreeView(true);
         //                treeView-> setFocus();
         //                stackedWidget->setCurrentIndex(WTreeView);
         break;
@@ -477,12 +533,12 @@ void PageWidget::setUrl(const QString &url)
     if(url!=":/trash"&&url!=":/search"){
 
         if(!i.isValid()){
-            if(urlIsHidden(url))
-                emit selectedFoldersFiles(tr("this path is hidden please presse Ctrl+h"));
-            else
+            if(urlIsHidden(url)){
+               emit selectedFoldersFiles(tr("this path is hidden please presse Ctrl+h"));
+            }else{
                 emit selectedFoldersFiles(tr("this path is no valid "));
-
-            return;
+            }
+             return;
         }
     }
 
@@ -556,14 +612,6 @@ void PageWidget::setUrlChange(const QString &url)
             return;
         }
 
-        /*-if files and folders count > 500
-           *change the IconProvider
-           *emit the tab parent
-           * slot setLargeDirectory(QString)
-           */
-        //          QDir dir(m_dirPath);
-        //          if(dir.count()>100)
-        //              emit isLargeDirectory(m_dirPath);
 
         //-----------------------------------
         switch (mViewMode)
@@ -973,8 +1021,13 @@ void PageWidget::showProperties()
  **************************************************************************************/
 void PageWidget::showOpenwithDlg(const QString &fileName)
 {
+    QString mim;
+    QModelIndex idx=myModel->index(fileName);
+    if(idx.isValid())
+        mim=idx.data(_MMIM).toString();
+    else
+        mim=EMimIcon::mimeTyppe(QFileInfo(fileName));
 
-    QString mim=EMimIcon::mimeTyppe(QFileInfo(fileName));
     if(!openWithDlg)
         openWithDlg =new OpenWithDlg();
 
@@ -1017,6 +1070,9 @@ int PageWidget::focusedWidget()
 void PageWidget::iconUpdate(QModelIndex index)
 {
     if(!index.isValid())return;
+
+    mItemDelegate->clearItemCache(myModel->filePath(index));
+
     if (focusWidget() == listView){
 
         listView->update(index);
@@ -1029,13 +1085,18 @@ void PageWidget::iconUpdate(QModelIndex index)
 
 }
 
+//TODO RMOVE THIS
 void PageWidget::iconThumbUpdate(const QString &fileName)
 {
+    if(!QFile::exists(fileName))return;
+
     QModelIndex idx=myModel->index(fileName);
     if(idx.isValid())
         iconUpdate(idx);
 }
+
+//TODO RMOVE THIS
 void PageWidget::clearIcons()
 {
-    mItemDelegate->clearCurentPath(curentDir());
+  //  mItemDelegate->clearCurentPath(curentDir());
 }

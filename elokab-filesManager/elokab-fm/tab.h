@@ -88,6 +88,7 @@ public:
 //void refreshIcons(const QString &dir);
 
 void setPreview(bool preview){mPreview=preview;}
+void clearCache(const QString &path);
 
 
 signals:
@@ -120,7 +121,7 @@ private:
    bool mPreview;
 //  QHash<QString,QModelIndex> *hashIndex;
    //QHash< QModelIndex,Thumbnail* > *mThumbnails;
-     QHash<QString,QIcon>*iconCach;
+     QHash<QString,QString>*mimcach;
    //   QHash<QString,QIcon>*iconmimCach;
    //      QHash<QString,QIcon>*iconDesktopCach;
    //   QHash<QString,QByteArray> *hashImages;
@@ -172,12 +173,13 @@ void  tabAdded(const QString &url);
 
 
      private slots:
-void creatThumb(const QString &path);
+
           //!
-          void directoryChanged(const QString &dir);
+          void createThumbnail(const QString &dir);
+          void saveImageThumb(const QFileInfo &fi) ;
           //void dataFileChanged(const QString &dir);
 //void loadIcons(const QString &currentPath);
-void iconUpdate(QModelIndex index);
+//void iconUpdate(QModelIndex index);
           //!
          // void setLargeDirectory(const QString &dir);
 

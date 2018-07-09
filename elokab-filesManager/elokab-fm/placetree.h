@@ -60,7 +60,7 @@ void refreshIcons();
           */
           void addNewBookmark();
 
-     private:
+private:
 
           /*!< cmment */
           QTreeWidgetItem *mPlacesItem;
@@ -94,7 +94,8 @@ void refreshIcons();
            QList<Device*> mListDevice;
 
            UdiskDevice *mUdiskDevice;
-     private slots:
+
+private slots:
            //!new=================
 
 

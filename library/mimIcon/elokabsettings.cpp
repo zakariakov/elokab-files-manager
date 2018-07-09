@@ -23,9 +23,10 @@
 #include <QDir>
 #include <QDebug>
 #include <QCoreApplication>
+#include <QApplication>
 #include <QMutex>
 ElokabSettings::ElokabSettings(QObject *parent) :
-    QSettings("elokab","elokabsettings", parent)
+    QSettings(QApplication::organizationName(),QApplication::applicationName(), parent)
 
 {
 

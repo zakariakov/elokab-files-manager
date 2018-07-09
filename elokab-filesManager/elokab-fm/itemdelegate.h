@@ -21,7 +21,7 @@
 #define ITEMDELEGATE_H
 #include <QAbstractItemDelegate>
 #include <QStyledItemDelegate>
-//#include <QFutureWatcher>
+
 #include <QFileInfo>
 
 
@@ -38,6 +38,9 @@ public:
 
     //!
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+
+
 signals:
 
     //!
@@ -46,13 +49,22 @@ signals:
 public slots:
 
     //!
+    void setTreeView(bool arg){isTreeview=arg;}
+
+    //!
     void setTumbnail(bool thumb){mThumbnail=thumb;}
 
     //!
     void clearCurentPath(const QString &path);
 
-private:
+    //!
+    void clearItemCache(const QString &file);
 
+private:
+    //!
+    void paintDetailView(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    //!
+    void paintIconView(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     QIcon mSymlinkIcon;
     QSize mItemSize;
@@ -63,14 +75,21 @@ private:
     QMap<QString ,QIcon>  *folderCache;
     QMap<QString ,QIcon>  *deskCache;
 
- QStringList *listThumb;
+    QStringList *listThumb;
+    QString thumbnail;
+bool isTreeview;
     //!
     static QIcon::Mode iconModeFromState(QStyle::State state);
 
     //!
-    QIcon decoration( QString filePath) const;
-void saveImageThumb(const QFileInfo &fi,const QString &fileThumbnail)const;
- QByteArray iconThambnail(const QString &file)const;
+    QIcon decoration(const QModelIndex &index) const;
+
+    //!
+    void saveImageThumb(const QFileInfo &fi,const QString &fileThumbnail)const;
+
+    //!
+    QIcon iconThumbnails(const QString &file)const;
+
 };
 
 #endif // ITEMDELEGATE_H

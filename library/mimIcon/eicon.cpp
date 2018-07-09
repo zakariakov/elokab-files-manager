@@ -39,6 +39,7 @@ EIcon *EIcon::instance()
 {
    return EIconInstance();
 }
+
 QString themePath(const QString &path)
 {
     foreach (QString p, QIcon::themeSearchPaths())

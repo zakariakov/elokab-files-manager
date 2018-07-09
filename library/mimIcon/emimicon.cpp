@@ -44,7 +44,8 @@
 #include <QImageWriter>
 #include <QImageReader>
 #include <QStandardPaths>
-#define THEM_BACK   "Elokab"
+#include <QApplication>
+#include <QMessageAuthenticationCode>
 //______________________________________________________________________________________
 QIcon EMimIcon::icon(const QFileInfo &info, bool previw)
 {
@@ -73,7 +74,7 @@ QIcon EMimIcon::icon(const QFileInfo &info, bool previw)
         if(previw && mim.startsWith("image"))
         {
             QPixmap pix;
-            pix.loadFromData(iconThambnail(minfo.absoluteFilePath()));
+            pix.loadFromData(iconThumbnails(minfo.absoluteFilePath()));
             QIcon icon=QIcon(pix);
             if(!icon.isNull())
                 retIcon=icon;
@@ -120,10 +121,10 @@ QHash<QString,QIcon> EMimIcon::iconhash(const QFileInfo &info, bool previw)
         if(previw && mim.startsWith("image"))
         {
            QPixmap pix;
-           pix.loadFromData(iconThambnail(minfo.absoluteFilePath()));
+           pix.loadFromData(iconThumbnails(minfo.absoluteFilePath()));
             QIcon icon=QIcon(pix);
 
-           // QIcon icon=iconThambnail(minfo.absoluteFilePath());
+           // QIcon icon=Thumbnails(minfo.absoluteFilePath());
             if(!icon.isNull())
                 retIcon=icon;
 
@@ -257,17 +258,20 @@ QIcon EMimIcon::iconSymLink(QIcon icon)
 }
 
 //______________________________________________________________________________________
-QByteArray EMimIcon::iconThambnail(const QString &file)
+QByteArray EMimIcon::iconThumbnails(const QString &file)
 {
     QFileInfo fi(file);
 
-    QByteArray text=file.toUtf8();
+    QMessageAuthenticationCode code(QCryptographicHash::Md5);
+    code.addData(file.toLatin1());
 
-    QString thumbnail=Edir::cachDir()+"/thambnail";
+   // QByteArray text=file.toUtf8();
 
-    QString fileThumbnail=thumbnail+"/"+text.toHex();
+    QString thumbnail=Edir::cachDir()+"/thumbnails";
 
-    QSettings setting("elokab","thambnail");
+    QString fileThumbnail=thumbnail+"/"+code.result().toHex();
+
+    QSettings setting(QApplication::organizationName(),"thumbnails");
     QBuffer buffer;
     QImage pix;
     bool hasThumb=false;
@@ -279,7 +283,7 @@ QByteArray EMimIcon::iconThambnail(const QString &file)
             pix.load(fileThumbnail);
             hasThumb=true;
         }
-        // return QIcon(fileThambnail);
+        // return QIcon(fileThumbnails);
     }
 
 
@@ -464,8 +468,6 @@ QString EMimIcon::getMimeTypeBySufix(QString sufix)
                //   qDebug()<<line;             //value "application/x-unknow:*.sufix"
                line=line.section(":",0,0);      // value "application/x-unknow"
                //                               line=line.replace("/","-"); // value "application-x-unknow"
-
-
                return /*iconName*/(line );
           }
           /************************************/
@@ -671,7 +673,7 @@ qDebug()<<fileName;
 
     /*-----------------------------------DIR-------------------------------------------*/
     if(info.isDir()){
-        QSettings setting("elokab","elokabsettings");
+        QSettings setting(QApplication::organizationName(),"elokabsettings");
         setting.beginGroup("DefaultBrowser");
         bool defaultBrowser=(setting.value("defaultBrowser",false).toBool());
 
@@ -867,7 +869,7 @@ void EMimIcon::updateMimeAssociatedApplication()
 
      }//while
 
-     QSettings settings("elokab","mimeappslist");
+     QSettings settings(QApplication::organizationName(),"mimeappslist");
      //   settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
      settings.beginGroup("Default-Applications");
      QHashIterator<QString, QStringList> i(hash);
@@ -989,7 +991,7 @@ QStringList EMimIcon::associatedApplication(const QString &mim)
 {
      QStringList listApp;
 
-     QSettings settings("elokab","mimeappslist");
+     QSettings settings(QApplication::organizationName(),"mimeappslist");
      if(!QFile::exists(settings.fileName())||QFileInfo(settings.fileName()).size()==0)
           updateMimeAssociatedApplication();
 
@@ -1028,7 +1030,7 @@ QStringList EMimIcon::associatedApplication(const QString &mim)
 //______________________________________________________________________________________
 void EMimIcon::setMimeAssociatedApplication(const QString &mimType,const QStringList &listAppDesktop  )
 {
-     QSettings settings("elokab","mimeappslist");
+     QSettings settings(QApplication::organizationName(),"mimeappslist");
 
      settings.beginGroup("Default-Applications");
 
@@ -1043,7 +1045,7 @@ void EMimIcon::AddMimeAssociatedApplication(const QString &mimType,const QString
 {
 
 
-     QSettings settings("elokab","mimeappslist");
+     QSettings settings(QApplication::organizationName(),"mimeappslist");
 
      settings.beginGroup("Default-Applications");
      //get list appAssociated if exist
@@ -1166,7 +1168,7 @@ QString EMimIcon::defaultTerminal()
     qDebug()<<"envirenment"<<sS;
     QString terminal;
     if(sS=="elokab-session"){
-        QSettings setting("elokab","elokabsettings");
+        QSettings setting(QApplication::organizationName(),"elokabsettings");
         setting.beginGroup("Terminal");
         terminal=  setting.value("Default","xterm").toString();
         setting.endGroup();

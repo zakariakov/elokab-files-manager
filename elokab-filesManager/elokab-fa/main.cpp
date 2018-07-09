@@ -45,10 +45,12 @@ int main(int argc, char *argv[])
     QTranslator translator;
            translator.load(a.translationPath());
            a.installTranslator(&translator);
-    QStringList args = a.arguments();
+          qApp->setLayoutDirection(a.layoutDirection());
 
-    //------------------------------------argument-------------------------------------------------
 
+
+    //-----------------------------------argument-------------------------------------------------
+   QStringList args = a.arguments();
     qDebug()<<"FilesActions"<<args.count();
     if(args.count()==3)
     {

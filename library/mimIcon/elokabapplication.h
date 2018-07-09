@@ -29,11 +29,14 @@ public:
 
     ElokabApplication(int& argc, char** argv);
    const QString translationPath();
+  Qt::LayoutDirection layoutDirection(){return mLd;}
 private slots:
    void setIconsThemeName();
 
 private:
+   void setLayoutDirection(Qt::LayoutDirection ld){mLd=ld;}
   ElokabSettings *msetting;
+  Qt::LayoutDirection mLd;
 };
 
 #endif // ELOKABAPPLICATION_H

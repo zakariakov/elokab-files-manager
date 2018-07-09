@@ -20,10 +20,16 @@
 #ifndef MESSAGES_H
 #define MESSAGES_H
 #include <QDebug>
+
+ //Q_GLOBAL_STATIC(Messages, mInstance)
 class Messages
+
 {
+
      public:
-          Messages(){}
+
+          Messages(){mdebug=false;}
+         static Messages *instance();
 
           enum MsgType{
               TOP,
@@ -34,30 +40,12 @@ class Messages
 
           };
 
-           //!
-          static void showMessage(MsgType type, const QString &slotName ,const QString &msg=QString())
-          {
-               QString t = "=";
+          void setDebug(bool debug){mdebug=debug;}
+          bool isDebug(){return mdebug;}
+          static void debugMe(int n,int line,QString arg1,QString arg2=QString(),QString arg3=QString());
 
-               switch (type) {
-                    case TOP:
-                          t += QString(25-slotName.size()/2, '=');
-                          qDebug()<<t+slotName.toUpper()+t;
-                         break;
-                    case BEGIN:
 
-                          qDebug()<<"ELOKAB-FM:   BEGIN: "<<slotName;
-                         break;
-                    case END:
-                          qDebug()<<"ELOKAB-FM:   __END: "<<slotName;
-                         break;
-                    case NORMALE:
-                          qDebug()<<"ELOKAB-FM:----------"<<slotName<<msg;
-                         break;
-                    default:
-                         break;
-               }
-          }
+          bool mdebug;
 
 };
 

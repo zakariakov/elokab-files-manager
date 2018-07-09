@@ -89,14 +89,14 @@ QString Edir::dataHomeAppDir()
 //_________________________________________________________________
 QString Edir::libDir()
 {
-   // "/usr/lib/elokab/elokabe-appname"
-   QString appName=QApplication::applicationName();
+   // "/usr/lib/elokab"
+  // QString appName=QApplication::applicationName();
    QDir pluginsDir(qApp->applicationDirPath());
     pluginsDir.cdUp();
-    if(QFile::exists(pluginsDir.path()+"/lib/elokab/"+appName)){
-        pluginsDir.cd(pluginsDir.path()+"/lib/elokab/"+appName);
-    }else if(QFile::exists(pluginsDir.path()+"/lib64/elokab/"+appName)){
-        pluginsDir.cd(pluginsDir.path()+"/lib64/elokab/"+appName);
+    if(QFile::exists(pluginsDir.path()+"/lib/elokab")){
+        pluginsDir.cd(pluginsDir.path()+"/lib/elokab");
+    }else if(QFile::exists(pluginsDir.path()+"/lib64/elokab")){
+        pluginsDir.cd(pluginsDir.path()+"/lib64/elokab");
     }
     return pluginsDir.absolutePath();
 }
@@ -140,7 +140,7 @@ QString Edir::applicationsHomeDir()
 QString Edir::thumbnaileCachDir()
 {
        QString location=cachDir();
-       location+="/thambnail";
+       location+="/thumbnails";
        QDir dir(location);
        if(!dir.exists())
            dir.mkpath(".");

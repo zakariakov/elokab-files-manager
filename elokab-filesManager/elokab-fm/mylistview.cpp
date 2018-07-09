@@ -30,22 +30,26 @@ MyListView::MyListView(QFileSystemModel *model, Actions *action,QWidget *parent)
      QListView(parent),mModel(model),mActions(action)
 {
 
-     setModel(mModel);
-    setContentsMargins(5,5,5,5);
-setSpacing(5);
-     setResizeMode(QListView::Adjust);
+    setModel(mModel);
+    setContentsMargins(3,3,3,3);
+    setSpacing(5);
+    setResizeMode(QListView::Adjust);
 
-     setSelectionMode(QAbstractItemView::ExtendedSelection);
-     setSelectionRectVisible(true);
     setWrapping(true);
-   //  setMovement(QListView::Snap);
+    //  setFlow(QListView::LeftToRight);
+
     setSelectionMode(QAbstractItemView::ExtendedSelection);
-     setDragDropMode(QAbstractItemView::DragDrop);
-     setDefaultDropAction(Qt::MoveAction);
-     setDropIndicatorShown(true);
-     setEditTriggers(QAbstractItemView::EditKeyPressed |
-                     QAbstractItemView::SelectedClicked);
-     setMouseTracking(true);
+    setSelectionRectVisible(true);
+
+    //  setMovement(QListView::Snap);
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setDragDropMode(QAbstractItemView::DragDrop);
+    setDefaultDropAction(Qt::MoveAction);
+    setDropIndicatorShown(true);
+    setEditTriggers(QAbstractItemView::EditKeyPressed |
+                    QAbstractItemView::SelectedClicked);
+    setMouseTracking(true);
+    setWordWrap(false);
 }
 
 
@@ -110,8 +114,22 @@ void MyListView::dropEvent(QDropEvent* e) {
  **************************************************************************************/
 void MyListView::setListViewMode(ViewMode mode)
 {
-    setViewMode(mode);
+    clearPropertyFlags();
+    //setFlow(QListView::LeftToRight);
 
+    setContentsMargins(3,3,3,3);
+    setSpacing(5);
+
+    if(mode==QListView::ListMode){
+        setFlow(QListView::LeftToRight);
+        setMovement(QListView::Snap);
+        //
+        //        setWrapping(true);
+    }//else{
+
+    setResizeMode(QListView::Adjust);
+    setViewMode(mode);
+    setWrapping(true);
 }
 
 /**************************************************************************************

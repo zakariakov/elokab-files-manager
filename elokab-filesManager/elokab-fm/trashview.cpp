@@ -327,7 +327,7 @@ void TrashView::restoreFiles()
                         QFileInfo fi(origeFile);
                         QString t=tr("restor to %1 failed \n please check if the path exist" ).arg(fi.absolutePath());
                        
-                        Messages::showMessage(Messages::NORMALE,"TrashView::clearTrash()",t);
+                        //Messages::showMessage(Messages::NORMALE,"TrashView::clearTrash()",t);
                        
                         QMessageBox::information(0,"error",t);
                                                 

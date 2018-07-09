@@ -28,7 +28,7 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QStringList>
-
+#include <QApplication>
 /****************************************************************************
  *
  ****************************************************************************/
@@ -89,7 +89,7 @@ bool MenuGen::checkAppsDesktopFile()
  ****************************************************************************/
 void MenuGen::loadSettings()
 {
-     QSettings setting("elokab","elokabsettings");
+     QSettings setting(QApplication::organizationName(),"elokabsettings");
      setting.beginGroup("MenuAppCount");
      m_appCount=setting.value("Num",0).toInt();
      setting.endGroup();
@@ -100,7 +100,7 @@ void MenuGen::loadSettings()
  ****************************************************************************/
 void MenuGen::saveSettings()
 {
-     QSettings setting("elokab","elokabsettings");
+     QSettings setting(QApplication::organizationName(),"elokabsettings");
      setting.beginGroup("MenuAppCount");
      setting.setValue("Num",m_appCount);
      setting.endGroup();
@@ -188,7 +188,7 @@ void MenuGen::genirateAppFile()
 
 
      //--------------------------------------------------
-     QSettings setting("elokab","menuApps");
+     QSettings setting(QApplication::organizationName(),"menuApps");
      setting.beginGroup("Menu");
      m_desktopList=setting.value("Exclud").toStringList();
      setting.endGroup();
@@ -273,11 +273,11 @@ QString MenuGen::openDesktopEntry(QString file)
 
     DesktopFile xdg(file,"Desktop Entry",m_locale);
     QString oldname=xdg.value("Name").toString();
-    QString name=xdg.value("Name["+m_locale+"]",oldname).toString();
+    QString   name=xdg.value("Name["+m_locale+"]",oldname).toString();
 
-    QString exec=xdg.value("Exec").toString();
-    QString icon=xdg.value("Icon").toString();
-    QString type=xdg.value("Type").toString();
+    QString   exec=xdg.value("Exec").toString();
+    QString   icon=xdg.value("Icon").toString();
+    QString   type=xdg.value("Type").toString();
     bool NoDisplay=xdg.value("NoDisplay",false).toBool();
 
     if(type!="Application")return "";

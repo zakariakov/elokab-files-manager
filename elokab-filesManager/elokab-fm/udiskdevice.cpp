@@ -129,7 +129,7 @@ bool UdiskDevice::UpdateDevices()
 
 
             if(Mountable && MountPoints!="/" && !mDevicesHash.contains(DevicePath)){
-               qDebug()<<DevicePath<<"added"<<IdDrive;
+              // qDebug()<<DevicePath<<"added"<<IdDrive;
 
                 if(IdLabel.isEmpty()){
                     qint64 n=Size.toLong();

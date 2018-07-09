@@ -62,7 +62,7 @@ public:
     static QIcon iconSymLink(QIcon icon);
 
     //!
-    static  QByteArray iconThambnail(const QString &file);
+    static  QByteArray iconThumbnails(const QString &file);
 
     //!
     static QIcon iconColorized(QIcon icon, QColor color);

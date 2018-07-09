@@ -67,7 +67,11 @@ ElokabApplication::ElokabApplication(int &argc, char **argv):
             QApplication::installTranslator(translatorsys);
      qDebug()<<dirPath+"/translations/"+locale+"/"+applicationName();
 
-         qDebug()<<locale<<layoutDirection();
+
+         QLocale lx=QLocale(locale);
+         setLayoutDirection(lx.textDirection());
+
+          qDebug()<<locale<<layoutDirection();
     return dirPath+"/translations/"+locale+"/"+applicationName();
 
 }

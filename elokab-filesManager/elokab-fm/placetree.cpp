@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "placetree.h"
+#include "messages.h"
 #include <EMimIcon>
 #include "filesutils/propertiesdlg.h"
 //#include <EIcon>
@@ -34,15 +35,18 @@
 PlaceTree::PlaceTree(QWidget *parent) :
      QTreeWidget(parent)
 {
+    Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__);
+
      setObjectName("PlaceTree");
      setHeaderHidden(true);
      setIconSize(QSize(16,16));
-     setContextMenuPolicy(Qt::CustomContextMenu);
+         setContextMenuPolicy(Qt::CustomContextMenu);
      setStyleSheet("QTreeView{"
                    "background-color: transparent;"
                    " border-color: palette(Window);"
                    "}");
      setFrameShape(QFrame::NoFrame);
+     setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Expanding);
 //     myComputer=new MyComputer;
 ///New===============================
      mUdiskDevice=new UdiskDevice;
@@ -86,11 +90,11 @@ PlaceTree::PlaceTree(QWidget *parent) :
 //mUdiskDevice->UpdateDevices();/     //-----------------Expending All--------------------
 
      expandAll();
-
+  Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__,"end");
 }
 PlaceTree::~PlaceTree()
 {
-    qDebug()<<"delete PlaceTree";
+
   //  myComputer->blockSignals(true);
    // delete myComputer;
   delete  mDivecesItem;
@@ -101,6 +105,8 @@ PlaceTree::~PlaceTree()
  **************************************************************************************/
 void PlaceTree::chargeFoldersPlaces()
 {
+      Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__);
+
     QString homeDir=QDir::homePath();
     QString DesktopDir=Edir::desktopDir();
     QString MusicDir=Edir::musicDir();
@@ -108,7 +114,7 @@ void PlaceTree::chargeFoldersPlaces()
     QString DocumentsDir=Edir::documentsDir();
     QString MoviesDir=Edir::moviesDir();
 
-    qDebug()<<"MoviesDir>>>>>===========>>>>"<<MoviesDir;
+   // qDebug()<<"MoviesDir>>>>>===========>>>>"<<MoviesDir;
 
     QDir dir;
     //HOME
@@ -118,7 +124,7 @@ void PlaceTree::chargeFoldersPlaces()
     itemHomeFolder->setData(0,Qt::ToolTipRole,homeDir);
     itemHomeFolder->setIcon(0,EIcon::fromTheme("folder-home",("user-home")));
     mHashItems[homeDir]=itemHomeFolder;
-
+     Messages::debugMe(2,__LINE__,"found",dir.dirName());
     //مجلد سطح المكتب
     dir.setPath(DesktopDir);
     if(dir.exists()&& !DesktopDir.isEmpty() && DesktopDir!=homeDir){
@@ -127,7 +133,7 @@ void PlaceTree::chargeFoldersPlaces()
         itemDesktopFolder->setData(0,Qt::ToolTipRole,DesktopDir);
         itemDesktopFolder->setIcon(0,EIcon::fromTheme("folder-desktop",("user-desktop")));
         mHashItems[DesktopDir]=itemDesktopFolder;
-
+      Messages::debugMe(2,__LINE__,"found",dir.dirName());
     }
 
     //مجلد الصوت
@@ -138,6 +144,7 @@ void PlaceTree::chargeFoldersPlaces()
         itemMusicFolder->setData(0,Qt::ToolTipRole,MusicDir);
         itemMusicFolder->setIcon(0,QIcon::fromTheme("folder-music",QIcon::fromTheme("folder-sound")));
         mHashItems[MusicDir]=itemMusicFolder;
+        Messages::debugMe(2,__LINE__,"found",dir.dirName());
     }
     //مجلد الصور
     dir.setPath(PicturesDir);
@@ -147,6 +154,7 @@ void PlaceTree::chargeFoldersPlaces()
         itemPicturesFolder->setData(0,Qt::ToolTipRole,PicturesDir);
         itemPicturesFolder->setIcon(0,QIcon::fromTheme("folder-images",QIcon::fromTheme("folder-image")));
         mHashItems[PicturesDir]=itemPicturesFolder;
+        Messages::debugMe(2,__LINE__,"found",dir.dirName());
     }
 
     //مجلد المستندات
@@ -158,6 +166,7 @@ void PlaceTree::chargeFoldersPlaces()
         itemDocumentsFolder->setData(0,Qt::ToolTipRole,DocumentsDir);
         itemDocumentsFolder->setIcon(0,QIcon::fromTheme("folder-documents",QIcon::fromTheme("folder_documents")));
         mHashItems[DocumentsDir]=itemDocumentsFolder;
+        Messages::debugMe(2,__LINE__,"found",dir.dirName());
 
     }
 
@@ -169,6 +178,7 @@ void PlaceTree::chargeFoldersPlaces()
         itemMoviesFolder->setData(0,Qt::ToolTipRole,MoviesDir);
         itemMoviesFolder->setIcon(0,QIcon::fromTheme("folder-video",QIcon::fromTheme("folder-videos")));
         mHashItems[MoviesDir]=itemMoviesFolder;
+        Messages::debugMe(2,__LINE__,"found",dir.dirName());
     }
 
     //ROOT
@@ -187,7 +197,7 @@ void PlaceTree::chargeFoldersPlaces()
     itemTrashFolder->setIcon(0,EIcon::fromTheme("user-trash","emptytrash"));
     mHashItems[":/trash"]=itemTrashFolder;
     //--------------------------------------------------------------------------------------
-    QSettings setting("elokab","elokabFm");
+    QSettings setting(QApplication::organizationName(),QApplication::applicationName());
 
     int count = setting.beginReadArray("Boukmarks");
     if(count==0){
@@ -211,7 +221,7 @@ void PlaceTree::chargeFoldersPlaces()
 
     setting.endArray();
 //TODO:add refresh icons
-     //place folder ned  refresh icons
+  Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__,"end");
 }
 void PlaceTree::refreshIcons()
 {
@@ -278,7 +288,7 @@ mListMountedItems.clear();
  **************************************************************************************/
 void PlaceTree::addDiskItem(Device *D)
 {
-qDebug()<<"addDiskItem(D)===============================;"<<D->devPath();
+    Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__,D->devPath());
     QTreeWidgetItem *item=new QTreeWidgetItem();
     item->setText(0,D->label());
     item->setData(0,Qt::ToolTipRole,D->mountPath());
@@ -298,6 +308,8 @@ qDebug()<<"addDiskItem(D)===============================;"<<D->devPath();
  **************************************************************************************/
 void PlaceTree::removeDiskItem(QString s)
 {
+      Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__);
+
      QTreeWidgetItem *itemDev;
     for (int i = 0; i < mDivecesItem->childCount(); ++i) {
         QTreeWidgetItem *item=mDivecesItem->child(i);
@@ -313,6 +325,8 @@ void PlaceTree::removeDiskItem(QString s)
           mHashItems.remove(itemDev->data(0,Qt::ToolTipRole).toString());
           mDivecesItem->takeChild(indx);
      }
+
+
 }
 
 void PlaceTree::updateHashItem(QTreeWidgetItem* item)
@@ -338,9 +352,11 @@ void PlaceTree::chargeBookmarks()
  **************************************************************************************/
 void PlaceTree::addNewBookmark()
 {
+      Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__,m_dirPath);
      addBookmark(m_dirPath);
 
      saveBookmarks();
+
 }
 
 /**************************************************************************************
@@ -348,6 +364,7 @@ void PlaceTree::addNewBookmark()
  **************************************************************************************/
 void PlaceTree::addBookmark(const QString &path)
 {
+
      QDir dir(path);
      QString name=dir.dirName();
      if(name.isEmpty())name="/";
@@ -397,7 +414,7 @@ void PlaceTree::removeCurentBookmark()
 void PlaceTree::saveBookmarks()
 {
 
-     QSettings settings("elokab","elokabFm");
+     QSettings settings(QApplication::organizationName(),QApplication::applicationName());
      settings.remove("Boukmarks");
      settings.beginWriteArray("Boukmarks");
 
@@ -480,7 +497,8 @@ QString PlaceTree::openDeviceUrl(QTreeWidgetItem* item)
 
     m_dirPath=url;
     emit urlPlacesChanged(url);
-    qDebug()<<"urldevice"<<url;
+
+     Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__,url);
     QApplication::restoreOverrideCursor();
     return url;
 

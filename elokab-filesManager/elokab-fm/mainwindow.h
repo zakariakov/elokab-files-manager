@@ -48,7 +48,7 @@ class MainWindow : public QMainWindow
      public:
 
          //!
-          explicit MainWindow(QWidget *parent = 0);
+          explicit MainWindow(QString pathUrl=QString(), QWidget *parent = 0);
 
            //!
           ~MainWindow();

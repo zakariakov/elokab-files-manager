@@ -29,296 +29,341 @@
 
 class Actions : public QObject
 {
-          Q_OBJECT
-     public:
-          /**
+    Q_OBJECT
+public:
+    /**
      * @brief Actions
      * @param lc اللغة
      * @param parent
      */
-          explicit Actions(Settings *setting,const QString &lc,QObject *parent = 0);
+    explicit Actions(Settings *setting,const QString &lc,QObject *parent = 0);
 
-          //!
-          enum ViewMode{
-               IconView,
-               CompactView,
-               DetailView
-          };
+    //!
+    enum ViewMode{
+        IconView,
+        CompactView,
+        DetailView
+    };
 
-          //!
-          enum SortBy{
-               sortName=0,
-               sortSize=1,
-               sortType=2
-          };
+    //!
+    enum SortBy{
+        sortName=0,
+        sortSize=1,
+        sortType=2
+    };
 
-QAction *actNewTab,*actQuit,*actConfigTool,* actPaste,*actCopy;
- QAction *actOpenInNewTab ,*actOpenTerminal;
-QWidgetAction * actPathWidget;
 
-     signals:
-void reloadIcons();
-          /*!< تلقي مؤشر على تغير المسار */
-          void urlChanged(const QString &);
+    //!
+    QMenu   *menuService(const QStringList &files, const QString &mim);
 
-          /*!< تلقي مؤشر لتغير تحديد المجلد */
-          void curDirChanged(const QString &);
+    QAction *extractHereAction(const QString &file);
 
-          /*!< تلقي مؤشر لتوفر مسارات في الحافظة للنسخ واللصق */
-          void clipboardAvailable(bool);
+    QAction *AddArchiveAction(const QStringList &files);
 
-          /*!< تلقي مؤشر على توفر تحديد */
-          void selectionAvialable(bool);
+    QAction *folderPlaceAction(){return actPlacesFolder;}
 
-        //!
-          void forwardAvailable(bool);
+    QAction *quitAction(){return actQuit;}
 
-          /*!< تلقي رسالة بتوفر السابق */
-          void backAvailable(bool);
-          //---------------------------
-          /*!< الرسال رسالة بفتح لسان جديد */
-          void sendNewTab(const QString &);
+    QWidgetAction *pathWidgetAction(){return actPathWidget;}
 
-          //!
-          void sendNewPath(const QString &);
+    QAction *configToolAction(){return actConfigTool;}
 
-          /*!< رسالة بالتنقل الى مجلد الاب */
-          void sendGoUpDir();
+    QAction *anewTabAction(){return actNewTab;}
 
-          /*!< رسالة بالتنقل الى المجلد السابق */
-          void sendGoBackDir();
+    QAction *pasteAction(){return actPaste;}
 
-          /*!< رسالة بالتنقل الى المجلد السابق */
-          void sendGoForwardDir();
+    QAction *openTerminalAction(const QString &path){
+        actOpenTerminal->setData(path);
+        return actOpenTerminal;}
 
-          /*!<   رسالة بالتنقل الى مجلد البيت */
-          void sendGoHomeDir();
+    QAction *openInNewTabAction(const QString &path){
+        actOpenInNewTab->setData(path);
+        return actOpenInNewTab;}
 
-          /*!< رسالة بالتنقل الى سلة المحذوفات */
-          void sendGoTrachDir();
+    QAction *copyAction(){return actCopy;}
 
-          //!
-          void sendGoSearch();
+    QAction *propertiesAction(){return actProperties;}
 
-          /*!< رسالة ببداية تغيير الاسم */
-          void startEdit();
 
-          /*!< رسالة ببداية الحذف */
-          void startDelete();
+signals:
 
-          /*!< رسالة بالحذف الى سلة المحذوفات */
-          void startMoveToTrash();
+    /*!< تحديث الايقونات */
+    void reloadIcons();
 
-          /*!< رسالة ببدأ القص */
-          void startCutFile();
+    /*!< تلقي مؤشر على تغير المسار */
+    void urlChanged(const QString &);
 
-          /*!< رسالة ببدأ النسخ */
-          void startCopyFile();
+    /*!< تلقي مؤشر لتغير تحديد المجلد */
+    void curDirChanged(const QString &);
 
-          /*!< رسالة بالصق محتويات الحافظة  */
-          void pasteClipboard();
+    /*!< تلقي مؤشر لتوفر مسارات في الحافظة للنسخ واللصق */
+    void clipboardAvailable(bool);
 
-          /*!< رسالة بتحديد الكل */
-          void selectAll();
+    /*!< تلقي مؤشر على توفر تحديد */
+    void selectionAvialable(bool);
 
-          /*!< رسالة بغلق اللسان الحالي */
-          void sendCloseTab();
+    //!
+    void forwardAvailable(bool);
 
-          /*!< رسالة بعرص المرشح */
-          void showFilterBar();
+    /*!< تلقي رسالة بتوفر السابق */
+    void backAvailable(bool);
+    //---------------------------
+    /*!< الرسال رسالة بفتح لسان جديد */
+    void sendNewTab(const QString &);
 
-          /*!< رسالة بعرض خصائص الملفات */
-          void showProperties();
+    //!
+    void sendNewPath(const QString &);
 
-          /*!< رسالة بعرص نافذة فتح باستخدام */
-          void   showOpenwithDlg();
+    /*!< رسالة بالتنقل الى مجلد الاب */
+    void sendGoUpDir();
 
-          /*!< رسالة بعرص نافذة اعدادات قائمة الازرار لللوحة */
-          void showConfigureTool();
+    /*!< رسالة بالتنقل الى المجلد السابق */
+    void sendGoBackDir();
 
-          //!
-          void zoomInChanged();
-          void ZoomOutChanged();
+    /*!< رسالة بالتنقل الى المجلد السابق */
+    void sendGoForwardDir();
 
-     public slots:
-          //!
-          void actionsShortcuts();
-            //!
-          void refreshIcons();
-          //!
-          QMenu *menuOpenWith(const QString &url, const QString &type);
+    /*!<   رسالة بالتنقل الى مجلد البيت */
+    void sendGoHomeDir();
 
-          //!
-          QMenu *menuNew(){return mMenuNew;}
+    /*!< رسالة بالتنقل الى سلة المحذوفات */
+    void sendGoTrachDir();
 
-          //!
-          QMenu *menuFile(){return mMenufile;}
+    //!
+    void sendGoSearch();
 
-          //!
+    /*!< رسالة ببداية تغيير الاسم */
+    void startEdit();
 
-          //!
-          QMenu *menuView(){return mMenuView;}
+    /*!< رسالة ببداية الحذف */
+    void startDelete();
 
-          //!
-          QMenu *menuGo(){return mMenuGo;}
+    /*!< رسالة بالحذف الى سلة المحذوفات */
+    void startMoveToTrash();
 
-          //!
-          QMenu *menuTools(){return mMenuTools;}
+    /*!< رسالة ببدأ القص */
+    void startCutFile();
 
-          //!
-          QMenu *menuEdit(){return mMenuEdit;}
+    /*!< رسالة ببدأ النسخ */
+    void startCopyFile();
 
-          //!
-          QMenu *menuViewfile(){return mMenuViewfile;}
+    /*!< رسالة بالصق محتويات الحافظة  */
+    void pasteClipboard();
 
-          //!
-          QMenu *menuPanels(){return mMenuPanels;}
+    /*!< رسالة بتحديد الكل */
+    void selectAll();
 
-          //!
-          QMenu *menuSettings(){return mMenuSettings;}
+    /*!< رسالة بغلق اللسان الحالي */
+    void sendCloseTab();
 
-          /**
+    /*!< رسالة بعرص المرشح */
+    void showFilterBar();
+
+    /*!< رسالة بعرض خصائص الملفات */
+    void showProperties();
+
+    /*!< رسالة بعرص نافذة فتح باستخدام */
+    void   showOpenwithDlg();
+
+    /*!< رسالة بعرص نافذة اعدادات قائمة الازرار لللوحة */
+    void showConfigureTool();
+
+    //!
+    void zoomInChanged();
+    void ZoomOutChanged();
+
+
+public slots:
+    //!
+    void setUrl(const QString &);
+
+    //!
+    void actionsShortcuts();
+    //!
+    void refreshIcons();
+    //!
+    QMenu *menuOpenWith(const QString &url, const QString &type);
+
+    //!
+    QMenu *menuNew(){return mMenuNew;}
+
+    //!
+    QMenu *menuFile(){return mMenufile;}
+
+    //!
+
+    //!
+    QMenu *menuView(){return mMenuView;}
+
+    //!
+    QMenu *menuGo(){return mMenuGo;}
+
+    //!
+    QMenu *menuTools(){return mMenuTools;}
+
+    //!
+    QMenu *menuEdit(){return mMenuEdit;}
+
+    //!
+    QMenu *menuViewfile(){return mMenuViewfile;}
+
+    //!
+    QMenu *menuPanels(){return mMenuPanels;}
+
+    //!
+    QMenu *menuSettings(){return mMenuSettings;}
+
+    /**
            * @brief listActions قائمة بجميع الازرار
            * @return قائمة
           */
-          QList<QAction *>listActions(){return QList<QAction *>()
-                         <<mMenuGo->actions()
-                        <<mMenuView->actions()
-                       <<mMenufile->actions()
-                      <<mMenuTools->actions()
-                     <<mMenuEdit->actions()
-                    <<mMenuPanels->actions()
-                   <<actPathWidget;}
+    QList<QAction *>listActions(){return QList<QAction *>()
+                <<mMenuGo->actions()
+               <<mMenuView->actions()
+              <<mMenufile->actions()
+             <<mMenuTools->actions()
+            <<mMenuEdit->actions()
+           <<mMenuPanels->actions()
+          <<actPathWidget;}
 
-          //!
-          void addClosedTab(const QString &url);
+    //!
+    void addClosedTab(const QString &url);
 
-          //!
-          void setcurDir(const QString &url){  m_curDir=url;}
+  //  void setcurPath(const QString &url){  m_dirPath=url;}
 
-          //!
-          void chargeFavorite();
+    //!
+    //void setcurDir(const QString &url){  m_curDir=url;}
 
-          //!
-          void chargeAppService(const QString &path);
-          //!
-          QMenu *menuService(const QStringList &files, const QString &mim);
+    //!
+    void chargeFavorite();
 
-     private:
+    //!
+    void chargeAppService(const QString &path);
 
-          //!
-          QString m_dirPath;
+private:
 
-          //!
-          QString m_curDir;
+    //!
+    QString m_dirPath;
 
-          //!
-          QString m_lC;
+//    //!
+//    QString m_curDir;
 
-          //!
-          Settings *mSettings;
+    //!
+    QString m_lC;
 
-          //!
-          QStringList mListService;
+    //!
+    Settings *mSettings;
 
-          //!
-          QActionGroup  *alignSortBy;
+    //!
+    QStringList mListService;
 
-          //!
-          QActionGroup *alignViewMode ;
+    //!
+    QActionGroup  *alignSortBy;
 
-          //!
-          QMenu *mMenufile,*mMenuViewfile,*mMenuView,*mMenuEdit,*mMenuTools,*mMenuSettings;
+    //!
+    QActionGroup *alignViewMode ;
 
-          QMenu *mMenuGo,*mMenuNew,*mMenuPanels,*mMenuClosedTab,*mMenuFavorite,*menuOpenW,*mMenuService;
+    //!
+    QMenu *mMenufile,*mMenuViewfile,*mMenuView,*mMenuEdit,*mMenuTools,*mMenuSettings;
 
-         QAction *actOpenW;
+    QMenu *mMenuGo,*mMenuNew,*mMenuPanels,*mMenuClosedTab,*mMenuFavorite,*menuOpenW,*mMenuService;
 
-         //menuFile
-         QAction *actCloseTab,*actDelete,*actMoveToTrash,*actRename,*actProperties ;
+    QAction *actOpenW;
 
-         //menuEdit
-         QAction* actCut ,*actSelectAll,*actFind;
+    //menuFile
+    QAction *actCloseTab,*actDelete,*actMoveToTrash,*actRename,*actProperties ;
+    QAction *actAddArchive,*actExtractHere,*actTerminal;
+    //menuEdit
+    QAction* actCut ,*actSelectAll,*actFind;
 
-         //menu go
-         QAction*actGoBack ,*actGoUp,*actGoForward, *actGoHome, *actTrash;
+    //menu go
+    QAction*actGoBack ,*actGoUp,*actGoForward, *actGoHome, *actTrash;
 
-         //menu view
-         QAction *actDetailView,*actIconView,*actCompactView, *actSortByName,*actSortByType,*actSortBySize,*actSortAsc;
-         QAction *actZoomIn,*actZoomOut,*actHiddenFiles,*actThumbnails,*actReloadIcons;
-         QAction *actToolBar,*actMenuBar,*actPlacesFolder,*actInformation;
+    //menu view
+    QAction *actDetailView,*actIconView,*actCompactView, *actSortByName,*actSortByType,*actSortBySize,*actSortAsc;
+    QAction *actZoomIn,*actZoomOut,*actHiddenFiles,*actThumbnails,*actReloadIcons;
+    QAction *actToolBar,*actMenuBar,*actPlacesFolder,*actInformation;
 
-         // menu tools
-         QAction *actFilter  ;
-         QAction *actShooseTerminal;
-         // menu o
-         // menu other
+    // menu tools
+    QAction *actFilter  ;
+    QAction *actShooseTerminal;
+    // menu o
+    // menu other
 
-         QAction *actSingleClick,*actExpandableFolder;
+    QAction *actSingleClick,*actExpandableFolder;
 
-     private slots:
+    QAction *actNewTab,*actQuit,*actConfigTool,* actPaste,*actCopy;
+    QAction *actOpenInNewTab ,*actOpenTerminal;
+    QWidgetAction * actPathWidget;
 
-//!
-          void slotSetUrl(QAction *action);
+private slots:
 
-          //!
-          void clipboardChanged();
+    //!
+    void slotSetUrl(QAction *action);
 
-          //!
-          void setupMenuTemplate();
+    //!
+    void clipboardChanged();
 
-          //!
-          void setUrl(const QString &);
+    //!
+    void setupMenuTemplate();
 
-          //!
-          void openNewTab();
 
-          //!
-          void openInNewTab();
+    //!
+    void openNewTab();
 
-          //!
-          QString  getTemplateApp(const QString &fileName);
+    //!
+    void openInNewTab();
 
-          //!
-         // void creatLinkFile();
+    //!
+    QString  getTemplateApp(const QString &fileName);
 
-          //!
-        void creatXdgProgramme();
+    //!
+    // void creatLinkFile();
 
-          //!
-          void creatLink();
+    //!
+    void creatXdgProgramme();
 
-          //!
-          void toggleView(QAction *action);
+    //!
+    void creatLink();
 
-          //!
-          void executeTemplate();
+    //!
+    void toggleView(QAction *action);
 
-          //!
-          void creatNewFile(const QString &fileSource);
+    //!
+    void executeTemplate();
 
-          //!
-          void creatNewDir();
+    //!
+    void creatNewFile(const QString &fileSource);
 
-          //!
-          void actionOpenwith();
+    //!
+    void creatNewDir();
 
-          //!
-         // void openTerminal();
+    //!
+    void actionOpenwith();
 
-          //!
-          void openInTerminal();
+    //!
+    void openTerminal();
 
-          //!
-          void execService();
+    //!
+    void openInTerminal();
 
-          //!
-          void toggleSortBy(QAction* act);
+    //!
+    void execService();
 
-          //!
-          bool findProgram(const QString &program);
+    //!
+    void toggleSortBy(QAction* act);
 
-          void ShooseTerminal();
+    //!
+    bool findProgram(const QString &program);
+
+    //!
+    void ShooseTerminal();
+
+    //!
+    void archiveExtractHere();
+
+    //!
+     void addArchive();
 };
 
 #endif // ACTONS_H

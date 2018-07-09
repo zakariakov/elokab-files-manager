@@ -210,7 +210,7 @@ QIcon IconProvider::icon(const QFileInfo &info)const
         {
            // qApp->processEvents();
             QPixmap pix;
-            pix.loadFromData(EMimIcon::iconThambnail(minfo.absoluteFilePath()));
+            pix.loadFromData(EMimIcon::iconThumbnails(minfo.absoluteFilePath()));
             QIcon icon=QIcon(pix);
             if(!icon.isNull())
                 retIcon=icon;
@@ -293,10 +293,10 @@ QIcon IconProvider::iconF(const QFileInfo &info)const
      if(mPreview && mim.startsWith("image"))
         {
          QPixmap pix;
-         pix.loadFromData(EMimIcon::iconThambnail(minfo.absoluteFilePath()));
+         pix.loadFromData(EMimIcon::iconThumbnails(minfo.absoluteFilePath()));
          QIcon icon=QIcon(pix);
 
-           // QIcon icon=EMimIcon::iconThambnail(minfo.absoluteFilePath());
+           // QIcon icon=EMimIcon::iconThumbnails(minfo.absoluteFilePath());
             if(!icon.isNull())
                 retIcon=icon;
             else

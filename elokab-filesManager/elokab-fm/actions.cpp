@@ -55,7 +55,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      setObjectName("_Actions");
 
      connect(this ,SIGNAL(urlChanged(QString)),this,SLOT(setUrl(QString)));
-     connect(this ,SIGNAL(curDirChanged(QString)),this,SLOT(setcurDir(QString)));
+   //  connect(this ,SIGNAL(curDirChanged(QString)),this,SLOT(setcurDir(QString)));
      connect(clipboard ,SIGNAL(dataChanged()),this,SLOT(clipboardChanged()));
      //
      actPathWidget=new QWidgetAction(this);
@@ -73,6 +73,12 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      connect(actNewTab, SIGNAL(triggered()), this, SLOT(openNewTab()));
      actNewTab->setObjectName("New_Tab_Act");
      actNewTab->setStatusTip(tr("Open new tab  ")+actNewTab->shortcut().toString());
+
+     // new tab contextmenu---
+     actOpenInNewTab = new QAction(tr("Open In new tab"), this);
+     connect(actOpenInNewTab, SIGNAL(triggered()), this, SLOT(openInNewTab()));
+     actOpenInNewTab->setObjectName("Open_In_newtab_Act");
+
 
      actCloseTab = new QAction(tr("Close tab"), this);
      connect(actCloseTab, SIGNAL(triggered()), this, SIGNAL(sendCloseTab()));
@@ -125,6 +131,16 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      connect(this,SIGNAL(clipboardAvailable(bool)),actPaste,SLOT(setEnabled(bool)));
      actPaste->setObjectName("Paste_Files_Act");
      actPaste->setStatusTip(tr("Paste clipboard contents   ")+actPaste->shortcut().toString());
+
+     actExtractHere= new QAction(tr("Extract Here"), this);
+     connect(actExtractHere, SIGNAL(triggered()), this, SLOT(archiveExtractHere()));
+     actExtractHere->setStatusTip(tr("Extract Archive in curent folder"));
+
+     actAddArchive= new QAction(tr("Add To Archive"), this);
+     connect(actAddArchive, SIGNAL(triggered()), this, SLOT(addArchive()));
+     actAddArchive->setStatusTip(tr("Add selected to Archive tar.gz"));
+
+
 
      actSelectAll = new QAction(tr("Select All"), this);
      actSelectAll->setStatusTip(tr("Select all files"));
@@ -291,20 +307,16 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      actFilter->setObjectName("Show_Filter_Act");
 
      actOpenTerminal = new QAction(tr("Open terminal"),this);
-     actOpenTerminal->setStatusTip(tr("Terminal ToolBar"));
-     //     connect(actOpenTerminal, SIGNAL(toggled(bool)), mSettings, SLOT(setShowTerminalTool(bool)));
-     //     connect(mSettings, SIGNAL(showTerminalToolChanged(bool)), actOpenTerminal, SLOT(setChecked(bool)));
+     actOpenTerminal->setStatusTip(tr("Open terminal in selected folder"));
      connect(actOpenTerminal, SIGNAL(triggered()), this, SLOT(openInTerminal()));
-     actOpenTerminal->setObjectName("Open_Terminal_Act");
-     //     actOpenTerminal->setCheckable(true);
-     //     actOpenTerminal->setChecked(mSettings->showTerminalTool());
 
+     actTerminal = new QAction(tr("Open terminal"),this);
+     actTerminal->setStatusTip(tr("Open terminal in curent path"));
+     connect(actTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
+     actTerminal->setObjectName("Open_Terminal_Act");
 
      //OTHER ACTIONS--------
 
-     actOpenInNewTab = new QAction(tr("Open In new tab"), this);
-     connect(actOpenInNewTab, SIGNAL(triggered()), this, SLOT(openInNewTab()));
-     actOpenInNewTab->setObjectName("Open_In_newtab_Act");
 
      actSingleClick= new QAction(tr("Single-click to open files and folders"), this);
      actSingleClick->setCheckable(true);
@@ -340,8 +352,8 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      mMenufile->addAction(actMoveToTrash);
      mMenufile->addAction(actDelete);
      mMenufile->addSeparator();
-     mMenufile->addAction(actProperties);
-     mMenufile->addAction(actOpenTerminal);
+    // mMenufile->addAction(actProperties);
+     mMenufile->addAction(actTerminal);
      //-----------mMenuViewfile--------
 
      mMenuViewfile=new QMenu(tr("&File"));
@@ -353,7 +365,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      mMenuViewfile->addAction(actMoveToTrash);
      mMenuViewfile->addAction(actDelete);
      mMenuViewfile->addSeparator();
-     mMenuViewfile->addAction(actProperties);
+    // mMenuViewfile->addAction(actProperties);
 
 
      //-----------mMenuEdit--------
@@ -405,7 +417,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      mMenuPanels->addAction(actInformation);
      mMenuPanels->addAction(actToolBar);
      mMenuPanels->addAction(actMenuBar);
-     //   mMenuPanels->addAction(actOpenTerminal);
+
      mMenuSettings->addMenu(mMenuPanels);
      mMenuSettings->addSeparator();
      mMenuSettings->addAction(actConfigTool);
@@ -418,7 +430,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      //-----------mMenuTools--------
      mMenuTools=new QMenu(tr("&Tools"));
      mMenuTools->addAction(actFilter);
-     //  mMenuTools->addAction(actOpenTerminal);
+
 
      //-----------mMenuGo--------
      mMenuGo=new QMenu(tr("&Go"));
@@ -500,6 +512,7 @@ void Actions::refreshIcons()
     actTrash->setIcon(EIcon::fromTheme("user-trash","emptytrash"));
     actFilter->setIcon(EIcon::fromTheme("view-filter"));
     actOpenTerminal->setIcon(EIcon::fromTheme("terminal"));
+    actTerminal->setIcon(EIcon::fromTheme("terminal"));
 
     actOpenInNewTab->setIcon(EIcon::fromTheme("tab-new",("add")));
     actConfigTool->setIcon(EIcon::fromTheme("configure"));
@@ -541,7 +554,8 @@ void Actions::actionsShortcuts()
     actGoForward->setShortcut(QKeySequence::Forward);
     actGoHome->setShortcut(QKeySequence::MoveToStartOfDocument);
     actFilter->setShortcut(QKeySequence("Ctrl+I"));
-    actOpenTerminal->setShortcut(QKeySequence("Shift+F4"));
+    //actOpenTerminal->setShortcut(QKeySequence("Shift+F4"));
+    actTerminal->setShortcut(QKeySequence("Shift+F4"));
 
 }
 
@@ -556,7 +570,7 @@ void Actions::chargeFavorite()
           delete act;
      }
      mMenuFavorite->clear();
-     QSettings setting("elokab","elokabFm");
+     QSettings setting(QApplication::organizationName(),QApplication::applicationName());
 
      int count = setting.beginReadArray("Boukmarks");
 
@@ -624,10 +638,11 @@ void Actions::clipboardChanged()
 void Actions::setUrl(const QString &url)
 {
 
-
      m_dirPath=url;
      actGoUp->setEnabled(m_dirPath!=QDir::rootPath()&&m_dirPath!=":/trash");
-
+//     actOpenInNewTab->setData(m_dirPath);
+//     actOpenTerminal->setData(m_dirPath);
+    qDebug()<<__FILE__<<__FUNCTION__<<m_dirPath;
 
 }
 
@@ -920,7 +935,7 @@ void Actions::openInNewTab()
 {
 
 
-     emit sendNewTab(m_curDir);
+     emit sendNewTab(actOpenInNewTab->data().toString());
 
 }
 
@@ -948,9 +963,23 @@ void Actions::openInTerminal()
 
      QString exec=mSettings->terminal();
      QProcess proc;
-     proc.setWorkingDirectory(m_dirPath);
-       QDir::setCurrent(m_dirPath);
+     QString path=actOpenTerminal->data().toString();
+     proc.setWorkingDirectory(path);
+       QDir::setCurrent(path);
      proc.startDetached(exec);
+
+
+}
+
+void Actions::openTerminal()
+{
+
+
+    QString exec=mSettings->terminal();
+    QProcess proc;
+    proc.setWorkingDirectory(m_dirPath);
+    QDir::setCurrent(m_dirPath);
+    proc.startDetached(exec);
 
 
 }
@@ -1120,6 +1149,8 @@ void Actions::execService()
 bool Actions::findProgram(const QString &program)
 {
 
+    if(program.isEmpty()) return false;
+
      QFileInfo fi(program);
      if (fi.isExecutable())
           return true;
@@ -1147,4 +1178,113 @@ void Actions::ShooseTerminal()
                                             mSettings->terminal(), &ok);
        if (ok && !text.isEmpty())
        mSettings->setTerminal(text);
+}
+
+
+/*********************************************************************
+ *                        ARCHIVE
+ *********************************************************************/
+QAction *Actions::AddArchiveAction(const QStringList &files)
+{
+    actAddArchive->setData(files);
+    return actAddArchive;
+}
+
+void Actions::addArchive()
+{
+
+    QFileInfo info=m_dirPath;
+    QStringList list;
+    list=actAddArchive->data().toStringList();
+
+    if(list.count()<1)return;
+
+    if(list.count()==1) info.setFile(list.at(0));
+
+    QString archName=info.baseName();
+
+    // DIALOG----------
+    bool ok;
+
+    QString text = QInputDialog::getText(0, tr("Create archive"),
+                                         tr("Archive name:"), QLineEdit::Normal,
+                                         archName, &ok);
+    if (ok && !text.isEmpty())
+        archName=text;
+    else
+        return;
+    // DIALOG ~----------
+
+    for (int i = 0; i < list.count(); ++i) {
+        QFileInfo fi(list.at(i));
+        list.replace(i,fi.fileName());
+    }
+
+    list.insert(0,archName+".tar.gz");
+    list.insert(0,"-cvf");
+
+    QProcess p;
+    p.startDetached("tar",list,m_dirPath);
+
+    qDebug()<<"tar"<<"-cvf"<<archName<<m_dirPath;
+
+
+}
+
+//_________________________________________________________________________________
+QAction *Actions::extractHereAction(const QString &file)
+{
+
+    actExtractHere->setData(file);
+    return actExtractHere;
+
+}
+
+
+
+void Actions::archiveExtractHere()
+{
+    bool exist=false;
+    QString prog;
+    QString arg;
+QFileInfo info=actExtractHere->data().toString();
+    QSettings setting(QApplication::organizationName(),"Archiver");
+
+    //DEFAULT
+    setting.beginGroup("Default");
+    prog = setting.value("File").toString();
+    arg = setting.value("Arg").toString();
+    if(findProgram(prog)){ exist=true; }
+    setting.endGroup();
+    //Find Any Archive
+
+    if(!exist){
+        int size = setting.beginReadArray("Prog");
+        for (int i = 0; i < size; ++i) {
+            setting.setArrayIndex(i);
+            prog = setting.value("File").toString();
+            arg = setting.value("Arg").toString();
+            if(findProgram(prog)){
+                exist=true;
+                break;
+            }
+        }
+    }
+    setting.endArray();
+
+    QProcess p;
+
+    if(!exist)
+    {
+        prog=Edir::libDir()+"/atool";
+        arg="-x";
+        p.startDetached("perl",QStringList()<<prog<<arg<<info.filePath(),info.path());
+        return;
+    }
+
+
+    //QString cmd="sh "+prog+" "+arg +" "+
+    p.startDetached(prog,QStringList()<<arg<<info.filePath(),info.path());
+
+    qDebug()<<"Extract archive:"<<prog<<arg<<info.filePath()<<info.path();
 }
