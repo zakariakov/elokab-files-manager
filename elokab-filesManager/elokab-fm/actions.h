@@ -53,37 +53,90 @@ public:
     };
 
 
-    //!
+   //!
     QMenu   *menuService(const QStringList &files, const QString &mim);
 
+     //!
     QAction *extractHereAction(const QString &file);
 
+     //!
     QAction *AddArchiveAction(const QStringList &files);
 
+     //!
     QAction *folderPlaceAction(){return actPlacesFolder;}
 
+     //!
     QAction *quitAction(){return actQuit;}
 
+     //!
     QWidgetAction *pathWidgetAction(){return actPathWidget;}
 
+     //!
     QAction *configToolAction(){return actConfigTool;}
 
+     //!
     QAction *anewTabAction(){return actNewTab;}
 
+     //!
     QAction *pasteAction(){return actPaste;}
 
+     //!
     QAction *openTerminalAction(const QString &path){
         actOpenTerminal->setData(path);
         return actOpenTerminal;}
 
+     //!
     QAction *openInNewTabAction(const QString &path){
         actOpenInNewTab->setData(path);
         return actOpenInNewTab;}
 
+     //!
     QAction *copyAction(){return actCopy;}
 
+     //!
     QAction *propertiesAction(){return actProperties;}
 
+    //!
+    QMenu *menuNew(){return mMenuNew;}
+
+    //!
+    QMenu *menuFile(){return mMenufile;}
+
+     //!
+    QMenu *menuView(){return mMenuView;}
+
+    //!
+    QMenu *menuGo(){return mMenuGo;}
+
+    //!
+    QMenu *menuTools(){return mMenuTools;}
+
+    //!
+    QMenu *menuEdit(){return mMenuEdit;}
+
+    //!
+    QMenu *menuViewfile(){return mMenuViewfile;}
+
+    //!
+    QMenu *menuPanels(){return mMenuPanels;}
+
+    //!
+    QMenu *menuSettings(){return mMenuSettings;}
+
+    //!
+    QMenu *menuOpenWith(const QString &url, const QString &type);
+
+    //!
+    void addClosedTab(const QString &url);
+
+    QList<QAction *>listActions(){return QList<QAction *>()
+                <<mMenuGo->actions()
+               <<mMenuView->actions()
+              <<mMenufile->actions()
+             <<mMenuTools->actions()
+            <<mMenuEdit->actions()
+           <<mMenuPanels->actions()
+          <<actPathWidget;}
 
 signals:
 
@@ -177,62 +230,8 @@ public slots:
     //!
     void setUrl(const QString &);
 
-    //!
-    void actionsShortcuts();
-    //!
-    void refreshIcons();
-    //!
-    QMenu *menuOpenWith(const QString &url, const QString &type);
 
-    //!
-    QMenu *menuNew(){return mMenuNew;}
-
-    //!
-    QMenu *menuFile(){return mMenufile;}
-
-    //!
-
-    //!
-    QMenu *menuView(){return mMenuView;}
-
-    //!
-    QMenu *menuGo(){return mMenuGo;}
-
-    //!
-    QMenu *menuTools(){return mMenuTools;}
-
-    //!
-    QMenu *menuEdit(){return mMenuEdit;}
-
-    //!
-    QMenu *menuViewfile(){return mMenuViewfile;}
-
-    //!
-    QMenu *menuPanels(){return mMenuPanels;}
-
-    //!
-    QMenu *menuSettings(){return mMenuSettings;}
-
-    /**
-           * @brief listActions قائمة بجميع الازرار
-           * @return قائمة
-          */
-    QList<QAction *>listActions(){return QList<QAction *>()
-                <<mMenuGo->actions()
-               <<mMenuView->actions()
-              <<mMenufile->actions()
-             <<mMenuTools->actions()
-            <<mMenuEdit->actions()
-           <<mMenuPanels->actions()
-          <<actPathWidget;}
-
-    //!
-    void addClosedTab(const QString &url);
-
-  //  void setcurPath(const QString &url){  m_dirPath=url;}
-
-    //!
-    //void setcurDir(const QString &url){  m_curDir=url;}
+private:
 
     //!
     void chargeFavorite();
@@ -240,13 +239,14 @@ public slots:
     //!
     void chargeAppService(const QString &path);
 
-private:
+    //!
+    void refreshIcons();
+
+    //!
+    void actionsShortcuts();
 
     //!
     QString m_dirPath;
-
-//    //!
-//    QString m_curDir;
 
     //!
     QString m_lC;
@@ -274,25 +274,25 @@ private:
     QAction *actCloseTab,*actDelete,*actMoveToTrash,*actRename,*actProperties ;
     QAction *actAddArchive,*actExtractHere,*actTerminal;
     //menuEdit
-    QAction* actCut ,*actSelectAll,*actFind;
+    QAction* actCut ,*actSelectAll,*actFind,* actPaste,*actCopy;
 
     //menu go
     QAction*actGoBack ,*actGoUp,*actGoForward, *actGoHome, *actTrash;
 
     //menu view
-    QAction *actDetailView,*actIconView,*actCompactView, *actSortByName,*actSortByType,*actSortBySize,*actSortAsc;
+    QAction *actDetailView,*actIconView   ,*actCompactView, *actSortByName;
+    QAction *actSortByType,*actSortBySize,*actSortAsc;
     QAction *actZoomIn,*actZoomOut,*actHiddenFiles,*actThumbnails,*actReloadIcons;
     QAction *actToolBar,*actMenuBar,*actPlacesFolder,*actInformation;
 
     // menu tools
     QAction *actFilter  ;
     QAction *actShooseTerminal;
-    // menu o
-    // menu other
 
+    // menu other
     QAction *actSingleClick,*actExpandableFolder;
 
-    QAction *actNewTab,*actQuit,*actConfigTool,* actPaste,*actCopy;
+    QAction *actNewTab,*actQuit,*actConfigTool;
     QAction *actOpenInNewTab ,*actOpenTerminal;
     QWidgetAction * actPathWidget;
 
@@ -316,9 +316,6 @@ private slots:
 
     //!
     QString  getTemplateApp(const QString &fileName);
-
-    //!
-    // void creatLinkFile();
 
     //!
     void creatXdgProgramme();
@@ -355,6 +352,9 @@ private slots:
 
     //!
     bool findProgram(const QString &program);
+
+    //!
+    QString defaultTerminal();
 
     //!
     void ShooseTerminal();

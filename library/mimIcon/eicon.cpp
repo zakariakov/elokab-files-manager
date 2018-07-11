@@ -37,7 +37,7 @@ void EIcon::seTemeName(const QString  &name)
 
 EIcon *EIcon::instance()
 {
-   return EIconInstance();
+    return EIconInstance();
 }
 
 QString themePath(const QString &path)
@@ -45,8 +45,11 @@ QString themePath(const QString &path)
     foreach (QString p, QIcon::themeSearchPaths())
     {
         QDir dirS;
-        if(dirS.exists(p+"/"+path))
+        qDebug()<<"themePath" << p+"/"+path;
+        if(dirS.exists(p+"/"+path)){
+            qDebug()<<"return" << p+"/"+path;
             return  p+"/"+path;
+        }
 
     }
     return path;
@@ -78,22 +81,24 @@ QIcon EIcon::fromTheme(const QString  &iconName, const QString &fallback)
         return QIcon::fromTheme("unknown");
 
     if(instance()->cachIcon.contains(iconName))
-            return instance()->cachIcon.value(iconName);
+        return instance()->cachIcon.value(iconName);
 
     else if(QIcon::hasThemeIcon(iconName))
-            iconF =  QIcon::fromTheme(iconName);
+        iconF =  QIcon::fromTheme(iconName);
 
 
-     else if(hasPathIcon(iconName,THEM_PIXMAP))
-            iconF =iconFromThemePath(iconName,THEM_PIXMAP);
+    else if(hasPathIcon(iconName,THEM_PIXMAP))
+        iconF =iconFromThemePath(iconName,THEM_PIXMAP);
 
-
-    else if(!fallback.isEmpty() && QIcon::hasThemeIcon(fallback))
-        iconF =  QIcon::fromTheme(fallback);
 
     else if(hasPathIcon(iconName,THEM_BACK))
         iconF =  iconFromThemePath(iconName,themePath(THEM_BACK));
 
+
+    if(iconF.availableSizes().isEmpty()){
+        if(!fallback.isEmpty() && QIcon::hasThemeIcon(fallback))
+            iconF =  QIcon::fromTheme(fallback);
+    }
 
     if(!iconF.availableSizes().isEmpty()){
         instance()->cachIcon.insert(iconF.name(),iconF);
@@ -108,7 +113,7 @@ QIcon EIcon::fromTheme(const QString  &iconName, const QString &fallback)
 
     return QIcon::fromTheme(APP_EXE);
 
-  }
+}
 //-------------------------------------------------------------------
 bool EIcon::hasPathIcon(const QString &name,const QString &path)
 {
@@ -121,11 +126,13 @@ bool EIcon::hasPathIcon(const QString &name,const QString &path)
         if(dirS.exists(p+"/"+path))
         {
             mPath=  p+"/"+path;
+            // qDebug()<<"hasPathIcon"<<name<< mPath;
+
             break;
         }
 
     }
-
+    //qDebug()<<"hasPathIcon return"<<name<< mPath;
     return searchIcon(name,mPath);
 
 }
@@ -133,17 +140,19 @@ bool EIcon::hasPathIcon(const QString &name,const QString &path)
 bool EIcon::searchIcon(const QString &name,const QString &path)
 {
     QStringList files = QDir(path).entryList(QStringList(name+".*"),
-                        QDir::Files | QDir::NoDotAndDotDot);
+                                             QDir::Files | QDir::NoDotAndDotDot);
 
-    if(files.count()>0)
+    if(files.count()>0){
+        // qDebug()<<"searchIcon"<<name<< path<<files;
         return true;
+    }
 
     QDirIterator it( path,QDir::AllDirs |QDir::NoDotAndDotDot ,
                      QDirIterator::Subdirectories);
 
     while(it.hasNext())
     {
-       // qDebug()<<"it.filePath()"<<it.filePath();
+        // qDebug()<<"it.filePath()"<<it.filePath();
         it.next();
         if(hasPathIcon(name,it.filePath()))
             return true;
@@ -152,25 +161,7 @@ bool EIcon::searchIcon(const QString &name,const QString &path)
     return false;
 }
 //______________________________________________________________________________________
-
-QIcon EIcon::iconFromThemePath(const QString &m_iconName,const QString &path)
-{
-QIcon m_icon ;
-
-    addIconFile(m_icon,m_iconName,path);
-
-    QDirIterator it(path,QDir::AllDirs |
-                     QDir::NoDotAndDotDot , QDirIterator::Subdirectories);
-    while(it.hasNext())
-    {
-        it.next();
-        addIconFile(m_icon,m_iconName,it.filePath());
-        //        qDebug()<<curPath;
-
-    }
-return m_icon;
-}
-void EIcon::addIconFile(QIcon m_icon,const QString m_iconName,const QString &curPath)
+QIcon addIconFile(QIcon m_icon,const QString m_iconName,const QString &curPath)
 {
     QStringList listStr;
     listStr<<m_iconName+".png" <<m_iconName+".xpm"
@@ -182,14 +173,31 @@ void EIcon::addIconFile(QIcon m_icon,const QString m_iconName,const QString &cur
     foreach (QString s, files) {
         QString f=  QDir(curPath).absoluteFilePath(s);
         QSize size=QPixmap(f).size();
-        if(!size.isNull()){
-         //  qDebug()<<f<<QPixmap(f).size();
-           m_icon.addFile(f,size);
-           //  m_icon.addPixmap(QPixmap(f));
-           // m_availableSizes.append(size);
-        }
+        if(!size.isNull())
+            m_icon.addFile(f,size);
+
+    }
+    return m_icon;
+}
+
+QIcon EIcon::iconFromThemePath(const QString &m_iconName,const QString &path)
+{
+    // qDebug()<<"iconFromThemePath"<<m_iconName<<path;
+    QIcon m_icon ;
+
+    m_icon=  addIconFile(m_icon,m_iconName,path);
+
+
+    QDirIterator it(path,QDir::AllDirs |
+                    QDir::NoDotAndDotDot , QDirIterator::Subdirectories);
+    while(it.hasNext())
+    {
+        it.next();
+        m_icon=  addIconFile(m_icon,m_iconName,it.filePath());
+
     }
 
+    return m_icon;
 }
 
 QT_END_NAMESPACE

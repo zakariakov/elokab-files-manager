@@ -23,12 +23,10 @@
 #include "messages.h"
 #include <QApplication>
 #include <QClipboard>
-#include <QMimeData>
 #include <QMessageBox>
-#include <QUrl>
 #include <QProcess>
 #include <QToolButton>
-#include <QPainter>
+
 #include <QtConcurrentRun>
 #include <QImageReader>
 #include <QDateTime>
@@ -43,7 +41,7 @@
  *
  *
  *****************************************************************************************************/
-
+/*
 MyFileSystemModel::MyFileSystemModel(IconProvider *iconProvider,QObject *parent):
     mIconProvider(iconProvider), QFileSystemModel(parent)
 {
@@ -58,8 +56,9 @@ MyFileSystemModel::MyFileSystemModel(IconProvider *iconProvider,QObject *parent)
 
     Messages::debugMe(0,__LINE__,"MyFileSystemModel",__FUNCTION__,"End");
 }
-
+*/
 //--------------------------------------------------------------
+/*
 QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 {
 
@@ -108,8 +107,8 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
 
 }// MyFileSystemModel::data
-
-
+*/
+/*
 //--------------------------------------------------------------
 QVariant MyFileSystemModel::headerData(int section,
                                        Qt::Orientation orientation,
@@ -131,8 +130,9 @@ QVariant MyFileSystemModel::headerData(int section,
     return QVariant();
 
 }
-
+*/
 //--------------------------------------------------------------
+/*
 bool MyFileSystemModel::dropMimeData(const QMimeData * data,
                                      Qt::DropAction action,
                                      int row,
@@ -173,7 +173,8 @@ Messages::debugMe(0,__LINE__,"MyFileSystemModel",__FUNCTION__);
 
     return false;
 }
-
+*/
+/*
 void MyFileSystemModel::clearCache(const QString &path)
 {
     QDirIterator it(path ,QDir::Files
@@ -185,7 +186,7 @@ void MyFileSystemModel::clearCache(const QString &path)
         if(mimcach->contains(path)) mimcach->remove(file);
     }
 }
-
+*/
 /*****************************************************************************************************
  *
  *                                   TAB

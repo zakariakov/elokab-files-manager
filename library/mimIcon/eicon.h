@@ -41,7 +41,7 @@ private:
     static  bool searchIcon(const QString &name,const QString &path);
 
  static   QIcon iconFromThemePath(const QString &m_iconName, const QString &path);
-  static  void addIconFile(QIcon m_icon, const QString m_iconName, const QString &curPath);
+ // static  void addIconFile(QIcon m_icon, const QString m_iconName, const QString &curPath);
     //!
 
     QHash<QString,QIcon>cachIcon;

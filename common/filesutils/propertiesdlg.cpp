@@ -61,7 +61,7 @@ PropertiesDlg::PropertiesDlg(const QStringList &urls, QWidget *parent) :
           ui->labelModified->setText(time.toString("dd.MM.yyyy hh:mm"));
           ui->labellastRead->setText(lasttime.toString("dd.MM.yyyy hh:mm"));
            mMim=EMimIcon::mimeTyppe(fi);
-          ui->labelType->setText(EMimIcon::mimLang(mMim,locale().name().section("_",0,0)));
+          ui->labelType->setText(EMimIcon::mimLang(mMim/*,locale().name().section("_",0,0)*/));
           mIcon=EMimIcon::icon(fi);
            ui->toolButton->setIcon(mIcon);
           ui->lineEditFileName->setText(fi.fileName());

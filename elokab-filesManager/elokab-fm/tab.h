@@ -21,6 +21,7 @@
 #define TAB_H
 
 #include "pagewidget.h"
+#include "myfilesystemmodel.h"
 #include <QWidget>
 #include "iconprovider.h"
 //#include "iconproviderdefault.h"
@@ -30,8 +31,8 @@
 #include <QUrl>
 #include <QDebug>
 #include <QApplication>
-#include <QFileSystemWatcher>
-#include <QFutureWatcher>
+//#include <QFileSystemWatcher>
+//#include <QFutureWatcher>
 /*
 
 class Thumbnail : public QObject
@@ -71,7 +72,7 @@ bool mPreview;
 };
 
 */
-
+/*
 class MyFileSystemModel :public QFileSystemModel
 {
  Q_OBJECT
@@ -128,7 +129,7 @@ private:
 
 
 };
-
+*/
 
 /**
  * @brief The Tab class السنة البرنامج

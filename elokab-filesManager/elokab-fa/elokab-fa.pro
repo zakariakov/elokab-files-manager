@@ -40,9 +40,8 @@ TRANSLATIONS    =../../usr/share/elokab/translations/ar/elokab-fa.ts\
                  ../../usr/share/elokab/translations/en/elokab-fa.ts\
 
 CODECFORTR = UTF-8
+
 # install
-
-
 
  target.path = /usr/bin
 

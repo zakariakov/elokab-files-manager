@@ -642,7 +642,7 @@ void Actions::setUrl(const QString &url)
      actGoUp->setEnabled(m_dirPath!=QDir::rootPath()&&m_dirPath!=":/trash");
 //     actOpenInNewTab->setData(m_dirPath);
 //     actOpenTerminal->setData(m_dirPath);
-    qDebug()<<__FILE__<<__FUNCTION__<<m_dirPath;
+   // qDebug()<<__FILE__<<__FUNCTION__<<m_dirPath;
 
 }
 
@@ -962,6 +962,9 @@ void Actions::openInTerminal()
 
 
      QString exec=mSettings->terminal();
+     if(!findProgram(exec)){
+         exec=defaultTerminal();
+     }
      QProcess proc;
      QString path=actOpenTerminal->data().toString();
      proc.setWorkingDirectory(path);
@@ -971,11 +974,67 @@ void Actions::openInTerminal()
 
 }
 
+QString Actions::defaultTerminal()
+{
+
+   QString terminal;
+
+    QByteArray sS=qgetenv("DESKTOP_SESSION");
+    qDebug()<<"envirenment"<<sS;
+
+     //search in enverenment
+    if(sS=="xfce")
+        terminal="xfce4-terminal";
+    else if(sS=="Enlightenment"||sS.contains("enlightenment"))
+        terminal="terminology";
+    else if(sS==" plasma-wayland-session"||sS==" plasma-session"||sS.contains("plasma"))
+        terminal="konsole";
+    else if(sS=="gnome-session"||sS.contains("gnome"))
+        terminal="gnome-terminal";
+    else if(sS=="cinnamon-session")
+        terminal="gnome-terminal";
+    else if(sS.contains("deepin"))
+        terminal="gnome-terminal";
+    else if(sS==("lxsession"))
+        terminal="lxterminal";
+    //search list of terminal
+
+    if(terminal.isEmpty()){
+        //TODO remplace this list
+        QStringList list;
+        list<<"elokab-terminal"<<"gnome-terminal"<<"konsole"<<"termite"
+           <<"deepin-terminal"<<"terminology"<<"xfce4-terminal"
+           << "lxterminal"<<"qterminal"<<"mate-terminal"<<"pantheon-terminal"
+           <<"terminator"<<"theterminal"<<"aterm"
+           <<"urxvt"<<"eterm"<<"mlterm"<<" tilda";
+
+            foreach (QString term, list) {
+                if( (findProgram(term))){
+                    terminal=term;
+                    qDebug()<<"terminal exist"<<term;
+                    break;
+                }
+            }
+
+    }
+    if(terminal.isEmpty())
+        terminal="xterm";
+
+
+    return terminal;
+
+}
+
+
 void Actions::openTerminal()
 {
 
-
     QString exec=mSettings->terminal();
+    qDebug()<<"openTerminal"<<exec;
+    if(!findProgram(exec)){
+        exec=defaultTerminal();
+    }
+qDebug()<<"openTerminal"<<exec;
     QProcess proc;
     proc.setWorkingDirectory(m_dirPath);
     QDir::setCurrent(m_dirPath);

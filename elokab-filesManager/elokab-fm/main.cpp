@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QUrl>
 /**
  * @brief main
  * @param argc

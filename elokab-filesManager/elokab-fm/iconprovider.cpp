@@ -327,7 +327,7 @@ QString IconProvider::type(const QFileInfo &info) const
      if(!mimLang.isEmpty())
           return mimLang;
 
-     mimLang=EMimIcon::mimLang(mim,mLc);
+     mimLang=EMimIcon::mimLang(mim);
 
      if(mimLang.isEmpty()){
           return QFileIconProvider::type(info);

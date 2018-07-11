@@ -45,8 +45,10 @@ public:
     };
 
     //!
-    explicit  EMimIcon(){}
+    explicit  EMimIcon(){/*instance()->hashMimLang=new QHash<QString,QString>; */}
 
+    static EMimIcon *instance();
+static void setlocale(QString lc);
     static  QIcon icon(const QFileInfo &info,bool previw=false);
 
     //!
@@ -171,7 +173,7 @@ public:
     static QString iconName(QString result) ;
 
     //!
-    static QString mimLang(const QString &mim,const QString &local);
+    static QString mimLang(const QString &mim);
     static QString createDescktopFile(const QString &exec);
     static QString defaultTerminal();
 signals:
@@ -182,8 +184,8 @@ protected:
 
 
 private:
-
-
+QHash<QString,QString>hashMimLang;
+QString mLocal;
 private slots:
 
     //!

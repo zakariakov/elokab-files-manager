@@ -51,11 +51,10 @@ SOURCES += \
     ../../common/about/widgetabout.cpp \
     ../../common/filesutils/symlinkdlg.cpp \
     ../../common/filesutils/dialogxdesktop.cpp \
-#  itemdelegate.cpp
- #    qitemdelegate.cpp
     udiskdevice.cpp \
     itemdelegate.cpp \
-    messages.cpp
+    messages.cpp \
+    myfilesystemmodel.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -80,11 +79,10 @@ HEADERS  += \
     ../../common/about/widgetabout.h \
     ../../common/filesutils/symlinkdlg.h \
     ../../common/filesutils/dialogxdesktop.h \
-#  itemdelegate.h
- #     qitemdelegate.h
     udiskdevice.h \
     itemdelegate.h \
-    defines.h
+    defines.h \
+    myfilesystemmodel.h
 
 FORMS    += mainwindow.ui \
     pathwidget.ui \

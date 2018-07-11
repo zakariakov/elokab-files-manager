@@ -149,7 +149,7 @@ class Settings : public QSettings
 
           /*!< ترتيب تنازلي ام تصاعدي */
           bool sortAscending(){ return value("SortAscending",true).toBool();  }
-          void  setSortAscending(const bool &arg){ setValue("SortAscending",arg);emit sortingChanged();}
+          void setSortAscending(const bool &arg){ setValue("SortAscending",arg);emit sortingChanged();}
           Qt::SortOrder sortOrder(){
 
                if(sortAscending())
@@ -160,7 +160,7 @@ class Settings : public QSettings
           }
 
           /*!< اسم الطرفية الافتراضي */
-          QString terminal(){return value("Terminal","x-terminal-emulator").toString();;}
+          QString terminal(){return value("Terminal").toString();}
           void setTerminal(const QString &arg){setValue("Terminal",arg);emit terminalNameChanged(arg);}
 
           /*!< تفعيل الملفات والكجلدات بنقرة واحدة */

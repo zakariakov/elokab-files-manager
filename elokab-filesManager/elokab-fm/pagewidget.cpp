@@ -343,23 +343,19 @@ void PageWidget::customContextMenu(QPoint)
     //----------------------------------------------
     menu.addActions(mActions->menuViewfile()->actions());
 
-    if(count==1 && isArchive(mim))
-        menu.addAction(mActions->extractHereAction(info.filePath()));
+    if(QFileInfo(m_dirPath).isWritable()){
 
-    menu.addAction(mActions->AddArchiveAction(selectedFiles()));
+        if(count==1  && isArchive(mim))
+            menu.addAction(mActions->extractHereAction(info.filePath()));
 
-    menu.addSeparator();
+        menu.addAction(mActions->AddArchiveAction(selectedFiles()));
+        menu.addSeparator();
+
+    }
 
     menu.addAction(mActions->propertiesAction());
 
-
     menu.exec(QCursor::pos());
-
-//        mActions->setUrl(m_dirPath);
-
-
-
-    //     return;
 
 }
 

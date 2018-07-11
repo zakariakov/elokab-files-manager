@@ -79,7 +79,7 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
     }
     mSettings=new Settings ;
 
-
+EMimIcon::setlocale(locale().name().section("_",0,0));
     EMimIcon::updateMimeAssociatedApplication();
 
     mActions  =new Actions(mSettings,locale().name().section("_",0,0));

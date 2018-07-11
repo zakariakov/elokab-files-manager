@@ -157,7 +157,7 @@ void FileInformation::setDirInformation(const QFileInfo &fi)
                arg(fi.permission(QFile::ReadUser) ? "r" : "-").
                arg(fi.permission(QFile::WriteUser) ? "w" : "-").
                arg(fi.permission(QFile::ExeUser) ? "x" : "-").
-               arg(EMimIcon::mimLang("inode/directory",locale().name().section("_",0,0))).
+               arg(EMimIcon::mimLang("inode/directory"/*,locale().name().section("_",0,0)*/)).
                arg(sym)  ;
 
      ui->labelInfo->setText(info);
@@ -194,7 +194,7 @@ void FileInformation::setFileInformation(const QFileInfo &fi)
                                   "Modified: %3 \n"
                                   "\n"
                                   "User Permission: %4 %5 %6")).
-                    arg(EMimIcon::mimLang(mim,locale().name().section("_",0,0))).
+                    arg(EMimIcon::mimLang(mim/*,locale().name().section("_",0,0)*/)).
                     arg(EMimIcon::formatSize(fi.size())).
                     arg(time.toString("dd.MM.yyyy hh:mm")).
                     arg(fi.permission(QFile::ReadUser) ? "r" : "-").
@@ -255,7 +255,7 @@ int max=qMax(pix.width(),pix.height());
                              "Modified: %3 \n \n "
                              "width: %4  \n"
                              "height: %5")).
-               arg(EMimIcon::mimLang(mim,locale().name().section("_",0,0))).
+               arg(EMimIcon::mimLang(mim/*,locale().name().section("_",0,0)*/)).
                arg(EMimIcon::formatSize(fi.size())).
                arg(time.toString("dd.MM.yyyy hh:mm")).
                arg(pix.width()).

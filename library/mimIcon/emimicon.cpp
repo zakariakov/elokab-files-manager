@@ -46,6 +46,12 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QMessageAuthenticationCode>
+Q_GLOBAL_STATIC(EMimIcon, EMimIconInstance)
+EMimIcon *EMimIcon::instance()
+{
+    return EMimIconInstance();
+}
+ void EMimIcon::setlocale(QString lc){instance()->mLocal=lc;}
 //______________________________________________________________________________________
 QIcon EMimIcon::icon(const QFileInfo &info, bool previw)
 {
@@ -1058,8 +1064,14 @@ void EMimIcon::AddMimeAssociatedApplication(const QString &mimType,const QString
 }
 
 //______________________________________________________________________________________
-QString EMimIcon::mimLang(const QString &mim,const QString &local)
+QString EMimIcon::mimLang(const QString &mim)
 {
+    if(instance()->hashMimLang.contains(mim)){
+      //  qDebug()<<"mimLang"<<mim<<instance()->hashMimLang.value(mim);
+        return instance()->hashMimLang.value(mim);
+
+    }
+
      QString mimType=mim;
      if(mimType=="text/x-shellscript")
           mimType="application/x-shellscript";
@@ -1094,7 +1106,7 @@ QString EMimIcon::mimLang(const QString &mim,const QString &local)
                     retEn=xml.readElementText();
  continue;
 
-               }else if(lang==local){
+               }else if(lang==instance()->mLocal){
 
                     ret= xml.readElementText();
                     break;
@@ -1111,6 +1123,12 @@ QString EMimIcon::mimLang(const QString &mim,const QString &local)
           ret=retDefault;
      if(ret.isNull()||ret.isEmpty())
           ret=retEn;
+    // qDebug()<<"inser"<<mim<<ret;
+     instance()->hashMimLang.insert(mim,ret.trimmed());
+
+     if(ret.isNull()||ret.isEmpty())
+          ret=mim;
+
      return ret.trimmed();
 }
 
