@@ -53,8 +53,7 @@ class PageWidget : public QWidget
           explicit PageWidget(QFileSystemModel *model,
                               Settings *setting,
                               Actions *action,
-                              const QString &url,
-                              IconProvider *iconProvider,
+                              const QString &url,                  
                               QWidget *parent = 0);
 
           //!
@@ -160,8 +159,8 @@ class PageWidget : public QWidget
           //!
           void showOpenwithDlg(const QString &fileName);
  void iconUpdate(QModelIndex index);
-  void iconThumbUpdate(const QString &fileName);
- void clearIcons();
+//  void iconThumbUpdate(const QString &fileName);
+
 
      private slots:
           //!

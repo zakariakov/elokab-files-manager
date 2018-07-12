@@ -386,6 +386,7 @@ void IconProvider::saveCacheIcons()
             fileLang.close();
 
 }
+
 void IconProvider::clearCache()
 {
     saveCacheIcons();

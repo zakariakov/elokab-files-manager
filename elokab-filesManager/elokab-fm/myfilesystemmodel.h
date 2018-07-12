@@ -1,6 +1,6 @@
 #ifndef MYFILESYSTEMMODEL_H
 #define MYFILESYSTEMMODEL_H
-#include "iconprovider.h"
+
 #include <QFileSystemModel>
 #include <QHash>
 
@@ -9,7 +9,7 @@ class MyFileSystemModel : public QFileSystemModel
     Q_OBJECT
 public:
 
-    explicit MyFileSystemModel(IconProvider *iconProvider,QObject *parent = 0);
+    explicit MyFileSystemModel(QObject *parent = 0);
 
     void setPreview(bool preview){mPreview=preview;}
     void clearCache(const QString &path);
@@ -41,7 +41,7 @@ public:
     //    }
     private:
 
-        IconProvider *mIconProvider;
+
         bool mPreview;
     //  QHash<QString,QModelIndex> *hashIndex;
        //QHash< QModelIndex,Thumbnail* > *mThumbnails;
@@ -49,7 +49,7 @@ public:
        //   QHash<QString,QIcon>*iconmimCach;
        //      QHash<QString,QIcon>*iconDesktopCach;
        //   QHash<QString,QByteArray> *hashImages;
-
+QString localeType(const QFileInfo &info)const;
 
 };
 

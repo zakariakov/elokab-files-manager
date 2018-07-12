@@ -5,23 +5,21 @@
 #include <QUrl>
 #include <QDebug>
 #include <QApplication>
-#include <QFileIconProvider>
+
 /*****************************************************************************************************
  *
  *
  *****************************************************************************************************/
 
-MyFileSystemModel::MyFileSystemModel(IconProvider *iconProvider,QObject *parent):
-    mIconProvider(iconProvider), QFileSystemModel(parent)
+MyFileSystemModel::MyFileSystemModel(QObject *parent):
+     QFileSystemModel(parent)
 {
-   // Messages::debugMe(0,__LINE__,"MyFileSystemModel",__FUNCTION__);
 
     mimcach=new QHash<QString,QString>;
     setRootPath("/");
     setNameFilterDisables(false);
     setReadOnly(false);
     setResolveSymlinks(true);
-    // setIconProvider(iconProvider);
 
    // Messages::debugMe(0,__LINE__,"MyFileSystemModel",__FUNCTION__,"End");
 }
@@ -56,19 +54,9 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
     }// column 0
 
     if(index.column()==0 && role == _MTYPE){
-//        QString mim;
-//        if(mimcach->contains(filePath(index)))
-//            mim=mimcach->value(filePath(index));
-//        else
-//            mim==EMimIcon::mimeTyppe(fileInfo(index));
 
-//       QString mimLang=EMimIcon::mimLang(mim);
-////           if(mimLang.isEmpty())
-////             return QFileIconProvider::type(QFileInfo(filePath(index)));
+        return localeType(fileInfo(index));
 
-//           return mimLang;
-
-        return mIconProvider->type(fileInfo(index));
     }// column 2
 
     if(index.column()==0 && role == _MSize){
@@ -79,7 +67,8 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
     //تحميل نوع الملف بالغة النظام
     if(index.column()==2 && role == Qt::DisplayRole){
-        return mIconProvider->type(fileInfo(index));
+       return localeType(fileInfo(index));
+
     }// column 2
 
 
@@ -88,6 +77,22 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
 }// MyFileSystemModel::data
 
+QString MyFileSystemModel::localeType(const QFileInfo &info) const
+{
+            QString mim;
+            if(mimcach->contains(info.filePath()))
+                mim=mimcach->value(info.filePath());
+            else
+                mim=EMimIcon::mimeTyppe(info);
+
+
+           QString mimLang=EMimIcon::mimLang(mim);
+         //  qDebug()<<"localeType"<<info.filePath()<<mim<<mimLang;
+             if(mimLang.isEmpty())
+                return type(index(info.filePath()));
+
+               return mimLang;
+}
 
 //--------------------------------------------------------------
 QVariant MyFileSystemModel::headerData(int section,

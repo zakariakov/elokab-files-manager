@@ -19,7 +19,7 @@
 
 #ifndef TRASHVIEW_H
 #define TRASHVIEW_H
-#include "iconprovider.h"
+
 #include "actions.h"
 #include <QTreeWidget>
 #include <QFileSystemWatcher>
@@ -37,8 +37,7 @@ class TrashView : public QTreeWidget
      * @param action
      * @param parent
      */
-          explicit TrashView(IconProvider *iconProvider,
-                             Actions *action,
+          explicit TrashView(Actions *action,
                              QWidget *parent = 0);
 
      signals:
@@ -92,8 +91,6 @@ class TrashView : public QTreeWidget
           /*!< مجلد الملفات المحذوفة */
           QString TrashPathFiles;
 
-          /*!< مدير الايقونات */
-          IconProvider *iconP;
 
           /*!< مراقب تغير الملفات */
           QFileSystemWatcher *fsWatcher;

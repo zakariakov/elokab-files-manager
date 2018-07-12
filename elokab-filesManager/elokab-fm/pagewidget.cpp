@@ -41,7 +41,6 @@ PageWidget::PageWidget(QFileSystemModel *model,
                        Settings *setting,
                        Actions *action,
                        const QString &url,
-                       IconProvider *iconProvider,
                        QWidget *parent) :
     QWidget(parent),
     mSettings(setting),
@@ -74,7 +73,7 @@ PageWidget::PageWidget(QFileSystemModel *model,
     vLayoutList->setContentsMargins(0,0,0,0);
 
     mItemDelegate=new ItemDelegate;
-    connect(mItemDelegate,SIGNAL(imageHasThumb(QString)),this,SLOT(iconThumbUpdate(QString)));
+   // connect(mItemDelegate,SIGNAL(imageHasThumb(QString)),this,SLOT(iconThumbUpdate(QString)));
     listView = new MyListView(myModel,mActions,pageList);
     listView->setItemDelegate(mItemDelegate);
 
@@ -97,7 +96,7 @@ PageWidget::PageWidget(QFileSystemModel *model,
     QVBoxLayout *vLayoutTrash = new QVBoxLayout(pageTrash);
     vLayoutTrash->setSpacing(6);
     vLayoutTrash->setContentsMargins(0,0,0,0);
-    trashView = new TrashView(iconProvider,mActions,pageTrash);
+    trashView = new TrashView(mActions,pageTrash);
 
     vLayoutTrash->addWidget(trashView);
     stackedWidget->addWidget(pageTrash);
@@ -126,7 +125,7 @@ PageWidget::PageWidget(QFileSystemModel *model,
     //   connect(mSettings,SIGNAL(iconSizeChanged(int)),this,SLOT(setZoomIn(int)));
     connect(mActions,SIGNAL(zoomInChanged()),this,SLOT(setZoomIn()));
     connect(mActions,SIGNAL(ZoomOutChanged()),this,SLOT(setZoomOut()));
-    connect(mActions,SIGNAL(reloadIcons()),this,SLOT(clearIcons())) ;
+   // connect(mActions,SIGNAL(reloadIcons()),this,SLOT(clearIcons())) ;
 
     connect(mSettings,SIGNAL(rootDecorationChanged(bool)),treeView,SLOT(setExpandable(bool)));
     connect(mSettings,SIGNAL(showThumbnailsChanged(bool)),mItemDelegate,SLOT(setTumbnail(bool))) ;
@@ -240,7 +239,9 @@ void PageWidget::customContextMenu(QPoint)
     case WTreeView:
         selectedPath=myModel->filePath(treeView->currentIndex());
         info=myModel->fileInfo(treeView->currentIndex());
-        count=listSelectionModel->selectedIndexes().count();
+       // count=listSelectionModel->selectedIndexes().count();
+         count=listSelectionModel->selectedRows(0).count();
+        qDebug()<<"count"<<count;
         break;
 
     case WSearchView:
@@ -277,7 +278,7 @@ void PageWidget::customContextMenu(QPoint)
         menu.addAction(mActions->openTerminalAction(m_dirPath));
         menu.addSeparator();
         menu.addActions(mActions->menuViewfile()->actions());
-         menu.addAction(mActions->propertiesAction());
+        menu.addAction(mActions->propertiesAction());
         menu.exec(QCursor::pos());
         return;
 
@@ -308,6 +309,7 @@ void PageWidget::customContextMenu(QPoint)
     }// search
     else  //non search
     {
+
         if(count==1){
             if(info.isDir())
             {
@@ -928,23 +930,7 @@ void PageWidget::setZoomOut()
     default:
         break;
     }
-    /*
-     if (focusWidget() == treeView)
-     {
-        int size=mSettings->treeIconSize()-8;
-         if(size<16)size=16;
-        treeView->setTreeIconSize(size);
-        mSettings->setValue("TreeIconSize",size);
-
-     } else if(focusWidget() == listView) {
-         int size=mSettings->viewIconSize()-8;
-          if(size<16)size=16;
-         listView->setViewIconSize(size);
-         mSettings->setValue("ViewIconSize",size);
-
-     }
-*/
-}
+ }
 void PageWidget::setZoomIn()
 {
     int size;
@@ -971,23 +957,7 @@ void PageWidget::setZoomIn()
         break;
     }
 
-    /*
-     if (focusWidget() == treeView)
-     {
-        int size=mSettings->treeIconSize()+8;
-        if(size>128)size=128;
-        treeView->setTreeIconSize(size);
-        mSettings->setValue("TreeIconSize",size);
-
-     } else if(focusWidget() == listView) {
-         int size=mSettings->viewIconSize()+8;
-          if(size>128)size=128;
-         listView->setViewIconSize(size);
-         mSettings->setValue("ViewIconSize",size);
-
-     }
-*/
-}
+ }
 
 /**************************************************************************************
  *
@@ -1082,17 +1052,13 @@ void PageWidget::iconUpdate(QModelIndex index)
 }
 
 //TODO RMOVE THIS
-void PageWidget::iconThumbUpdate(const QString &fileName)
-{
-    if(!QFile::exists(fileName))return;
+//void PageWidget::iconThumbUpdate(const QString &fileName)
+//{
+//    if(!QFile::exists(fileName))return;
 
-    QModelIndex idx=myModel->index(fileName);
-    if(idx.isValid())
-        iconUpdate(idx);
-}
+//    QModelIndex idx=myModel->index(fileName);
+//    if(idx.isValid())
+//        iconUpdate(idx);
+//}
 
-//TODO RMOVE THIS
-void PageWidget::clearIcons()
-{
-  //  mItemDelegate->clearCurentPath(curentDir());
-}
+

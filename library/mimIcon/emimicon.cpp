@@ -254,11 +254,11 @@ QIcon EMimIcon::iconFolder(const QString &f)
 //______________________________________________________________________________________
 QIcon EMimIcon::iconSymLink(QIcon icon)
 {
-     QPixmap pixSym=QIcon(EIcon::fromTheme("emblem-symbolic-link")).pixmap(48);
+     QPixmap pixSym=QIcon(EIcon::fromTheme("emblem-symbolic-link")).pixmap(64);
      QPixmap pix=icon.pixmap(QSize(128,128));
      QPainter p;
      p.begin(&pix);
-     p.drawPixmap(QRect(80,80,48,48),pixSym,pixSym.rect());
+     p.drawPixmap(QRect(0,0,64,64),pixSym,pixSym.rect());
      p.end();
      return QIcon(pix);
 }
@@ -1067,7 +1067,7 @@ void EMimIcon::AddMimeAssociatedApplication(const QString &mimType,const QString
 QString EMimIcon::mimLang(const QString &mim)
 {
     if(instance()->hashMimLang.contains(mim)){
-      //  qDebug()<<"mimLang"<<mim<<instance()->hashMimLang.value(mim);
+     //  qDebug()<<"mimLang"<<mim<<instance()->hashMimLang.value(mim);
         return instance()->hashMimLang.value(mim);
 
     }
@@ -1123,12 +1123,12 @@ QString EMimIcon::mimLang(const QString &mim)
           ret=retDefault;
      if(ret.isNull()||ret.isEmpty())
           ret=retEn;
-    // qDebug()<<"inser"<<mim<<ret;
+
      instance()->hashMimLang.insert(mim,ret.trimmed());
 
      if(ret.isNull()||ret.isEmpty())
           ret=mim;
-
+//  qDebug()<<"inser"<<mim<<ret;
      return ret.trimmed();
 }
 
@@ -1185,13 +1185,13 @@ QString EMimIcon::defaultTerminal()
     QByteArray sS=qgetenv("DESKTOP_SESSION");
     qDebug()<<"envirenment"<<sS;
     QString terminal;
-    if(sS=="elokab-session"){
-        QSettings setting(QApplication::organizationName(),"elokabsettings");
-        setting.beginGroup("Terminal");
-        terminal=  setting.value("Default","xterm").toString();
-        setting.endGroup();
-        return terminal;
-    }
+//    if(sS=="elokab-session"){
+//        QSettings setting(QApplication::organizationName(),"elokabsettings");
+//        setting.beginGroup("Terminal");
+//        terminal=  setting.value("Default","xterm").toString();
+//        setting.endGroup();
+//        return terminal;
+//    }
 
     //search in enverenment
     if(sS=="xfce")
@@ -1213,9 +1213,11 @@ QString EMimIcon::defaultTerminal()
     if(terminal.isEmpty()){
         //TODO remplace this list
         QStringList list;
-        list<<"elokab-terminal"<<"gnome-terminal"<<"konsole"<<"deepin-terminal"<<"terminology"<<"xfce4-terminal"
-           << "lxterminal"<<"qterminal"<<"mate-terminal"<<"pantheon-terminal"<<"terminator"<<"theterminal"<<"aterm"
-           <<"eterm"<<"mlterm"<<" tilda";
+        list<<"elokab-terminal"<<"gnome-terminal"<<"konsole"<<"termite"
+           <<"deepin-terminal"<<"terminology"<<"xfce4-terminal"
+           << "lxterminal"<<"qterminal"<<"mate-terminal"<<"pantheon-terminal"
+           <<"terminator"<<"theterminal"<<"aterm"
+           <<"urxvt"<<"eterm"<<"mlterm"<<" tilda";
 
         QStringList dirs = QString(getenv("PATH")).split(":");
 
@@ -1232,7 +1234,7 @@ QString EMimIcon::defaultTerminal()
         }
     }
     if(terminal.isEmpty())
-        terminal="xtem";
+        terminal="xterm";
 
     qDebug()<<"defaultTerminal"<<terminal;
     return terminal;

@@ -31,6 +31,21 @@
 #include <QMainWindow>
 #include <QWidgetAction>
  #include <QProgressBar>
+ #include <QFileIconProvider>
+
+class MyIconProvider:public QFileIconProvider
+{
+public:
+
+    MyIconProvider(){}
+
+   // virtual  QIcon icon(IconType type) const;
+
+    virtual  QIcon icon(const QFileInfo &info) const ;
+
+  //  virtual  QString type(const QFileInfo &info)const ;
+
+};
 /**
  *
  */
@@ -143,7 +158,7 @@ class MainWindow : public QMainWindow
           FileInformation *mFileInfo;
 
           /*!< cmment */
-          IconProvider *mIconProvider;
+          MyIconProvider *mIconProvider;
 
           //!
       //    QFileSystemWatcher *m_fileWatcher;

@@ -33,6 +33,19 @@
 #include<QClipboard>
 #include<QSplitter>
 
+QIcon MyIconProvider::icon(const QFileInfo &info)const
+{
+    if(info.isDir()){
+        QIcon icon;
+        icon=   EMimIcon::iconFolder(info.absoluteFilePath());
+        if(info.isSymLink()){
+            icon=  EMimIcon::iconSymLink(icon);
+        }
+        return icon;
+    }
+
+    return QFileIconProvider::icon(info);
+}
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
@@ -79,13 +92,13 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
     }
     mSettings=new Settings ;
 
-EMimIcon::setlocale(locale().name().section("_",0,0));
+    EMimIcon::setlocale(locale().name().section("_",0,0));
     EMimIcon::updateMimeAssociatedApplication();
 
     mActions  =new Actions(mSettings,locale().name().section("_",0,0));
-    mIconProvider=new IconProvider;
-    mIconProvider->setlocale(locale().name().section("_",0,0));
-    mTab =new Tab(mSettings,mIconProvider,mActions,this);
+    mIconProvider=new MyIconProvider;
+   // mIconProvider->setlocale(locale().name().section("_",0,0));
+    mTab =new Tab(mSettings,mActions,this);
     ui->vLayoutCenter->addWidget(mTab);
     placesTree= new PlaceTree(this);
     ui->verticalLayoutPlace->addWidget(placesTree);
@@ -567,8 +580,8 @@ void MainWindow::loadIconThems()
 }
 void MainWindow::refreshIcons()
 {
-//    mIconProvider->clearCache();
- //   myModel->setIconProvider(mIconProvider);
+
+
 //    mTab->refreshIcons();
     placesTree->refreshIcons();
 //    mActions->refreshIcons();

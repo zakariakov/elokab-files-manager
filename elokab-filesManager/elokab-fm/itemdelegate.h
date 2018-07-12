@@ -44,7 +44,7 @@ public:
 signals:
 
     //!
-    void imageHasThumb(const QString &path)const;
+   // void imageHasThumb(const QString &path)const;
 
 public slots:
 

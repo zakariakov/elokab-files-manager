@@ -353,8 +353,6 @@ private slots:
     //!
     bool findProgram(const QString &program);
 
-    //!
-    QString defaultTerminal();
 
     //!
     void ShooseTerminal();

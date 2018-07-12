@@ -126,7 +126,7 @@ void ItemDelegate::saveImageThumb(const QFileInfo &fi,const QString &fileThumbna
 //        setting.setValue(fi.filePath(),QFileInfo(fileThumbnail).fileName());
         qApp->processEvents();
         //TODO RMOVE THIS imageHasThumb
-        emit imageHasThumb(fi.filePath());
+       // emit imageHasThumb(fi.filePath());
         listThumb->removeAll(fi.filePath());
     }
 
