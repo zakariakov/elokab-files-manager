@@ -85,6 +85,8 @@ class Settings : public QSettings
           /*!< اظهار خطوط الشجرة */
           void rootDecorationChanged(bool);
 
+          void confirmDragDropChanged(bool);
+
      private:
 
 
@@ -170,6 +172,11 @@ class Settings : public QSettings
           /*!< اظهار خطوط الشجرة */
           bool rootIsDecorated(){return value("RootIsDecorated",true).toBool();}
           void setRootIsDecorated(const bool &arg){setValue("RootIsDecorated",arg);emit rootDecorationChanged(arg);}
+
+          /*!< رسالة الاعلام عند سحب الملفات */
+          bool confirmDragDrop(){return value("ConfirmDragDrop",true).toBool();}
+          void setConfirmDragDrop(const bool &arg){setValue("ConfirmDragDrop",arg);emit confirmDragDropChanged(arg);}
+
 
      private slots:
 

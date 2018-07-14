@@ -37,39 +37,39 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
         return fileName(index);
     }// column 0
 
-
-
-    if(index.column()==0 && role == _MMIM){
-
-        if(mimcach->contains(filePath(index))){
-            //qDebug()<<"mim from mimcach";
-            return mimcach->value(filePath(index));
-        }else{
-            QString mim=EMimIcon::mimeTyppe(fileInfo(index));
-            mimcach->insert(filePath(index),mim);
-            //qDebug()<<"mim from EMimIcon"<<mim;
-            return mim;
-        }
-
-    }// column 0
-
-    if(index.column()==0 && role == _MTYPE){
-
-        return localeType(fileInfo(index));
-
-    }// column 2
-
-    if(index.column()==0 && role == _MSize){
-        if(fileInfo(index).isDir())return QVariant();
-        return EMimIcon::formatSize(size(index));
-    }// column 2
-
-
     //تحميل نوع الملف بالغة النظام
     if(index.column()==2 && role == Qt::DisplayRole){
        return localeType(fileInfo(index));
 
     }// column 2
+
+    if( /*index.column()==0 &&*/role == _MMIM){
+
+        if(mimcach->contains(filePath(index))){
+
+           return mimcach->value(filePath(index));
+        }else{
+            QString mim=EMimIcon::mimeTyppe(fileInfo(index));
+            mimcach->insert(filePath(index),mim);
+           // qDebug()<<"mim from EMimIcon"<<mim;
+            return mim;
+        }
+
+    }
+
+    if(/*index.column()==0 && */role == _MTYPE){
+
+        return localeType(fileInfo(index));
+
+    }
+
+    if(/*index.column()==0 && */role == _MSize){
+
+        if(fileInfo(index).isDir())return QVariant();
+        return EMimIcon::formatSize(size(index));
+    }// column 2
+
+
 
 
     return QFileSystemModel::data(index,role);
@@ -166,6 +166,7 @@ void MyFileSystemModel::clearCache(const QString &path)
 
     while (it.hasNext()) {
         QString file=it.next();
+
         if(mimcach->contains(path)) mimcach->remove(file);
     }
 }

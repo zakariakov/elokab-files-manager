@@ -339,6 +339,11 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      connect(actShooseTerminal, SIGNAL(triggered()),this,SLOT(ShooseTerminal()));
      actShooseTerminal->setObjectName("ConfigureTerminal_Tool_Act");
 
+     actConfirmDragDrop = new QAction(tr("Confirm Drag Drop files"),this);
+     actConfirmDragDrop->setCheckable(true);
+     actConfirmDragDrop->setChecked(mSettings->confirmDragDrop());
+     connect(actConfirmDragDrop, SIGNAL(toggled(bool)),mSettings,SLOT(setConfirmDragDrop(bool)));
+
      //-----------mMenufile--------
      mMenufile=new QMenu(tr("&File"));
      mMenuNew=new QMenu(trUtf8("Create New"));
@@ -412,25 +417,26 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
 
      //-----------mMenuSettings-------------
      mMenuSettings=new QMenu(tr("&Settings"));
+
+    // mMenuSettings->addMenu(mMenuPanels);
+     mMenuSettings->addSeparator();
+     mMenuSettings->addAction(actConfigTool);
+     mMenuSettings->addAction(actSingleClick);
+     mMenuSettings->addAction(actExpandableFolder);
+     mMenuSettings->addAction(actConfirmDragDrop);
+     mMenuSettings->addSeparator();
+     mMenuSettings->addAction(actShooseTerminal);
+    // mMenuSettings->addSeparator();
+     //     mMenuSettings->addAction(actStandardIcon);
+     //-----------mMenuTools--------
+     mMenuTools=new QMenu(tr("&Tools"));
+     mMenuTools->addAction(actFilter);
      mMenuPanels=new QMenu(tr("Pa&nels"));
      mMenuPanels->addAction(actPlacesFolder);
      mMenuPanels->addAction(actInformation);
      mMenuPanels->addAction(actToolBar);
      mMenuPanels->addAction(actMenuBar);
-
-     mMenuSettings->addMenu(mMenuPanels);
-     mMenuSettings->addSeparator();
-     mMenuSettings->addAction(actConfigTool);
-     mMenuSettings->addAction(actSingleClick);
-     mMenuSettings->addAction(actExpandableFolder);
-     mMenuSettings->addSeparator();
-     mMenuSettings->addAction(actShooseTerminal);
-     mMenuSettings->addSeparator();
-     //     mMenuSettings->addAction(actStandardIcon);
-     //-----------mMenuTools--------
-     mMenuTools=new QMenu(tr("&Tools"));
-     mMenuTools->addAction(actFilter);
-
+     mMenuTools->addMenu(mMenuPanels);
 
      //-----------mMenuGo--------
      mMenuGo=new QMenu(tr("&Go"));

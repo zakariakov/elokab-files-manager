@@ -129,10 +129,10 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
     ui->hLayoutPlace->addWidget(btn);
     //
     myModel = new QFileSystemModel(this);
-    myModel->setRootPath(QDir::root().absolutePath());
+    myModel->setRootPath(QDir::rootPath());
     myModel->setFilter(QDir::AllDirs|QDir::NoDotAndDotDot);
 
-   myModel->setIconProvider(mIconProvider);
+    myModel->setIconProvider(mIconProvider);
     myModel->setResolveSymlinks(true);
 
     ui->treeView->setModel(myModel);

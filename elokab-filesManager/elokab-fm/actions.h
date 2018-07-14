@@ -283,14 +283,17 @@ private:
     QAction *actDetailView,*actIconView   ,*actCompactView, *actSortByName;
     QAction *actSortByType,*actSortBySize,*actSortAsc;
     QAction *actZoomIn,*actZoomOut,*actHiddenFiles,*actThumbnails,*actReloadIcons;
+    //menu panels
     QAction *actToolBar,*actMenuBar,*actPlacesFolder,*actInformation;
 
     // menu tools
     QAction *actFilter  ;
-    QAction *actShooseTerminal;
 
+   // menu settings
+    QAction *actShooseTerminal, *actConfirmDragDrop;
+   QAction *actSingleClick,*actExpandableFolder;
     // menu other
-    QAction *actSingleClick,*actExpandableFolder;
+
 
     QAction *actNewTab,*actQuit,*actConfigTool;
     QAction *actOpenInNewTab ,*actOpenTerminal;

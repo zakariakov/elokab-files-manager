@@ -390,7 +390,7 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
 
         painter->setOpacity(1.0);
         //qDebug()<<"draw"<<txt<<textRect.height();
-        textRect.adjust(0,fm1.leading(),0,0);
+        textRect.adjust(0,_MARGINS+fm1.leading(),0,0);
 
         int height=fm1.height()+fm1.leading();
         /*  //انشاء تقطيع النص عندما يكون اكبر من مربع النص
@@ -556,11 +556,19 @@ void ItemDelegate::paintDetailView(QPainter *painter, const QStyleOptionViewItem
             // رسم الخط الاول العنوان titre1
             QString firstTxt=fm2.elidedText(txt,Qt::ElideRight,rect.width()/*,Qt::TextWordWrap|Qt::TextWrapAnywhere*/);
             if(firstTxt.endsWith("…")) firstTxt.remove("…");
-            rect.moveTop(rect.top()+_MARGINS+fm2.leading());
+            // center this text verical
+          int top;
+
+          if((h*4)<option.rect.height())
+                top= (option.rect.height()-(h*4))/2;
+            else
+             top=_MARGINS+fm2.leading();
+
+            rect.moveTop(rect.top()+top+fm2.leading());
             painter->drawText(rect,firstTxt,textOption);
 
             // رسم الخط الثاني العنوان titre2
-            if(txt.length()>firstTxt.length() && option.decorationSize.width() > 48 ){
+            if(txt.length()>firstTxt.length() && (h*4)<option.rect.height()){
 
                 QString lastTxt=txt.mid(firstTxt.length());
                 lastTxt=fm2.elidedText(lastTxt,Qt::ElideRight,rect.width());
@@ -629,7 +637,7 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
         }else{
 
             int h=option.decorationSize.height()+(_MARGINS*2);
-            int minH=(option.fontMetrics.height()*3)+(option.fontMetrics.leading()*3);
+            int minH=(option.fontMetrics.height()*3)+(option.fontMetrics.leading()*3)+(_MARGINS*2);;
             if(h<minH) h=minH;
             // qDebug()<<__LINE__<<__FILE__<<__FUNCTION__;
             return  QSize(option.decorationSize.width()+200,h);

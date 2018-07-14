@@ -18,11 +18,10 @@
  ***************************************************************************/
 
 #include "trashview.h"
-
-#include "filesactions.h"
 #include "messages.h"
 #include <QDir>
-
+#include <EMimIcon>
+#include <QMenu>
 #include <QDebug>
 
 #include <QSettings>
@@ -36,8 +35,7 @@
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
-TrashView::TrashView(Actions *action,
-                     QWidget *parent) :
+TrashView::TrashView(QWidget *parent) :
     QTreeWidget(parent),TrashFilesChanged(0)
 {
 
@@ -51,7 +49,7 @@ TrashView::TrashView(Actions *action,
 
     setSortingEnabled(true);
 
-    mActions=action;
+  //  mActions=action;
 
     setColumnCount(4);
     this->headerItem()->setText(0,tr("File"));

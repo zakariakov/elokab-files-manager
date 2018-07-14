@@ -49,10 +49,15 @@ UdiskDevice::UdiskDevice(QObject *parent) : QObject(parent)
     connect(mProcess,SIGNAL(readyReadStandardOutput()),this,SLOT(deviceStatuChanged()));
     mProcess->start(UDISK_MONITOR);
 }
+UdiskDevice::~UdiskDevice()
+{
+delete mProcess;
+}
 
 void UdiskDevice::deviceStatuChanged()
 {
 
+    qDebug()<<"deviceStatuChanged";
     QString result=mProcess->readAll();
 
     if(result.contains("Properties Changed")){

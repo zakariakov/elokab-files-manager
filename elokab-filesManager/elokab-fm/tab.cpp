@@ -96,7 +96,8 @@ Tab::Tab(Settings *setting, Actions *actions, QWidget *parent) :
     connect(mSettings,SIGNAL(sortingChanged()),           this,SLOT(setSorting()));
     //
     connect(myModel,SIGNAL(dragDropFiles(bool,QString,QStringList)),this,SLOT(dragDropFiles(bool,QString,QStringList)));
-    connect(myModel,SIGNAL(directoryLoaded(QString)),this,SLOT(createThumbnail(QString)));
+   connect(myModel,SIGNAL(directoryLoaded(QString)),this,SLOT(createThumbnail(QString)));
+    // connect(myModel,SIGNAL(rootPathChanged(QString)),this,SLOT(createThumbnail(QString)));
 
     setHiddenFile(mSettings->showHidden());
     setShowThumbnails(mSettings->showThumbnails());
@@ -224,31 +225,30 @@ void Tab::updateIcons()
 
     QString currentPath=pageWidget->curentDir();
 
-   // QtConcurrent::run(this, &Tab::creatThumb,currentPath);
-    myModel->clearCache(currentPath);
-
-    createThumbnail(currentPath);
     QApplication::setOverrideCursor(Qt::WaitCursor) ;
 
-//    for(int x = 0; x < myModel->rowCount(myModel->index(currentPath)); ++x){
-//        QModelIndex idx=myModel->index(x,0,myModel->index(currentPath));
-//        pageWidget->iconUpdate(idx);
-//    }
+    myModel->clearCache(currentPath);
 
-    QDirIterator it(currentPath ,QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden, QDirIterator::NoIteratorFlags);
+    pageWidget->clearCurentPath();
 
-    while (it.hasNext()) {
-        QString s=it.next();
-       //  qDebug()<<"Tab"<<0,__LINE__<<s;
-        QModelIndex idx=myModel->index(s);
-        pageWidget->iconUpdate(idx);
-    }
+    QDir dir(currentPath);
+
+    QModelIndex idx=myModel->mkdir(myModel->index(currentPath),"...");
+    myModel->rmdir(idx);
+    //myModel->setRootPath(currentPath);
+    //    QDirIterator it(currentPath ,QDir::AllEntries|QDir::NoDotAndDotDot|QDir::Hidden, QDirIterator::NoIteratorFlags);
+
+    //    while (it.hasNext()) {
+    //        QString s=it.next();
+    //       //  qDebug()<<"Tab"<<0,__LINE__<<s;
+    //        QModelIndex idx=myModel->index(s);
+    //        pageWidget->iconUpdate(idx);
+    //    }
     // pageWidget->setUrl( pageWidget->dirPath());
 
     QApplication::restoreOverrideCursor();
 
-
- Messages::debugMe(0,__LINE__,"Tab",__FUNCTION__,"End");
+    Messages::debugMe(0,__LINE__,"Tab",__FUNCTION__,"End");
 }
 
 /*****************************************************************************
@@ -375,17 +375,17 @@ void Tab::setUrl(const QString &url)
 void Tab::createThumbnail(const QString &dir)
 {
     Messages::debugMe(0,__LINE__,"Tab",__FUNCTION__);
+qDebug()<<"createThumbnail"<<dir;
 
     if(!pageWidget )return;
     //  QtConcurrent::run(this, &Tab::creatThumb,dir);
     //  QSettings setting("elokab","thumbnails");
     QImageReader reader;
     QList<QByteArray> list=reader.supportedMimeTypes();
-
+//qDebug()<<reader.supportedImageFormats();
     QDirIterator it(dir ,QDir::Files
                     |QDir::NoDotAndDotDot
                     |QDir::Hidden, QDirIterator::NoIteratorFlags);
-
     while (it.hasNext()) {
 
         QFileInfo fi( it.next());
@@ -420,31 +420,37 @@ void Tab::createThumbnail(const QString &dir)
 
 void Tab::saveImageThumb(const QFileInfo &fi)
 {
+
+    QImageReader reader(fi.filePath());
+    if(!reader.canRead())
+        return;
+
+    if(qMax(reader.size().width(),reader.size().height())<=128){
+     return;
+    }
+
     QMessageAuthenticationCode code(QCryptographicHash::Md5);
     code.addData(fi.filePath().toLatin1());
 
     QString thumbnail=Edir::thumbnaileCachDir();
     QString fileThumbnail=thumbnail+"/"+code.result().toHex();
 
-    QImageReader reader(fi.filePath());
-    if(qMax(reader.size().width(),reader.size().height())<=128){
-     return;
-    }
     //qDebug()<<"creatthumb"<<fi.filePath();
     if(QFile::exists(fileThumbnail)){
 
         reader.setFileName(fileThumbnail);
-        QString  fModified=reader.text("DATETIME");
-
-        if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss"))
-            return;
+        if(reader.canRead()){
+            QString  fModified=reader.text("DATETIME");
+            if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss"))
+                return;
+        }
 
     }
 
     QImage image;
     if( image.load(fi.filePath()))
     {
-       // qDebug()<<"Tab"<<0,__LINE__<<fi.filePath();
+       qDebug()<<"saveImageThumb"<<__LINE__<<fi.filePath();
         image= image.scaled(QSize(128,128),Qt::KeepAspectRatio,Qt::SmoothTransformation);
         image.setText("DATETIME",fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
         QByteArray format="jpg";
@@ -593,8 +599,8 @@ void Tab::deleteFiles()
 
 
     QMessageBox msgBox;
-    msgBox.setText("Delete Files.");
-    msgBox.setInformativeText("Do you want to delete all selected files?");
+    msgBox.setWindowTitle(tr("Delete Files."));
+    msgBox.setText(tr("Do you want to delete all selected files?"));
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Yes);
     msgBox.setIcon(QMessageBox::Question);
@@ -777,6 +783,29 @@ void Tab::slotShowProperties()
  ****************************************************************************/
 void Tab::dragDropFiles(bool copy,QString path, QStringList list)
 {
+    if(mSettings->confirmDragDrop()){
+
+        QString action=tr("Move");
+        if(copy)action=tr("Copy");
+
+        QMessageBox msgBox;
+
+        msgBox.setWindowTitle(tr("%1 Files.").arg(action));
+        //msgBox.setTextFormat(Qt::PlainText);
+
+        msgBox.setText(tr("Do you want to %1 all selected files.").arg(action));
+        msgBox.setInformativeText(tr("To %1 ?").arg(path));
+
+        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::Yes);
+        msgBox.setIcon(QMessageBox::Question);
+
+        int ret = msgBox.exec();
+        if(ret== QMessageBox::No)
+            return;
+
+    }
+
     //qDebug()<<"Tab"<<0,__LINE__<<"dragDropFiles";
     QString prog=QApplication::applicationDirPath()+"/elokab-fa";
     QProcess p;

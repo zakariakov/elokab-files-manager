@@ -76,7 +76,7 @@ class UdiskDevice : public QObject
     Q_OBJECT
 public:
     explicit UdiskDevice(QObject *parent = 0);
-
+     ~UdiskDevice();
 signals:
 void deviceAdd(Device *D);
 

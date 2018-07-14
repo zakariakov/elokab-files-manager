@@ -69,6 +69,9 @@ class PageWidget : public QWidget
           //! return true if goForward is enabled
           bool forwardEnabled(){return mForwardEnabled;}
 
+          void clearCurentPath(){ mItemDelegate->clearCurentPath(m_dirPath); }
+
+
      protected:
 
      signals:
@@ -159,6 +162,10 @@ class PageWidget : public QWidget
           //!
           void showOpenwithDlg(const QString &fileName);
  void iconUpdate(QModelIndex index);
+
+
+
+
 //  void iconThumbUpdate(const QString &fileName);
 
 
@@ -251,6 +258,8 @@ class PageWidget : public QWidget
           //!
           int mViewMode;
 
+  //: TODO FIX RESTOR HIDEN FILES
+bool restorHiden;
 
 };
 

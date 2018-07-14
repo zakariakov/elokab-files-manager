@@ -96,7 +96,7 @@ PageWidget::PageWidget(QFileSystemModel *model,
     QVBoxLayout *vLayoutTrash = new QVBoxLayout(pageTrash);
     vLayoutTrash->setSpacing(6);
     vLayoutTrash->setContentsMargins(0,0,0,0);
-    trashView = new TrashView(mActions,pageTrash);
+    trashView = new TrashView(/*mActions,*/pageTrash);
 
     vLayoutTrash->addWidget(trashView);
     stackedWidget->addWidget(pageTrash);
@@ -368,7 +368,7 @@ void PageWidget::slotItemActivated(QModelIndex index)
 {
 
 
-    if(listSelectionModel->selectedIndexes().count()>0)
+    if(selectedIndex().count()>0)
     {
 
         if(myModel->isDir( listSelectionModel->currentIndex()))
@@ -376,6 +376,7 @@ void PageWidget::slotItemActivated(QModelIndex index)
             setUrl(myModel->filePath(index));
         }else{
            QString mim=index.data(_MMIM).toString();
+           qDebug()<<mim<<myModel->filePath(index);
            // QString mim=EMimIcon::mimeTyppe(myModel->fileInfo(index));
             if (EMimIcon::launchApp(myModel->filePath(index),mim)==false)
                 showOpenwithDlg(myModel->filePath(index));
@@ -532,12 +533,17 @@ void PageWidget::setUrl(const QString &url)
 
         if(!i.isValid()){
             if(urlIsHidden(url)){
-               emit selectedFoldersFiles(tr("this path is hidden please presse Ctrl+h"));
+               // myModel->setFilter( QDir::AllEntries | QDir::System|QDir::NoDotAndDotDot|QDir::Hidden);
+                qDebug()<<myModel->filter();
+
+             //  emit selectedFoldersFiles(tr("this path is hidden please presse Ctrl+h"));
             }else{
                 emit selectedFoldersFiles(tr("this path is no valid "));
+                 return;
             }
-             return;
+
         }
+
     }
 
     if(!m_dirPath.isEmpty() && m_dirPath!=":/search"){
@@ -573,15 +579,14 @@ void PageWidget::setUrlChange(const QString &url)
 {
 
 
-    qApp->processEvents();
+
 
     QString oldPath=m_dirPath;
     m_dirPath=url;
 
-
+bool restorRoot=false;
     if(m_dirPath.isEmpty())
         m_dirPath=QDir::rootPath();
-    QModelIndex i = myModel->index(url);
 
     if(m_dirPath==":/trash")
     {
@@ -601,16 +606,21 @@ void PageWidget::setUrlChange(const QString &url)
     }else{
 
 
+        QModelIndex i = myModel->index(url);
         if(!i.isValid()){
-            if(urlIsHidden(url))
-                emit selectedFoldersFiles(("this path is hidden please presse Ctrl+h"));
-            else
+            if(urlIsHidden(url)){
+                qDebug()<<"isHidden"<<m_dirPath;
+              myModel->setRootPath(url);
+               restorRoot=true;
+            }else{
+                m_dirPath=oldPath;
+                myModel->setRootPath(oldPath);
                 emit selectedFoldersFiles(tr("this path is no valid "));
-
-            return;
+                return;
+            }
         }
 
-
+         //myModel->setRootPath(oldPath);
         //-----------------------------------
         switch (mViewMode)
         {
@@ -640,7 +650,13 @@ void PageWidget::setUrlChange(const QString &url)
 
     emit urlChanged(m_dirPath);
 
-    emit indexHasChanged(i);
+    emit indexHasChanged(myModel->index(m_dirPath));
+
+    if(restorRoot){
+        myModel->setRootPath(QDir::rootPath());
+        myModel->setFilter(myModel->filter());
+   }
+
 
 }
 /**************************************************************************************
@@ -1032,6 +1048,7 @@ int PageWidget::focusedWidget()
     if (focusWidget() == trashView) return WTrashView;
     return -1;
 }
+
 
 void PageWidget::iconUpdate(QModelIndex index)
 {

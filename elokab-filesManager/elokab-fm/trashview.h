@@ -20,7 +20,7 @@
 #ifndef TRASHVIEW_H
 #define TRASHVIEW_H
 
-#include "actions.h"
+//#include "actions.h"
 #include <QTreeWidget>
 #include <QFileSystemWatcher>
 /**
@@ -37,7 +37,7 @@ class TrashView : public QTreeWidget
      * @param action
      * @param parent
      */
-          explicit TrashView(Actions *action,
+          explicit TrashView(/*Actions *action,*/
                              QWidget *parent = 0);
 
      signals:
@@ -96,7 +96,7 @@ class TrashView : public QTreeWidget
           QFileSystemWatcher *fsWatcher;
 
           /*!< الاوامر */
-          Actions *mActions;
+       //   Actions *mActions;
 };
 
 #endif // TRASHVIEW_H

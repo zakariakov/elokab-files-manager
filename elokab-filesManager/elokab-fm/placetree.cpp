@@ -87,7 +87,8 @@ PlaceTree::PlaceTree(QWidget *parent) :
      //-----------------chargements----------------------
      chargeFoldersPlaces();
     // myComputer->chargeDevices();
-//mUdiskDevice->UpdateDevices();/     //-----------------Expending All--------------------
+mUdiskDevice->UpdateDevices();
+//-----------------Expending All--------------------
 
      expandAll();
   Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__,"end");
@@ -96,7 +97,7 @@ PlaceTree::~PlaceTree()
 {
 
   //  myComputer->blockSignals(true);
-   // delete myComputer;
+  delete mUdiskDevice;
   delete  mDivecesItem;
 }
 
