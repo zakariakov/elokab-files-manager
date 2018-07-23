@@ -1,5 +1,24 @@
+/***************************************************************************
+ *   elokab Copyright (C) 2014 AbouZakaria <yahiaui@gmail.com>             *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 3 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+ ***************************************************************************/
+
 #include "confirmdlg.h"
-#include "mimetypexdg.h"
+#include <EMimIcon>
 #include "ui_confirmdlg.h"
 #include  <QFileInfo>
 #include  <QDateTime>
@@ -63,14 +82,14 @@ ConfirmDlg::ConfirmDlg(const QString &source, const QString &dest,bool cut, QWid
                                    "Modified: %3 \n"
                                    ).
                                 arg(source).
-                                arg(MimeTypeXdg::formatSize(fiSource.size())).
+                                arg(EMimIcon::formatSize(fiSource.size())).
                                 arg(timeS.toString("dd.MM.yyyy hh:mm")));
           QString infoD=QString(tr("Destination:\n %1 \n "
                                    "Size: %2 \n"
                                    "Modified: %3 \n"
                                    ).
                                 arg(dest).
-                                arg(MimeTypeXdg::formatSize(fiDest.size())).
+                                arg(EMimIcon::formatSize(fiDest.size())).
                                 arg(timeD.toString("dd.MM.yyyy hh:mm")));
 
           ui->labelSource->setText(infoS);
@@ -119,8 +138,9 @@ ConfirmDlg::~ConfirmDlg()
  ****************************************************************************/
 void ConfirmDlg::nameChanged(const QString &txt)
 {
-     renameButton->setEnabled(txt!=mOldName);
-     renameButton->setFocus();
+
+     renameButton->setEnabled(!QFile::exists(mPath+"/"+txt));
+    // renameButton->setFocus();
 }
 
 /****************************************************************************

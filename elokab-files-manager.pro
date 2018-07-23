@@ -2,7 +2,8 @@
 TEMPLATE    = subdirs
 SUBDIRS	    =\
     library\
-    elokab-filesManager
+    elokab-fm \
+     elokab-fa
 
 CONFIG += qt \
           release

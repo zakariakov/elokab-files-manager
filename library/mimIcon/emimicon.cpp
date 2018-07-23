@@ -53,7 +53,8 @@ EMimIcon *EMimIcon::instance()
 {
     return EMimIconInstance();
 }
- void EMimIcon::setlocale(QString lc){instance()->mLocal=lc;}
+
+void EMimIcon::setlocale(QString lc){instance()->mLocal=lc;}
 //______________________________________________________________________________________
 QIcon EMimIcon::icon(const QFileInfo &info, bool previw)
 {
@@ -98,6 +99,7 @@ QIcon EMimIcon::icon(const QFileInfo &info, bool previw)
     return retIcon;
 
 }
+
 QHash<QString,QIcon> EMimIcon::iconhash(const QFileInfo &info, bool previw)
 {
     QHash<QString,QIcon>hash;
@@ -154,30 +156,16 @@ QHash<QString,QIcon> EMimIcon::iconhash(const QFileInfo &info, bool previw)
 QString EMimIcon::mimeTyppe(const QFileInfo &info)
 {
     if (info.isDir())
-        return "inode/directory"; /*getMimeTypeByFile(info.absoluteFilePath());*/
+        return "inode/directory";
+
     QString mim;
     QString suf=info.suffix().toLower();
-    if(!suf.isEmpty())
-        mim= getMimeTypeBySufix(suf);
+    if(!suf.isEmpty()) mim= getMimeTypeBySufix(suf);
 
     if(!mim.isEmpty())return mim;
 
     return getMimeTypeByFile(info.absoluteFilePath());
 
-    /*
-     if(!suf.isEmpty()){
-
-          return getMimeTypeByFile(info.absoluteFilePath());
-     }else{
-
-          QString mim= getMimeTypeBySufix(suf);
-          if(mim.isEmpty())
-               mim=getMimeTypeByFile(info.absoluteFilePath());
-
-          return mim;
-     }
-     return "unknown";
-     */
 }
 
 //______________________________________________________________________________________
@@ -304,62 +292,8 @@ QByteArray EMimIcon::iconThumbnails(const QString &file)
            pix.load((file));
        }
    }
-//        //  QPixmap pixF(file);
-//        pix.load((file));
-//        //qDebug()<<pix.isNull()<<pix.size()<<file;
-//        if(pix.isNull()||pix.width()==0||pix.height()==0)
-//            return  buffer.buffer();
-
-//        //if(pix.width()>128 && pix.height()>128){
-//        if(qMax(pix.width(),pix.height())>128){
-//            //  pix= QImage(128,128,QImage::Format_ARGB32);
-
-//            pix= pix.scaled(QSize(128,128),Qt::KeepAspectRatio);
-//            if(fi.absolutePath()!=thumbnail){
-//                QDir dir(thumbnail);
-//                dir.mkpath(thumbnail);
-//                setting.setValue(file,fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
-//                pix.save(fileThumbnail,"png",50);
-//            }
-//        }
-//    }
-    //    QPixmap pix(128,128);
-//    QImage pixRet;
 
 
-//    if(qMax(pix.width(),pix.height())>128){
-//        pixRet= QImage(128,128,QImage::Format_ARGB32);
-
-//        pixRet.fill(Qt::transparent);
-//        QSize size= pix.scaled(QSize(124,124),Qt::KeepAspectRatio).size();
-//        //QSize size=pix.size();
-//        int left=(128-size.width())/2;
-//        int top=(128-size.height())/2;
-//        QPainter p(&pixRet);
-
-//        //    p.fillRect(0,0,259,259,QColor(229,239,255,50));
-
-//        p.drawImage(QRect(left+2,top+2,size.width()-4,size.height()-4),pix,pix.rect());
-
-//        p.setPen(Qt::lightGray);
-//        p.drawRect(0,0,126,126);
-//        p.setPen(Qt::gray);
-//        p.drawRect(-1,-1,127,127);
-//        p.setOpacity(0.3);
-//        p.drawRect(-1,-1,128,128);
-//        //   p.setPen(Qt::red);
-//        //  p.drawPixmap(QRect(left+1,top+1,size.width()-1,size.height()-1),pixF,pixF.rect());
-
-//        //p.end();
-//    }else{
-//        pixRet= QImage(pix.width(),pix.height(),QImage::Format_ARGB32);
-
-//        pixRet.fill(Qt::transparent);
-
-//         QPainter p(&pixRet);
-//         p.drawImage(QRect(0,0,pix.width(),pix.height()),pix,pix.rect());
-
-  //  }
 
     QImageWriter writer(&buffer,"png");
     writer.setQuality(50);
@@ -434,12 +368,17 @@ QString EMimIcon::getMimeTypeByFile(QString fileName)
 {
 
      //-----------MAGIC----------------------
-     magic_t cookie = magic_open(MAGIC_MIME);
+    // magic_t cookie = magic_open(MAGIC_MIME);
+     magic_t cookie = magic_open(MAGIC_MIME_TYPE);
+
      magic_load(cookie, 0);
      QString temp = magic_file(cookie, fileName.toLocal8Bit());
 
      magic_close(cookie);
-     QString rsl=temp.left(temp.indexOf(";"));
+     //qDebug()<<"magic"<<temp;
+    // QString rsl=temp.left(temp.indexOf(";"));
+     QString rsl=temp;
+
      //    QString mim=iconName(rsl);
      //      qDebug()<<"by mime"<<icon;
      if(rsl.isEmpty())
@@ -465,7 +404,6 @@ QString EMimIcon::getMimeTypeByFile(QString fileName)
 QString EMimIcon::getMimeTypeBySufix(QString sufix)
 {
 
-
      // mimeTypeالبحث عن اسم الايقونة حسب اللاحقة
      QFile file("/usr/share/mime/globs");
      if (!file.open(QFile::ReadOnly)){
@@ -473,21 +411,18 @@ QString EMimIcon::getMimeTypeBySufix(QString sufix)
 
      }
      QTextStream textStream(&file);
-     QString line;
 
-     line= textStream.readLine();//
+     //value "application/x-unknow:*.sufix"
+    QString line= textStream.readLine();//
      while (!line.isNull()) {
           QString s= line.section(":",1,1);
           if( s==("*."+sufix)){
-               //   qDebug()<<line;             //value "application/x-unknow:*.sufix"
-               line=line.section(":",0,0);      // value "application/x-unknow"
-               //                               line=line.replace("/","-"); // value "application-x-unknow"
-               return /*iconName*/(line );
+               return line.section(":",0,0); // value "application/x-unknow"
           }
           /************************************/
           line = textStream.readLine();
-
      }
+
      return "";
 }
 
@@ -1287,7 +1222,8 @@ QString EMimIcon::defaultTerminal()
     }
 
     if(findProgram(terminal))
-        return terminal;
+    { return terminal;}
+
         terminal="xterm";
 
     qDebug()<<"defaultTerminal"<<terminal;

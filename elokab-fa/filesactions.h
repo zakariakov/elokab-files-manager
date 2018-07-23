@@ -17,81 +17,100 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef TRASHVIEW_H
-#define TRASHVIEW_H
-
-//#include "actions.h"
-#include <QTreeWidget>
-#include <QFileSystemWatcher>
-/**
- * @brief The TrashView class
- */
-class TrashView : public QTreeWidget
+#ifndef FILESACTIONS_H
+#define FILESACTIONS_H
+#include "progressdlg.h"
+#include <QObject>
+#include <QStringList>
+#include <QHash>
+class FilesActions : public QObject
 {
           Q_OBJECT
-
      public:
-
-          /**
-     * @brief TrashView
-     * @param action
-     * @param parent
-     */
-          explicit TrashView(/*Actions *action,*/
-                             QWidget *parent = 0);
+          explicit FilesActions(QObject *parent = 0);
 
      signals:
-          void fileSelected(const QString &txt);
 
      public slots:
 
           //!
-          void updateTrashFiles();
+          void removeFiles(const QStringList &files);
+
+          //!
+          void pastFiles(const QStringList &files, const QString &distDir);
+
+          //!
+          void moveFiles(const QStringList &files, const QString &distDir);
 
           //!
           void moveFilesToTrash(const QStringList &list);
 
-          //!
-          void deleteFiles(const QStringList &list);
-          //!
-          void restorFiles(const QStringList &list);
-
-          //!
-          void cleanTrash();
-
      private slots:
+void creatSymsLinks();
+          //!
+          void createListForRemove(const QString &path);
 
           //!
-          QStringList readDesktopFile(const QString &fileName);
+          bool createList(const QStringList &files, const QString &dist);
 
           //!
-          void directoryChanged(QString);
+          void createLisdOfDirs(const QString &path, const QString &dist);
 
           //!
-          void clearTrash();
+          void slotCancel();
 
           //!
-          void deleteFile();
+          bool copyFile(const QString &source,const QString &dist);
 
           //!
-          void restoreFiles();
+          bool cutFile(const QString &source,const QString &dist);
 
           //!
-          void costumMenu(QPoint);
+          QString confirmName(const QString &source, const QString &dist, bool cut=false);
+
+          //!
+          bool trashExists();
 
           //!
           void moveFileToTrash(const QString &file);
 
-          //!
-          void itemSelectionChanged();
-
      private:
 
-          /*!< تغير ملفات المهملات */
-          bool TrashFilesChanged ;
+          //!
+          bool mStop;
 
-          /*!< مجلد المهملات */
-          QString TrashPath;
+          //!
+          bool mOverWrite;
+
+          //!
+          bool mSkyp;
+
+          //!
+          bool mApplyAll;
+
+          //!
+          bool mApplyAllFolder;
+
+          //!
+          bool mSkypFolder;
+
+          //!
+          bool mWriteIntoFolder;
+
+          //!
+          QStringList mListFiles;
+
+          //!
+          QStringList mListDirs;
+
+          //!
+          QHash<QString,QString>m_hash;
+QHash<QString,QString>m_hashSymLink;
+          //!
+          ProgressDlg *progress;
+
+          //!
+          qint64 mTotalSize;
 
           /*!< مجلد معلومات المهملات */
           QString TrashPathInfo;
@@ -99,12 +118,6 @@ class TrashView : public QTreeWidget
           /*!< مجلد الملفات المحذوفة */
           QString TrashPathFiles;
 
-
-          /*!< مراقب تغير الملفات */
-          QFileSystemWatcher *fsWatcher;
-
-          /*!< الاوامر */
-       //   Actions *mActions;
 };
 
-#endif // TRASHVIEW_H
+#endif // FILESACTIONS_H
