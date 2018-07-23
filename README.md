@@ -18,7 +18,7 @@ Image and pdf and video thumbnails
 
 
 
-Depends :Qt5-svg , libmagick
+Depends :Qt5-svg , file
 
 Optional dependencies: imagemagick , ffmpeg
 
