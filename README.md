@@ -16,6 +16,12 @@ Image and pdf and video thumbnails
 
 ![Screenshots](https://github.com/zakariakov/screenshots/blob/master/elokabFm-thumbnails.png)
 
+
+
+Depends :Qt5-svg , libmagick
+
+Optional dependencies: imagemagick , ffmpeg
+
 # Install
 
 git clone https://gitlab.com/zakariakov/elokab-files-manager.git
