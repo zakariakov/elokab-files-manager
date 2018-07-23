@@ -34,5 +34,7 @@
         <file>icons/view-preview..svg</file>
         <file>icons/unknown.svg</file>
         <file>icons/emblem-symbolic-link.svg</file>
+        <file>icons/video.svg</file>
+        <file>icons/x-pdf.svg</file>
     </qresource>
 </RCC>

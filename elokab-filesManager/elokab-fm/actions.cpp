@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include "actions.h"
-
+#include "defines.h"
 #include "messages.h"
 #include "filesutils/symlinkdlg.h"
 
@@ -57,6 +57,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      connect(this ,SIGNAL(urlChanged(QString)),this,SLOT(setUrl(QString)));
    //  connect(this ,SIGNAL(curDirChanged(QString)),this,SLOT(setcurDir(QString)));
      connect(clipboard ,SIGNAL(dataChanged()),this,SLOT(clipboardChanged()));
+
      //
      actPathWidget=new QWidgetAction(this);
      actPathWidget->setText(tr("Path Edit"));
@@ -69,10 +70,29 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      //menuOpenW->setDefaultAction(actOpenW);
      mMenuService=new QMenu(tr("Actions..."));
      //MENU FILE ACTIONS-----------------------------------------------------------------------
-     actNewTab = new QAction(tr("New tab"), this);
-     connect(actNewTab, SIGNAL(triggered()), this, SLOT(openNewTab()));
-     actNewTab->setObjectName("New_Tab_Act");
-     actNewTab->setStatusTip(tr("Open new tab  ")+actNewTab->shortcut().toString());
+//     actNewTab = new QAction(tr("New tab"), this);
+//     connect(actNewTab, SIGNAL(triggered()), this, SLOT(openNewTab()));
+//     actNewTab->setObjectName("New_Tab_Act");
+//     actNewTab->setStatusTip(tr("Open new tab  ")+actNewTab->shortcut().toString());
+
+
+     // new Trash---
+     // *actTrash_Clean ,*actTrash_restore ,*actTrash_Delete   ;
+     actTrash_Clean = new QAction(tr("Empty trash"), this);
+     connect(actTrash_Clean, SIGNAL(triggered()), this, SIGNAL(trashClean()));
+
+     actTrash_restore = new QAction(tr("Restore"), this);
+     connect(actTrash_restore, SIGNAL(triggered()), this, SIGNAL(trashRestoreFiles()));
+     connect(this,SIGNAL(selectionAvialable(bool)),actTrash_restore,SLOT(setEnabled(bool)));
+
+     actTrash_Delete = new QAction(tr("Delete"), this);
+     connect(actTrash_Delete, SIGNAL(triggered()), this, SIGNAL(trashDeleteFile()));
+     connect(this,SIGNAL(selectionAvialable(bool)),actTrash_Delete,SLOT(setEnabled(bool)));
+     mMenuTrash=new QMenu;
+     mMenuTrash->addAction(actTrash_Clean);
+     mMenuTrash->addAction(actTrash_restore);
+     mMenuTrash->addSeparator();
+     mMenuTrash->addAction(actTrash_Delete);
 
      // new tab contextmenu---
      actOpenInNewTab = new QAction(tr("Open In new tab"), this);
@@ -155,6 +175,11 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      actFind = new QAction(tr("Find..."), this);
      connect(actFind, SIGNAL(triggered()),this, SIGNAL(sendGoSearch()));
      actFind->setObjectName("Find_Act");
+
+     actShowSettings = new QAction(tr("Settings"), this);
+     connect(actShowSettings, SIGNAL(triggered()),this, SIGNAL(sendShowSettings()));
+     actShowSettings->setObjectName("Settings_Act");
+     actShowSettings->setStatusTip(tr("Show settings dialog")+actShowSettings->shortcut().toString());
 
      //MENU VIEW ACTIONS-----------------------------------------------------------------------------
      actIconView = new QAction(tr("Icon view"),this);
@@ -307,42 +332,42 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      actFilter->setObjectName("Show_Filter_Act");
 
      actOpenTerminal = new QAction(tr("Open terminal"),this);
-     actOpenTerminal->setStatusTip(tr("Open terminal in selected folder"));
+     actOpenTerminal->setStatusTip(tr("Open terminal in curent path"));
      connect(actOpenTerminal, SIGNAL(triggered()), this, SLOT(openInTerminal()));
 
-     actTerminal = new QAction(tr("Open terminal"),this);
-     actTerminal->setStatusTip(tr("Open terminal in curent path"));
-     connect(actTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
-     actTerminal->setObjectName("Open_Terminal_Act");
+//     actTerminal = new QAction(tr("Open terminal"),this);
+//     actTerminal->setStatusTip(tr("Open terminal in curent path"));
+//     connect(actTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
+//     actTerminal->setObjectName("Open_Terminal_Act");
 
      //OTHER ACTIONS--------
 
 
-     actSingleClick= new QAction(tr("Single-click to open files and folders"), this);
-     actSingleClick->setCheckable(true);
-     actSingleClick->setChecked(mSettings->isSingleclick());
-     connect(actSingleClick, SIGNAL(toggled(bool)), mSettings, SLOT(setSingleclick(bool)));
-     actSingleClick->setObjectName("SingleClick_Act");
+//     actSingleClick= new QAction(tr("Single-click to open files and folders"), this);
+//     actSingleClick->setCheckable(true);
+//     actSingleClick->setChecked(mSettings->isSingleclick());
+//     connect(actSingleClick, SIGNAL(toggled(bool)), mSettings, SLOT(setSingleclick(bool)));
+//     actSingleClick->setObjectName("SingleClick_Act");
 
-     actExpandableFolder= new QAction(tr("Expandable folders in view details"), this);
-     actExpandableFolder->setCheckable(true);
-     actExpandableFolder->setChecked(mSettings->rootIsDecorated());
-     connect(actExpandableFolder, SIGNAL(toggled(bool)), mSettings, SLOT(setRootIsDecorated(bool)));
-     actExpandableFolder->setObjectName("ExpandableFolder_Act");
+//     actExpandableFolder= new QAction(tr("Expandable folders in view details"), this);
+//     actExpandableFolder->setCheckable(true);
+//     actExpandableFolder->setChecked(mSettings->isRootDecorated());
+//     connect(actExpandableFolder, SIGNAL(toggled(bool)), mSettings, SLOT(setRootIsDecorated(bool)));
+//     actExpandableFolder->setObjectName("ExpandableFolder_Act");
 
      actConfigTool = new QAction(tr("Configure toolbars..."),this);
      actConfigTool->setStatusTip(tr("Configure toolbars"));
      connect(actConfigTool, SIGNAL(triggered()),this,SIGNAL(showConfigureTool()));
      actConfigTool->setObjectName("Configure_Tool_Act");
 
-     actShooseTerminal = new QAction(tr("Configure Terminal..."),this);
-     connect(actShooseTerminal, SIGNAL(triggered()),this,SLOT(ShooseTerminal()));
-     actShooseTerminal->setObjectName("ConfigureTerminal_Tool_Act");
+//     actShooseTerminal = new QAction(tr("Configure Terminal..."),this);
+//     connect(actShooseTerminal, SIGNAL(triggered()),this,SLOT(chooseTerminal()));
+//     actShooseTerminal->setObjectName("ConfigureTerminal_Tool_Act");
 
-     actConfirmDragDrop = new QAction(tr("Confirm Drag Drop files"),this);
-     actConfirmDragDrop->setCheckable(true);
-     actConfirmDragDrop->setChecked(mSettings->confirmDragDrop());
-     connect(actConfirmDragDrop, SIGNAL(toggled(bool)),mSettings,SLOT(setConfirmDragDrop(bool)));
+//     actConfirmDragDrop = new QAction(tr("Confirm Drag Drop files"),this);
+//     actConfirmDragDrop->setCheckable(true);
+//     actConfirmDragDrop->setChecked(mSettings->isConfirmDragDrop());
+//     connect(actConfirmDragDrop, SIGNAL(toggled(bool)),mSettings,SLOT(setConfirmDragDrop(bool)));
 
      //-----------mMenufile--------
      mMenufile=new QMenu(tr("&File"));
@@ -350,26 +375,26 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      setupMenuTemplate();
      mMenufile ->addMenu(mMenuNew);
      mMenufile->addSeparator();
-     mMenufile->addAction(actNewTab);
+     mMenufile->addAction(actOpenInNewTab);
      mMenufile->addAction(actCloseTab);
      mMenufile->addSeparator();
-     mMenufile->addAction(actRename);
+
      mMenufile->addAction(actMoveToTrash);
      mMenufile->addAction(actDelete);
      mMenufile->addSeparator();
     // mMenufile->addAction(actProperties);
-     mMenufile->addAction(actTerminal);
+     mMenufile->addAction(actOpenTerminal);
      //-----------mMenuViewfile--------
 
-     mMenuViewfile=new QMenu(tr("&File"));
-     mMenuViewfile->addAction(actCut);
-     mMenuViewfile->addAction(actCopy);
-     mMenuViewfile->addAction(actPaste);
-     mMenuViewfile->addSeparator();
-     mMenuViewfile->addAction(actRename);
-     mMenuViewfile->addAction(actMoveToTrash);
-     mMenuViewfile->addAction(actDelete);
-     mMenuViewfile->addSeparator();
+     mMenuEditePopup=new QMenu(tr("&File"));
+     mMenuEditePopup->addAction(actCut);
+     mMenuEditePopup->addAction(actCopy);
+     mMenuEditePopup->addAction(actPaste);
+     mMenuEditePopup->addSeparator();
+     mMenuEditePopup->addAction(actRename);
+     mMenuEditePopup->addAction(actMoveToTrash);
+     mMenuEditePopup->addAction(actDelete);
+     mMenuEditePopup->addSeparator();
     // mMenuViewfile->addAction(actProperties);
 
 
@@ -378,10 +403,15 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      mMenuEdit->addAction(actCut);
      mMenuEdit->addAction(actCopy);
      mMenuEdit->addAction(actPaste);
+      mMenuEdit->addSeparator();
+     mMenuEdit->addAction(actRename);
      mMenuEdit->addSeparator();
      mMenuEdit->addAction(actFind);
      mMenuEdit->addSeparator();
      mMenuEdit->addAction(actSelectAll);
+     mMenuEdit->addSeparator();
+     mMenuEdit->addAction(actShowSettings);
+
      //-----------mMenuView--------
      mMenuView=new QMenu(tr("&View"));
      alignSortBy = new QActionGroup(this);
@@ -416,16 +446,15 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      mMenuView->addAction(actReloadIcons);
 
      //-----------mMenuSettings-------------
-     mMenuSettings=new QMenu(tr("&Settings"));
-
+   //  mMenuSettings=new QMenu(tr("&Settings"));
     // mMenuSettings->addMenu(mMenuPanels);
-     mMenuSettings->addSeparator();
-     mMenuSettings->addAction(actConfigTool);
-     mMenuSettings->addAction(actSingleClick);
-     mMenuSettings->addAction(actExpandableFolder);
-     mMenuSettings->addAction(actConfirmDragDrop);
-     mMenuSettings->addSeparator();
-     mMenuSettings->addAction(actShooseTerminal);
+    // mMenuSettings->addSeparator();
+    // mMenuSettings->addAction(actConfigTool);
+    // mMenuSettings->addAction(actSingleClick);
+    // mMenuSettings->addAction(actExpandableFolder);
+   //  mMenuSettings->addAction(actConfirmDragDrop);
+    // mMenuSettings->addSeparator();
+    // mMenuSettings->addAction(actShooseTerminal);
     // mMenuSettings->addSeparator();
      //     mMenuSettings->addAction(actStandardIcon);
      //-----------mMenuTools--------
@@ -437,6 +466,8 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
      mMenuPanels->addAction(actToolBar);
      mMenuPanels->addAction(actMenuBar);
      mMenuTools->addMenu(mMenuPanels);
+     mMenuTools->addSeparator();
+     mMenuTools->addAction(actConfigTool);
 
      //-----------mMenuGo--------
      mMenuGo=new QMenu(tr("&Go"));
@@ -482,7 +513,7 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
 void Actions::refreshIcons()
 {
     actPathWidget->setIcon(EIcon::fromTheme("edit-rename","edit"));
-    actNewTab->setIcon(EIcon::fromTheme("tab-new",("add")));
+   // actNewTab->setIcon(EIcon::fromTheme("tab-new",("add")));
     actCloseTab->setIcon(EIcon::fromTheme("window-close"));
     actQuit->setIcon(EIcon::fromTheme("application-exit","window-close"));
     actMoveToTrash->setIcon(EIcon::fromTheme("user-trash","emptytrash"));
@@ -518,11 +549,19 @@ void Actions::refreshIcons()
     actTrash->setIcon(EIcon::fromTheme("user-trash","emptytrash"));
     actFilter->setIcon(EIcon::fromTheme("view-filter"));
     actOpenTerminal->setIcon(EIcon::fromTheme("terminal"));
-    actTerminal->setIcon(EIcon::fromTheme("terminal"));
+   // actTerminal->setIcon(EIcon::fromTheme("terminal"));
 
     actOpenInNewTab->setIcon(EIcon::fromTheme("tab-new",("add")));
     actConfigTool->setIcon(EIcon::fromTheme("configure"));
-    actShooseTerminal->setIcon(EIcon::fromTheme("configure"));
+  //  actShooseTerminal->setIcon(EIcon::fromTheme("configure"));
+    actShowSettings->setIcon(EIcon::fromTheme("configure"));
+
+   // *actTrash_Clean ,*actTrash_restore ,*actTrash_Delete   ;
+        actTrash_Clean->setIcon(EIcon::fromTheme("user-trash","emptytrash"));
+        actTrash_Delete->setIcon(EIcon::fromTheme("edit-delete"));
+        actTrash_restore->setIcon(EIcon::fromTheme("reload"));
+
+
 
 }
 
@@ -531,7 +570,7 @@ void Actions::refreshIcons()
  *********************************************************************/
 void Actions::actionsShortcuts()
 {
-    actNewTab->setShortcut(QKeySequence::AddTab);
+     actOpenInNewTab->setShortcut(QKeySequence::AddTab);
     actCloseTab->setShortcut(QKeySequence::Close);
     actQuit->setShortcut(QKeySequence("ALT+F4"));
     actMoveToTrash->setShortcut(QKeySequence::Delete);
@@ -560,9 +599,9 @@ void Actions::actionsShortcuts()
     actGoForward->setShortcut(QKeySequence::Forward);
     actGoHome->setShortcut(QKeySequence::MoveToStartOfDocument);
     actFilter->setShortcut(QKeySequence("Ctrl+I"));
-    //actOpenTerminal->setShortcut(QKeySequence("Shift+F4"));
-    actTerminal->setShortcut(QKeySequence("Shift+F4"));
-
+   actOpenTerminal->setShortcut(QKeySequence("Shift+F4"));
+    // actTerminal->setShortcut(QKeySequence("Shift+F4"));
+actShowSettings->setShortcut(QKeySequence::Preferences);
 }
 
 /*********************************************************************
@@ -626,11 +665,14 @@ void Actions::clipboardChanged()
      if(mimeData->hasText()){
 
      }
+//     if(m_dirPath==_TRASH || m_dirPath==_SEARCH){
+//        emit  clipboardAvailable(false);
+//        return;
+//     }
+
      if(mimeData->hasUrls())
      {
-
           emit  clipboardAvailable(true);
-
      }else{
           emit  clipboardAvailable(false);
      }
@@ -645,7 +687,13 @@ void Actions::setUrl(const QString &url)
 {
 
      m_dirPath=url;
-     actGoUp->setEnabled(m_dirPath!=QDir::rootPath()&&m_dirPath!=":/trash");
+     m_selectedPath=url;
+     actGoUp->setEnabled(m_dirPath!=QDir::rootPath()&&m_dirPath!=_TRASH);
+     if(m_dirPath==_TRASH || m_dirPath==_SEARCH){
+       mMenuNew->setEnabled(false);
+     }else{
+          mMenuNew->setEnabled(true);
+     }
 //     actOpenInNewTab->setData(m_dirPath);
 //     actOpenTerminal->setData(m_dirPath);
    // qDebug()<<__FILE__<<__FUNCTION__<<m_dirPath;
@@ -852,7 +900,8 @@ void Actions::creatNewFile(const QString &fileSource)
                creatNewFile(fileSource);
           }else{
                //   file.open(QIODevice::WriteOnly | QIODevice::Text);
-               QFile::copy(fileSource,m_dirPath+"/"+newName+"."+fiS.suffix());
+               QFile::copy(fileSource,file.fileName());
+               emit newFileCreated(file.fileName());
           }
           file.close();
      }
@@ -879,7 +928,7 @@ void Actions::creatNewDir()
                creatNewDir();
           }else{
                path.mkdir(newName);
-
+              emit newFileCreated(m_dirPath+"/"+newName);
           }
 
      }
@@ -895,6 +944,9 @@ void Actions::creatLink()
 
      SymLinkDlg *dlg=new SymLinkDlg(m_dirPath);
      dlg->exec();
+//     if(dlg->exec()==QDialog::Accepted){
+//         emit newFileCreated(dlg->fileName());
+//     }
 
 
 }
@@ -907,7 +959,9 @@ void Actions::creatXdgProgramme()
 
 
      DialogXdesktop *dlg=new DialogXdesktop(m_dirPath);
-     dlg->exec();
+     if(dlg->exec()==QDialog::Accepted){
+         emit newFileCreated(dlg->fileName());
+     }
 
 }
 
@@ -926,39 +980,31 @@ void Actions::toggleView(QAction *action)
 /*********************************************************************
  *
  *********************************************************************/
-void Actions::openNewTab()
-{
+//void Actions::openNewTab()
+//{
 
 
-     emit sendNewTab(m_dirPath);
+//     emit sendNewTab(m_dirPath);
 
-}
+//}
 
 /*********************************************************************
  *
  *********************************************************************/
 void Actions::openInNewTab()
 {
+    QString path=m_selectedPath;
+    if(path==_TRASH || path==_SEARCH)
+        path=QDir::homePath();
 
-
-     emit sendNewTab(actOpenInNewTab->data().toString());
+     emit sendNewTab(path);
 
 }
 
 /*********************************************************************
  *
  *********************************************************************/
-//void Actions::openTerminal()
-//{
 
-
-//     QString exec=mSettings->terminal();
-//     QProcess proc;
-
-//     proc.startDetached(exec,QStringList(),m_dirPath);
-
-
-//}
 
 /*********************************************************************
  *
@@ -966,13 +1012,18 @@ void Actions::openInNewTab()
 void Actions::openInTerminal()
 {
 
-
      QString exec=mSettings->terminal();
-     if(!findProgram(exec)){
+     if(!EMimIcon::findProgram(exec)){
          exec=EMimIcon::defaultTerminal();
      }
-     QProcess proc;
-     QString path=actOpenTerminal->data().toString();
+
+//     QString path=actOpenTerminal->data().toString();
+//     if(path.isEmpty()) path=m_dirPath;
+
+     QString path=m_selectedPath;
+     if(path==_TRASH || path==_SEARCH)
+         path=QDir::homePath();
+       QProcess proc;
      proc.setWorkingDirectory(path);
        QDir::setCurrent(path);
      proc.startDetached(exec,QStringList(),path);
@@ -981,22 +1032,22 @@ void Actions::openInTerminal()
 }
 
 
-void Actions::openTerminal()
-{
+//void Actions::openTerminal()
+//{
 
-    QString exec=mSettings->terminal();
-    qDebug()<<"openTerminal"<<exec;
-    if(!findProgram(exec)){
-        exec=EMimIcon::defaultTerminal();
-    }
-qDebug()<<"openTerminal"<<exec;
-    QProcess proc;
-    proc.setWorkingDirectory(m_dirPath);
-    QDir::setCurrent(m_dirPath);
-    proc.startDetached(exec,QStringList(),m_dirPath);
+//    QString exec=mSettings->terminal();
+//    qDebug()<<"openTerminal"<<exec;
+//    if(!EMimIcon::findProgram(exec)){
+//        exec=EMimIcon::defaultTerminal();
+//    }
+//qDebug()<<"openTerminal"<<exec;
+//    QProcess proc;
+//    proc.setWorkingDirectory(m_dirPath);
+//    QDir::setCurrent(m_dirPath);
+//    proc.startDetached(exec,QStringList(),m_dirPath);
 
 
-}
+//}
 
 /*********************************************************************
  *
@@ -1071,7 +1122,7 @@ void Actions::chargeAppService(const QString &path)
     {
          it.next();
          QString prog=it.fileName().section("_",0,0);
-         if(!findProgram(prog))
+         if(!EMimIcon::findProgram(prog))
              continue;
          QString fileName=it.fileName();
         bool exist=false;
@@ -1160,39 +1211,20 @@ void Actions::execService()
 /*********************************************************************
  *
  *********************************************************************/
-bool Actions::findProgram(const QString &program)
-{
 
-    if(program.isEmpty()) return false;
 
-     QFileInfo fi(program);
-     if (fi.isExecutable())
-          return true;
-
-     QString path = qgetenv("PATH");
-     foreach(QString dir, path.split(":"))
-     {
-          QFileInfo fi= QFileInfo(dir + QDir::separator() + program);
-          //  qDebug()<<fi.filePath();
-
-          if (fi.isExecutable() )
-               return true;
-     }
-     return false;
-}
-
-/*********************************************************************
- *
- *********************************************************************/
-void Actions::ShooseTerminal()
-{
-    bool ok;
-       QString text = QInputDialog::getText(0, tr("Shoose Terminaml"),
-                                            tr("Name:"), QLineEdit::Normal,
-                                            mSettings->terminal(), &ok);
-       if (ok && !text.isEmpty())
-       mSettings->setTerminal(text);
-}
+///*********************************************************************
+// *
+// *********************************************************************/
+//void Actions::chooseTerminal()
+//{
+//    bool ok;
+//       QString text = QInputDialog::getText(0, tr("Shoose Terminaml"),
+//                                            tr("Name:"), QLineEdit::Normal,
+//                                            mSettings->terminal(), &ok);
+//       if (ok && !text.isEmpty())
+//       mSettings->setTerminal(text);
+//}
 
 
 /*********************************************************************
@@ -1268,7 +1300,7 @@ QFileInfo info=actExtractHere->data().toString();
     setting.beginGroup("Default");
     prog = setting.value("File").toString();
     arg = setting.value("Arg").toString();
-    if(findProgram(prog)){ exist=true; }
+    if(EMimIcon::findProgram(prog)){ exist=true; }
     setting.endGroup();
     //Find Any Archive
 
@@ -1278,7 +1310,7 @@ QFileInfo info=actExtractHere->data().toString();
             setting.setArrayIndex(i);
             prog = setting.value("File").toString();
             arg = setting.value("Arg").toString();
-            if(findProgram(prog)){
+            if(EMimIcon::findProgram(prog)){
                 exist=true;
                 break;
             }

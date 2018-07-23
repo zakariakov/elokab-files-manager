@@ -227,3 +227,46 @@ QString Edir::picturesDir()
 
     return location;
 }
+
+//_________________________________________________________________
+QString Edir::trashDir()
+{
+//    QString home =QDir::homePath();
+//    paths.append( home + "/.local/share/Trash" );
+//    paths.append( home + "/.trash" );
+    //"$Home/.config"
+    QDir dir(QDir::homePath()+"/.trash");
+    if(dir.exists())
+        return dir.absolutePath();
+
+    dir.setPath(QDir::homePath()+ "/.local/share/Trash" );
+    if(!dir.exists())
+        dir.mkpath(".");
+
+     return dir.absolutePath();
+
+
+}
+QString Edir::trashFiles()
+{
+
+    QDir dir(trashDir()+ "/files" );
+    if(!dir.exists())
+        dir.mkpath(".");
+
+
+    return dir.absolutePath();
+
+}
+
+QString Edir::trashInfo()
+{
+    QDir dir(trashDir()+ "/info" );
+    if(!dir.exists())
+        dir.mkpath(".");
+
+
+    return dir.absolutePath();
+
+
+}

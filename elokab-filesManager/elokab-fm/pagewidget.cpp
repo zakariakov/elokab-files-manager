@@ -37,7 +37,7 @@
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
-PageWidget::PageWidget(QFileSystemModel *model,
+PageWidget::PageWidget(MyFileSystemModel *model,
                        Settings *setting,
                        Actions *action,
                        const QString &url,
@@ -49,13 +49,6 @@ PageWidget::PageWidget(QFileSystemModel *model,
     propertiesDlg(0),
     openWithDlg(0)
 {
-    setObjectName("_pageWidget");
-
-#ifdef DEBUG_APP
-    Messages::showMessage(Messages::BEGIN,"PageWidget::PageWidget()");
-#endif
-
-
 
     setObjectName("PageWidget");
 
@@ -72,8 +65,10 @@ PageWidget::PageWidget(QFileSystemModel *model,
     vLayoutList->setSpacing(6);
     vLayoutList->setContentsMargins(0,0,0,0);
 
-    mItemDelegate=new ItemDelegate;
-   // connect(mItemDelegate,SIGNAL(imageHasThumb(QString)),this,SLOT(iconThumbUpdate(QString)));
+    mItemDelegate=new ItemDelegate(!mSettings->isClassicIcons());
+
+    mThumbnails=new Thumbnails ;
+
     listView = new MyListView(myModel,mActions,pageList);
     listView->setItemDelegate(mItemDelegate);
 
@@ -92,50 +87,55 @@ PageWidget::PageWidget(QFileSystemModel *model,
     stackedWidget->addWidget(pageTree);
 
 
-    QWidget *pageTrash = new QWidget();
-    QVBoxLayout *vLayoutTrash = new QVBoxLayout(pageTrash);
-    vLayoutTrash->setSpacing(6);
-    vLayoutTrash->setContentsMargins(0,0,0,0);
-    trashView = new TrashView(/*mActions,*/pageTrash);
-
-    vLayoutTrash->addWidget(trashView);
-    stackedWidget->addWidget(pageTrash);
-
+    mTrash=new Trash;
     searchView = new SearchView(this);
     stackedWidget->addWidget(searchView);
-    connect(searchView,SIGNAL(searchingCanceled(QString)),this,SLOT(setUrlChange(QString)));
-    connect(stackedWidget,SIGNAL(currentChanged(int)),this,SLOT(viewChangged(int)));
+
 
     vLayout->addWidget(stackedWidget);
     listSelectionModel=listView->selectionModel();
     treeView-> setSelectionModel(listView->selectionModel());
-    //searchView->searchTreeView()->setSelectionModel(listSelectionModel);
-    treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(treeView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(customContextMenu(QPoint)));
-    listView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(listView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(customContextMenu(QPoint)));
+
+    treeView->setContextMenuPolicy  (Qt::CustomContextMenu);
+    listView->setContextMenuPolicy  (Qt::CustomContextMenu);
     searchView->setContextMenuPolicy(Qt::CustomContextMenu);
+
+
+
+    connect(this,SIGNAL(urlChanged(QString)),mThumbnails,SLOT(directoryChanged(QString)));
+    connect(listSelectionModel,SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this,SLOT(selectionHasChanged(QItemSelection,QItemSelection)));
+
+    connect(treeView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(customContextMenu(QPoint)));
+    connect(treeView,SIGNAL(activated(QModelIndex)),this,SLOT(slotItemActivated(QModelIndex)));
+
+    connect(listView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(customContextMenu(QPoint)));
+    connect(listView,SIGNAL(activated(QModelIndex)),this,SLOT(slotItemActivated(QModelIndex)));
+    connect(listView,SIGNAL(fileEntered(QString)),this,SIGNAL(selectedFoldersFiles(QString)));
+
+    connect(mItemDelegate,SIGNAL(requireThumb(QFileInfo,QString)),mThumbnails,SLOT(addFileName(QFileInfo,QString)));
+    connect(mThumbnails,SIGNAL(updateThumbnail(QString)),this,SLOT(iconThumbUpdate(QString)));
+
+    connect(stackedWidget,SIGNAL(currentChanged(int)),this,SLOT(viewChangged(int)));
     connect(searchView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(customContextMenu(QPoint)));
-
-
-    listView->setViewIconSize(mSettings->viewIconSize());
-    treeView->setTreeIconSize(mSettings->treeIconSize());
-
 
     //   connect(mSettings,SIGNAL(iconSizeChanged(int)),this,SLOT(setZoomIn(int)));
     connect(mActions,SIGNAL(zoomInChanged()),this,SLOT(setZoomIn()));
     connect(mActions,SIGNAL(ZoomOutChanged()),this,SLOT(setZoomOut()));
-   // connect(mActions,SIGNAL(reloadIcons()),this,SLOT(clearIcons())) ;
+    connect(mActions,SIGNAL(newFileCreated(QString)),this,SLOT(selectIndex(QString))) ;
+    connect(mActions,SIGNAL(trashDeleteFile()),this,SLOT(trashDeleteFiles())) ;
+    connect(mActions,SIGNAL(trashClean()),mTrash,SLOT(cleanTrash())) ;
+    connect(mActions,SIGNAL(trashRestoreFiles()),this,SLOT(trashRestoreFiles())) ;
 
     connect(mSettings,SIGNAL(rootDecorationChanged(bool)),treeView,SLOT(setExpandable(bool)));
     connect(mSettings,SIGNAL(showThumbnailsChanged(bool)),mItemDelegate,SLOT(setTumbnail(bool))) ;
+    connect(mSettings,SIGNAL(classicIconsChanged(bool)),mItemDelegate,SLOT(setClassicIcons(bool))) ;
+    connect(mSettings,SIGNAL(pdfThumbnailsChanged(bool)),mItemDelegate,SLOT(setPdfTumbnail(bool))) ;
+    connect(mSettings,SIGNAL(VideoThumbnailsChanged(bool)),mItemDelegate,SLOT(setVideoTumbnail(bool))) ;
 
     connect(searchView,SIGNAL(setUrl(QString)),this,SLOT(setUrl(QString)));
+    connect(searchView,SIGNAL(searchingCanceled(QString)),this,SLOT(setUrlChange(QString)));
     connect(searchView,SIGNAL(showOpenwithDlg(QString)),this,SLOT(showOpenwithDlg(QString)));
     connect(searchView,SIGNAL(fileSelected(QString)),this,SIGNAL(selectedFoldersFiles(QString)));
-    connect(trashView,SIGNAL(fileSelected(QString)),this,SIGNAL(selectedFoldersFiles(QString)));
-
-    connect(listSelectionModel,SIGNAL(selectionChanged(QItemSelection,QItemSelection)),this,SLOT(selectionHasChanged(QItemSelection,QItemSelection)));
 
     connect(this,SIGNAL(historyBackAvailable(bool)),mActions,SIGNAL(backAvailable(bool))) ;
     connect(this,SIGNAL(historyForwardAvailable(bool)),mActions,SIGNAL(forwardAvailable(bool))) ;
@@ -144,45 +144,34 @@ PageWidget::PageWidget(QFileSystemModel *model,
     connect(this,SIGNAL(historyBackAvailable(bool)),this,SLOT(setBackEnabled(bool)));
     connect(this,SIGNAL(historyForwardAvailable(bool)),this,SLOT(setForwardEnabled(bool)));
 
-    connect(listView,SIGNAL(activated(QModelIndex)),this,SLOT(slotItemActivated(QModelIndex)));
-    connect(treeView,SIGNAL(activated(QModelIndex)),this,SLOT(slotItemActivated(QModelIndex)));
-    //  connect(listView,SIGNAL(pressed(QModelIndex)),this,SLOT(slotItemPressed(QModelIndex)));
-    // connect(treeView,SIGNAL(pressed(QModelIndex)),this,SLOT(slotItemPressed(QModelIndex)));
-    connect(listView,SIGNAL(fileEntered(QString)),this,SIGNAL(selectedFoldersFiles(QString)));
+    listView->setViewIconSize      (mSettings->viewIconSize());
+    treeView->setTreeIconSize      (mSettings->treeIconSize());
+    treeView->setRootIsDecorated   (mSettings->isRootDecorated());
+    mItemDelegate->setTumbnail     (mSettings->showThumbnails());
+    mItemDelegate->setPdfTumbnail  (mSettings->pdfThumbnails());
+    mItemDelegate->setVideoTumbnail(mSettings->videoThumbnails());
 
-
-    treeView->setRootIsDecorated(mSettings->rootIsDecorated());
-    mItemDelegate->setTumbnail(mSettings->showThumbnails());
     setUrl(url);
 
-#ifdef DEBUG_APP
-    Messages::showMessage(Messages::END,"PageWidget::PageWidget()");
 
-#endif
 }
 
 //___________________________________________________________________
 PageWidget::~PageWidget()
 {
 
-#ifdef DEBUG_APP
-    Messages::showMessage(Messages::BEGIN,"PageWidget::~PageWidget()");
-#endif
     searchView->stopSearch();
     searchView->close();
     // delete searchView;
     delete listView;
     delete treeView;
-    delete trashView;
+    delete mThumbnails;
+   // delete trashView;
 }
 void PageWidget::closeAll()
 {
-#ifdef DEBUG_APP
-    Messages::showMessage(Messages::BEGIN,"PageWidget::closeAll()");
-#endif
+
     searchView->stopSearch();
-    //searchView->close();
-    //  delete searchView;
 }
 /**************************************************************************************
  *
@@ -228,6 +217,9 @@ void PageWidget::customContextMenu(QPoint)
     QFileInfo info;
     QMenu menu;
     bool isSearch=false;
+    bool isTrash=false;
+    if(m_dirPath==_TRASH){isTrash=true;}
+
 
     switch (focusedWidget()) {
     case WListView:
@@ -239,8 +231,8 @@ void PageWidget::customContextMenu(QPoint)
     case WTreeView:
         selectedPath=myModel->filePath(treeView->currentIndex());
         info=myModel->fileInfo(treeView->currentIndex());
-       // count=listSelectionModel->selectedIndexes().count();
-         count=listSelectionModel->selectedRows(0).count();
+        // count=listSelectionModel->selectedIndexes().count();
+        count=listSelectionModel->selectedRows(0).count();
         qDebug()<<"count"<<count;
         break;
 
@@ -258,106 +250,97 @@ void PageWidget::customContextMenu(QPoint)
     QModelIndex idx=myModel->index(info.filePath());
     QString mim;
 
-    //qDebug()<<"absoluteFilePath"<<info.absoluteFilePath();
-    //qDebug()<<"filePath"<<info.filePath();
-    //qDebug()<<"path"<<info.path();
-
     if(idx.isValid())
         mim=idx.data(_MMIM).toString();
     else
         mim=EMimIcon::mimeTyppe(info);
 
-    if(!isSearch)
-        menu.addMenu(mActions->menuNew());//nonsearch
-
-    if (count==0 ){
-        if (isSearch) return;
-
-        menu.addMenu(mActions->menuService(QStringList()<<m_dirPath,"inode/directory"));
-        menu.addAction(mActions->openInNewTabAction(m_dirPath));
-        menu.addAction(mActions->openTerminalAction(m_dirPath));
-        menu.addSeparator();
-        menu.addActions(mActions->menuViewfile()->actions());
-        menu.addAction(mActions->propertiesAction());
-        menu.exec(QCursor::pos());
-        return;
-
-    }
-
-
-
+//![0] search  *****************************************************
     if(isSearch){
+        if (count==0 ){return;}
+
         emit selectedAvailabe(true);
         mActions->pasteAction()->setEnabled(false);
+        menu.addAction(mActions->openTerminalAction());
+        menu.addAction(mActions->openInNewTabAction());
         if(info.isDir())
         {
-
-            menu.addAction(mActions->openTerminalAction(selectedPath));
-            menu.addAction(mActions->openInNewTabAction(info.filePath()));
+            mActions->setSelectedDir(selectedPath);
             menu.addSeparator();
             //mActions->setcurPath(selectedPath);
-
-
         }else{
-
-            menu.addAction(mActions->openTerminalAction(info.path()));
+            mActions->setSelectedDir(info.path());
             if(mim!= "application/x-executable" )
                 menu.addMenu(mActions->menuOpenWith(selectedPath, mim))  ;
 
         }
 
+        //----------------------------------------------
+        menu.addActions(mActions->menuEditePopup()->actions());
+        //----------------------------------------------
+        menu.addAction(mActions->propertiesAction());
+        menu.exec(QCursor::pos());
+        mActions->restorePath();
+
+        return;
     }// search
-    else  //non search
-    {
 
-        if(count==1){
-            if(info.isDir())
-            {
-                //   menu.addAction(mActions->actOpenInTerminal);
-                menu.addAction(mActions->openInNewTabAction(info.filePath()));
-                menu.addAction(mActions->openTerminalAction(selectedPath));
-                // mActions->setcurPath(selectedPath);
+    if(isTrash){
 
-            }else{
-                // mActions->setcurPath(m_dirPath);
-                if(mim!= "application/x-executable" )
-                    menu.addMenu(mActions->menuOpenWith(selectedPath, mim))  ;
+        menu.addActions(mActions->menuTrach()->actions());
+         menu.exec(QCursor::pos());
+          return;
+    }
+//![1]  no selected file ****************************************
+    menu.addMenu(mActions->menuNew());//nonsearch
+    if (count==0 ){
 
-            }
-            menu.addMenu(mActions->menuService(QStringList()<<m_dirPath,mim));
-            menu.addSeparator();
-
-
-
-        }else{
-            qDebug()<<"selectedFiles="<<selectedFiles();
-
-            menu.addMenu(mActions->menuService(selectedFiles(),mim));
-            menu.addSeparator();
-        }
-
+        menu.addMenu(mActions->menuNew());
+        mActions->setSelectedDir(m_dirPath);
+        menu.addMenu(mActions->menuService(QStringList()<<m_dirPath,"inode/directory"));
+        menu.addAction(mActions->openInNewTabAction());
+        menu.addAction(mActions->openTerminalAction());
+        menu.addSeparator();
+        menu.addActions(mActions->menuEditePopup()->actions());
+        menu.addAction(mActions->propertiesAction());
+        menu.exec(QCursor::pos());
+         mActions->restorePath();
+        return;
 
     }
 
+//![2] else  selection avaliable************************************************
+    if(count==1){
+        if(info.isDir()) //dir
+        {
+            mActions->setSelectedDir(info.filePath());
+            menu.addAction(mActions->openInNewTabAction());
+
+        }else{ //files
+            if(mim!= "application/x-executable" )
+                menu.addMenu(mActions->menuOpenWith(selectedPath, mim))  ;
+        }
+         menu.addAction(mActions->openTerminalAction());
+        menu.addMenu(mActions->menuService(QStringList()<<m_dirPath,mim));
+    }else{ // count>1
+        menu.addMenu(mActions->menuService(selectedFiles(),mim));
+    }
     menu.addSeparator();
-
-
-    //----------------------------------------------
-    menu.addActions(mActions->menuViewfile()->actions());
-
+    // EDIT ----------------------------------------
+    menu.addActions(mActions->menuEditePopup()->actions());
+    // archive-------------------------------------
     if(QFileInfo(m_dirPath).isWritable()){
-
         if(count==1  && isArchive(mim))
             menu.addAction(mActions->extractHereAction(info.filePath()));
-
         menu.addAction(mActions->AddArchiveAction(selectedFiles()));
         menu.addSeparator();
-
     }
-
+    // PROPERTIES----------------------------------
     menu.addAction(mActions->propertiesAction());
 
     menu.exec(QCursor::pos());
+
+    mActions->restorePath();
 
 }
 
@@ -373,6 +356,9 @@ void PageWidget::slotItemActivated(QModelIndex index)
 
         if(myModel->isDir( listSelectionModel->currentIndex()))
         {
+            if(m_dirPath==_TRASH)
+                return;
+
             setUrl(myModel->filePath(index));
         }else{
            QString mim=index.data(_MMIM).toString();
@@ -449,7 +435,7 @@ void PageWidget::selectionHasChanged(const QItemSelection &/*selected*/,
 
     emit selectedFoldersFiles(msg);
 
-    if(!QFileInfo(m_dirPath).isWritable())
+    if(!QFileInfo(m_dirPath).isWritable() && m_dirPath!=_TRASH)
     {
         emit selectedAvailabe(false);
         mActions->copyAction()->setEnabled(listSelectionModel->selectedIndexes().count());
@@ -524,12 +510,12 @@ void PageWidget::setUrl(const QString &url)
 
     if(m_dirPath==url)return;
     if(url.isEmpty())return;
-    if(m_dirPath==":/trash" && url==":/search")return;
+    if(m_dirPath==_TRASH && url==_SEARCH)return;
 
 
 
     QModelIndex i = myModel->index(url);
-    if(url!=":/trash"&&url!=":/search"){
+    if(url!=_TRASH && url!=_SEARCH){
 
         if(!i.isValid()){
             if(urlIsHidden(url)){
@@ -546,7 +532,7 @@ void PageWidget::setUrl(const QString &url)
 
     }
 
-    if(!m_dirPath.isEmpty() && m_dirPath!=":/search"){
+    if(!m_dirPath.isEmpty() && m_dirPath!=_SEARCH){
         mHistoryBack.push(m_dirPath);
 
         mHistoryForward.clear();
@@ -556,17 +542,6 @@ void PageWidget::setUrl(const QString &url)
     }
 
     setUrlChange(url);
-
-
-    //     if(url!=":/search")
-    //          mHistory.append(url);
-    //     if(mHistory.count()>12)
-    //          mHistory.removeFirst();
-
-    //     mHindex=mHistory.count()-1;
-
-
-
 
 }
 
@@ -578,40 +553,33 @@ void PageWidget::setUrl(const QString &url)
 void PageWidget::setUrlChange(const QString &url)
 {
 
-
-
-
     QString oldPath=m_dirPath;
+
+    QString curPath=url;
     m_dirPath=url;
 
-bool restorRoot=false;
+  bool restorRoot=false;
+
     if(m_dirPath.isEmpty())
         m_dirPath=QDir::rootPath();
-
-    if(m_dirPath==":/trash")
-    {
-        stackedWidget->setCurrentIndex(WTrashView);
-        trashView->updateTrashFiles();
-        trashView->setFocus();
-
-
-    }
-    else if(m_dirPath==":/search")
+    if(curPath==_SEARCH)
     {
 
         stackedWidget->setCurrentIndex(WSearchView);
-        if(oldPath!=":/search")
+        if(oldPath!=_SEARCH)
             searchView->setPath(oldPath);
 
     }else{
 
+        if(url==_TRASH)
+            curPath=Edir::trashFiles();
 
-        QModelIndex i = myModel->index(url);
+        QModelIndex i = myModel->index(curPath);
         if(!i.isValid()){
-            if(urlIsHidden(url)){
-                qDebug()<<"isHidden"<<m_dirPath;
-              myModel->setRootPath(url);
-               restorRoot=true;
+            if(urlIsHidden(curPath)){
+                qDebug()<<"isHidden"<<curPath;
+                myModel->setRootPath(curPath);
+                restorRoot=true;
             }else{
                 m_dirPath=oldPath;
                 myModel->setRootPath(oldPath);
@@ -620,24 +588,29 @@ bool restorRoot=false;
             }
         }
 
-         //myModel->setRootPath(oldPath);
+        //myModel->setRootPath(oldPath);
         //-----------------------------------
         switch (mViewMode)
         {
 
         case IconView:
             stackedWidget->setCurrentIndex(WListView);
-            listView->setRootPath(m_dirPath);
+            listView->setRootPath(curPath);
             listView->setFocus();
             break;
         case CompactView:
             stackedWidget->setCurrentIndex(WListView);
-            listView->setRootPath(m_dirPath);
+            listView->setRootPath(curPath);
             listView->setFocus();
             break;
         case DetailView:
             stackedWidget->setCurrentIndex(WTreeView);
-            treeView->setRootPath(m_dirPath);
+            treeView->setColumnHidden(_COL_TYPE,    m_dirPath==_TRASH);
+            treeView->setColumnHidden(_COL_DATE,    m_dirPath==_TRASH);
+            treeView->setColumnHidden(_COL_TRASHED, m_dirPath!=_TRASH);
+            treeView->setColumnHidden(_COL_ORIGPATH,m_dirPath!=_TRASH);
+
+            treeView->setRootPath(curPath);
             treeView->setFocus();
             break;
 
@@ -647,7 +620,6 @@ bool restorRoot=false;
         //  QApplication::restoreOverrideCursor();
     }
 
-
     emit urlChanged(m_dirPath);
 
     emit indexHasChanged(myModel->index(m_dirPath));
@@ -655,7 +627,7 @@ bool restorRoot=false;
     if(restorRoot){
         myModel->setRootPath(QDir::rootPath());
         myModel->setFilter(myModel->filter());
-   }
+    }
 
 
 }
@@ -754,14 +726,6 @@ void PageWidget::renameFiles()
 /**************************************************************************************
  *
  **************************************************************************************/
-void PageWidget::moveFilesToTrash()
-{
-    trashView->moveFilesToTrash(selectedFiles());
-}
-
-/**************************************************************************************
- *
- **************************************************************************************/
 void PageWidget::selectAll()
 {
 
@@ -773,7 +737,7 @@ void PageWidget::selectAll()
         treeView->selectAll();
         break;
     case WTrashView:
-        trashView->selectAll();
+       // trashView->selectAll();
         break;
     case WSearchView:
         searchView->searchTreeView()->selectAll();
@@ -864,24 +828,7 @@ QModelIndexList PageWidget::selectedIndex()
         break;
     }
 
-    /*
-     if (focusWidget() == treeView)
-     {
-
-          indexList=listSelectionModel->selectedRows(0);
-
-     } else if(focusWidget() == listView) {
-
-          indexList=listSelectionModel->selectedIndexes();
-
-     }else if(focusWidget() == trashView) {
-
-          //NULL ACTION
-
-     }
-
-*/
-    return indexList;
+     return indexList;
 
 }
 
@@ -1045,7 +992,7 @@ int PageWidget::focusedWidget()
     if (focusWidget() == listView)return WListView;
     if (focusWidget() == treeView) return WTreeView;
     if (focusWidget() == searchView->searchTreeView()) return WSearchView;
-    if (focusWidget() == trashView) return WTrashView;
+  //  if (focusWidget() == trashView) return WTrashView;
     return -1;
 }
 
@@ -1068,14 +1015,29 @@ void PageWidget::iconUpdate(QModelIndex index)
 
 }
 
-//TODO RMOVE THIS
-//void PageWidget::iconThumbUpdate(const QString &fileName)
-//{
-//    if(!QFile::exists(fileName))return;
+void PageWidget::iconThumbUpdate(const QString &file)
+{
+    QModelIndex idx=myModel->index(file);
+   if(idx.isValid())
+     iconUpdate(idx);
 
-//    QModelIndex idx=myModel->index(fileName);
-//    if(idx.isValid())
-//        iconUpdate(idx);
-//}
+}
+
+void PageWidget::selectIndex(const QString &file)
+{
+    QModelIndex idx=myModel->index(file);
+   if(idx.isValid())
+  listSelectionModel->setCurrentIndex(idx,QItemSelectionModel::Select);
+}
 
 
+void PageWidget::trashDeleteFiles()
+{
+    mTrash->deleteFiles(selectedFiles());
+
+}
+void PageWidget::trashRestoreFiles()
+{
+    mTrash->restorFiles(selectedFiles());
+
+}

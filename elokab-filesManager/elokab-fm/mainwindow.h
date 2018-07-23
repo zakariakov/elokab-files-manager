@@ -24,6 +24,7 @@
 #include "actions.h"
 #include "pathwidget.h"
 #include "fileinformation.h"
+#include "settingsdlg.h"
 //#include <QTermWidget>
 #include "placetree.h"
 #include "filterbar.h"
@@ -126,6 +127,8 @@ class MainWindow : public QMainWindow
           //!
           void refreshIcons();
 
+          //!
+          void showSettings();
 
      private:
           Ui::MainWindow *ui;
@@ -165,6 +168,8 @@ class MainWindow : public QMainWindow
 
           //!
           ElokabSettings *mElokabSettings;
+
+
 
 };
 

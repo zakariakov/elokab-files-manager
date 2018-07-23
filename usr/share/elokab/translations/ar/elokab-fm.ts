@@ -4,31 +4,30 @@
 <context>
     <name>Actions</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="62"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="63"/>
         <source>Path Edit</source>
         <translation>تحرير المسار</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="65"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="66"/>
         <source>Open with...</source>
         <translation>فتح باستخدام...</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="72"/>
         <source>New tab</source>
-        <translation>لسان جديد</translation>
+        <translation type="vanished">لسان جديد</translation>
     </message>
     <message>
         <source>Open new tab</source>
         <translation type="obsolete">فتح لسان جديد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="83"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="103"/>
         <source>Close tab</source>
         <translation>غلق اللسان الحالي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="89"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="109"/>
         <source>Quit</source>
         <translation>خروج</translation>
     </message>
@@ -37,7 +36,7 @@
         <translation type="obsolete">الخروج من التطبيق</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="94"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="114"/>
         <source>Move To Trash</source>
         <translation>ارسال الى سلة المحذوفات</translation>
     </message>
@@ -46,17 +45,18 @@
         <translation type="obsolete">ارسال الملفات المحددة الى سلة المحذوفات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="100"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="88"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="120"/>
         <source>Delete</source>
         <translation>حذف</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="101"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="121"/>
         <source>Delete selected file</source>
         <translation>حذف الملفات المحددة نهائيا</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="107"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="127"/>
         <source>Rename</source>
         <translation>اعد التسمية</translation>
     </message>
@@ -65,7 +65,7 @@
         <translation type="obsolete">اعد تسمية الملف المحدد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="115"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="135"/>
         <source>Cut</source>
         <translation>قص</translation>
     </message>
@@ -74,7 +74,7 @@
         <translation type="obsolete">نقل الملفات المحددة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="122"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="142"/>
         <source>Copy</source>
         <translation>نسخ</translation>
     </message>
@@ -83,7 +83,7 @@
         <translation type="obsolete">نسخ الملفات المحددة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="129"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="149"/>
         <source>Paste</source>
         <translation>لصق</translation>
     </message>
@@ -92,62 +92,62 @@
         <translation type="obsolete">لصق محتويات الحافظة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="145"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="165"/>
         <source>Select All</source>
         <translation>تحديد الكل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="146"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="166"/>
         <source>Select all files</source>
         <translation>تحديد الكل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="151"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="171"/>
         <source>Properties</source>
         <translation>خصائص</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="160"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="185"/>
         <source>Icon view</source>
         <translation>عرص الايقونات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="161"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="186"/>
         <source>Toggle icon view</source>
         <translation>عرص الايقونات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="167"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="192"/>
         <source>Compact view</source>
         <translation>عرض قياسي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="168"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="193"/>
         <source>Toggle compact View</source>
         <translation>عرض قياسي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="174"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="199"/>
         <source>Detail view</source>
         <translation>عرض تفصيلي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="175"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="200"/>
         <source>Toggle detailed list</source>
         <translation>عرض تفصيلي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="196"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="221"/>
         <source>Zoom In</source>
         <translation>تكبير الايقونات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="197"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="222"/>
         <source>Zoom in icons</source>
         <translation>تكبير حجم الايقونات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="201"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="226"/>
         <source>Zoom Out</source>
         <translation>تصغير الايقونات</translation>
     </message>
@@ -156,269 +156,276 @@
         <translation type="obsolete">غلق اللسان الحالي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="70"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="71"/>
         <source>Actions...</source>
         <translation>الاوامر ...</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="75"/>
         <source>Open new tab  </source>
-        <translation>فتح لسان جديد</translation>
+        <translation type="vanished">فتح لسان جديد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="86"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="106"/>
         <source>Close current tab  </source>
         <translation>غلق اللسان الحالي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="92"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="112"/>
         <source>Quit this Application  </source>
         <translation>الخروج من التطبيق</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="98"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="118"/>
         <source>Move selected files to trash   </source>
         <translation>ارسال الملفات المحددة الى سلة المحذوفات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="105"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="125"/>
         <source>Delete selected files   </source>
         <translation>حذف الملفات المحددة نهائيا</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="112"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="132"/>
         <source>Rename file   </source>
         <translation>اعد تسمية الملف المحدد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="120"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="140"/>
         <source>Move selected files   </source>
         <translation>نقل الملفات المحددة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="127"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="147"/>
         <source>Copy selected files   </source>
         <translation>نسخ الملفات المحددة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="133"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="153"/>
         <source>Paste clipboard contents   </source>
         <translation>لصق محتوى الحافظة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="135"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="155"/>
         <source>Extract Here</source>
         <translation>استخرج هنا</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="137"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="157"/>
         <source>Extract Archive in curent folder</source>
         <translation>استخرج الارشيف في المجلد الحالي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="139"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="159"/>
         <source>Add To Archive</source>
         <translation>إظافة للأرشيف</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="141"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="161"/>
         <source>Add selected to Archive tar.gz</source>
         <translation>اظافة الملفات المحددة لارشيف ta.gz</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="155"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="175"/>
         <source>Find...</source>
         <translation>بحث...</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="181"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="179"/>
+        <source>Settings</source>
+        <translation type="unfinished">الإعدادات</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="182"/>
+        <source>Show settings dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="206"/>
         <source>Preview</source>
         <translation>معاينة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="182"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="207"/>
         <source>Show Preview of images files</source>
         <translation>عرض معاينة الصور</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="190"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="191"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="215"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="216"/>
         <source>Reload</source>
         <translation>تحديث</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="202"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="227"/>
         <source>Zoom out icons </source>
         <translation>تصغيرحجم  الايقونات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="206"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="231"/>
         <source>Show Hidden files</source>
         <translation>عرص الملفات المخفية</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="207"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="232"/>
         <source>Toggle hidden files</source>
         <translation>عرض او اخفاء الملفات المخفية</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="214"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="239"/>
         <source>Sort By Name</source>
         <translation>حسب الاسم</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="215"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="240"/>
         <source>Sort icons by name</source>
         <translation>ترتيب الايقونات حسب الاسم</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="221"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="246"/>
         <source>Sort By Size</source>
         <translation>حسب الحجم</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="222"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="247"/>
         <source>Sort icons by size</source>
         <translation>ترتيب الايقونات حسب الحجم</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="228"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="253"/>
         <source>Sort By type</source>
         <translation>حسب النوع</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="229"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="254"/>
         <source>Sort icons by type</source>
         <translation>ترتيب الايقونات حسب النوع</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="235"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="260"/>
         <source>Sort Ascending</source>
         <translation>ترتيب تنازلي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="236"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="261"/>
         <source>Sort icons in ascending order</source>
         <translation>ترتيب الايقونات تنازليا</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="242"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="267"/>
         <source>Folders</source>
         <translation>مجلدات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="243"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="268"/>
         <source>folders Navigation </source>
         <translation>التنقل حسب المجلدات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="249"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="274"/>
         <source>Information</source>
         <translation>معلومات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="250"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="275"/>
         <source>File Information </source>
         <translation>معلومات الملفات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="256"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="281"/>
         <source>Toolbar</source>
         <translation>لوحة الادوات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="257"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="282"/>
         <source>Show Hide Toolbar </source>
         <translation>عرض او اخفاء لوحة الادوات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="264"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="289"/>
         <source>MenuBar</source>
         <translation>القائمة الرئيسية</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="265"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="290"/>
         <source>Show Hide MenuBar </source>
         <translation>عرض او اخفاء القائمة الرئيسية</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="274"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="299"/>
         <source>Up</source>
         <translation>الاعلى</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="275"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="300"/>
         <source>Go up one directory </source>
         <translation>التنقل الى المجلد الاعلى</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="279"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="304"/>
         <source>Back</source>
         <translation>السابق</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="280"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="305"/>
         <source>Go back one directory </source>
         <translation>التنقل الى المجلد السابق</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="286"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="311"/>
         <source>Forward</source>
         <translation>التالي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="287"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="312"/>
         <source>Go forward one directory </source>
         <translation>التنقل الى المجلد التالي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="293"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="318"/>
         <source>Home</source>
         <translation>المنزل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="294"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="319"/>
         <source>Go to home directory</source>
         <translation>التنقل الى المجلد المنزل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="298"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="323"/>
         <source>trash</source>
         <translation>سلة المحذوفات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="299"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="324"/>
         <source>Go to trash directory</source>
         <translation>التنقل الى سلة المحذوفات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="304"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="329"/>
         <source>Filter</source>
         <translation>المرشح</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="305"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="330"/>
         <source>Show filter bar</source>
         <translation>عرض او اخفاءشريط المرشح</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="309"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="313"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="334"/>
         <source>Open terminal</source>
         <translation>فتح الطرفية</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="342"/>
         <source>Confirm Drag Drop files</source>
-        <translation>تأكيد سحب و إسقاط الملفات</translation>
+        <translation type="vanished">تأكيد سحب و إسقاط الملفات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1223"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1255"/>
         <source>Create archive</source>
         <translation>انشاء ارشيف</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1224"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1256"/>
         <source>Archive name:</source>
         <translation>اسم الارشيف :</translation>
     </message>
@@ -427,107 +434,110 @@
         <translation type="obsolete">فتح الطرفية هنا</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="321"/>
         <source>Single-click to open files and folders</source>
-        <translation>نقر مغرد لفتح المجلدات والملفات</translation>
+        <translation type="vanished">نقر مغرد لفتح المجلدات والملفات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="327"/>
         <source>Expandable folders in view details</source>
-        <translation>مجلدات قابلة للتمدد في عرض التفاصيل</translation>
+        <translation type="vanished">مجلدات قابلة للتمدد في عرض التفاصيل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="333"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="358"/>
         <source>Configure toolbars...</source>
         <translation>اعدادات لوحة الادوات ...</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="334"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="359"/>
         <source>Configure toolbars</source>
         <translation>اعدادات لوحة الادوات </translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="338"/>
         <source>Configure Terminal...</source>
-        <translation>اعدادات الطرفية...</translation>
+        <translation type="vanished">اعدادات الطرفية...</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="444"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="475"/>
         <source>&amp;Bookmarks</source>
         <translation>ال&amp;مفضلة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1190"/>
         <source>Shoose Terminaml</source>
-        <translation>اختيار طرفية</translation>
+        <translation type="vanished">اختيار طرفية</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="1191"/>
         <source>Name:</source>
-        <translation>الاسم:</translation>
+        <translation type="vanished">الاسم:</translation>
     </message>
     <message>
         <source>Open in terminal </source>
         <translation type="obsolete">فتح في الطرفية</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="78"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="98"/>
         <source>Open In new tab</source>
         <translation>فتح في لسان جديد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="310"/>
         <source>Open terminal in selected folder</source>
-        <translation>فتح الطرفية في المسار المحدد</translation>
+        <translation type="vanished">فتح الطرفية في المسار المحدد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="314"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="335"/>
         <source>Open terminal in curent path</source>
         <translation>فتح الطرفية في المسار الحالي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="348"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="364"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="373"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="389"/>
         <source>&amp;File</source>
         <translation>&amp;ملف</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="349"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="374"/>
         <source>Create New</source>
         <translation>انشاء جديد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="377"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="402"/>
         <source>&amp;Edit</source>
         <translation>&amp;تحرير</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="386"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="416"/>
         <source>&amp;View</source>
         <translation>&amp;عرض</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="419"/>
         <source>&amp;Settings</source>
-        <translation>الإ&amp;عدادات</translation>
+        <translation type="vanished">الإ&amp;عدادات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="434"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="463"/>
         <source>Pa&amp;nels</source>
         <translation>الل&amp;وحات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="432"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="461"/>
         <source>&amp;Tools</source>
         <translation>أ&amp;دوات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="442"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="81"/>
+        <source>Empty trash</source>
+        <translation type="unfinished">افراغ سلة المحذوفات</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="84"/>
+        <source>Restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="473"/>
         <source>&amp;Go</source>
         <translation>التن&amp;قل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="443"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="474"/>
         <source>&amp;Closed tab</source>
         <translation>الالسنة الم&amp;غلقة</translation>
     </message>
@@ -536,7 +546,7 @@
         <translation type="obsolete">الم&amp;فظلة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="66"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="67"/>
         <source>Other...</source>
         <translation>أخرى...</translation>
     </message>
@@ -549,19 +559,19 @@
         <translation type="obsolete">اختصار جديد الى مجلد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="844"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="892"/>
         <source>New File</source>
         <translation>ملف جديد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="845"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="871"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="893"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="920"/>
         <source>Enter name:</source>
         <translation>ادخل اسما :</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="870"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="872"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="919"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/actions.cpp" line="921"/>
         <source>New Folder</source>
         <translation>مجلد جديد</translation>
     </message>
@@ -860,35 +870,30 @@ height: %5</source>
 الارتفاع: %5</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="148"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="189"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="251"/>
         <source>Point To: </source>
-        <translation>يشير الى:</translation>
+        <translation type="vanished">يشير الى:</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="149"/>
         <source>
  %7Type: %6 
  Size: %1 
 Modified: %2 
 
 User Permission: %3 %4 %5</source>
-        <translation> %7النوع: %6 
+        <translation type="vanished"> %7النوع: %6 
  الحجم: %1 
 تاريخ التعديل: %2 
 
 صلاحيات المستخدم : %3 %4 %5</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="191"/>
         <source>
  %7Type: %1 
  Size: %2 
 Modified: %3 
 
 User Permission: %4 %5 %6</source>
-        <translation>
+        <translation type="vanished">
  %7النوع: %1 
  الحجم: %2 
 تاريخ التعديل: %3 
@@ -896,7 +901,6 @@ User Permission: %4 %5 %6</source>
 صلاحيات المستخدم : %4 %5 %6</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="252"/>
         <source>
  %6Type: %1 
  Size: %2 
@@ -904,7 +908,7 @@ Modified: %3
  
  width: %4  
 height: %5</source>
-        <translation>%6النوع: %1 
+        <translation type="vanished">%6النوع: %1 
  الحجم: %2 
 تاريخ التعديل: %3 
  
@@ -912,12 +916,55 @@ height: %5</source>
 الطول: %5</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="297"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="173"/>
+        <source>Point To: %1 
+</source>
+        <translation>يشير الى: %1 
+</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="174"/>
+        <source>Type: %1 
+</source>
+        <translation>النوع: %1 
+</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="177"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="179"/>
+        <source>Size: %1 
+</source>
+        <translation>الحجم: %1 
+</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="181"/>
+        <source>Modified: %1 
+</source>
+        <translation>تاريخ التعديل: %1 
+</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="189"/>
+        <source>Width: %1 
+</source>
+        <translation>العرض: %1 
+</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="190"/>
+        <source>Height: %1 
+</source>
+        <translation>الطول: %1 
+</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="224"/>
         <source> sub-folders </source>
         <translation> مجلدات فرعية </translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="297"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/fileinformation.cpp" line="224"/>
         <source> files</source>
         <translation> ملفات  </translation>
     </message>
@@ -991,7 +1038,7 @@ height: %5</source>
         <translation>المواقع</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="484"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="485"/>
         <source>Places</source>
         <translation>المواقع</translation>
     </message>
@@ -1028,42 +1075,42 @@ height: %5</source>
         <translation type="vanished">لصق</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="372"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="373"/>
         <source>root</source>
         <translation>الجذر</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="375"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="376"/>
         <source>Home</source>
         <translation>المنزل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="377"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="378"/>
         <source>ElokabFm</source>
         <translation>م-ف- العقاب</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="453"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="454"/>
         <source> Folders </source>
         <translation> مجلدات </translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="453"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="454"/>
         <source> Files</source>
         <translation> ملفات     </translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="482"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="483"/>
         <source>Folders</source>
         <translation> مجلدات </translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="599"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="621"/>
         <source>File Manager Based on Qt</source>
         <translation>مدير ملفات با ستخدام مكتبات كيوتي</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="600"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/mainwindow.cpp" line="622"/>
         <source>Elokab File manager</source>
         <translation>مدير ملفات العقاب</translation>
     </message>
@@ -1075,24 +1122,34 @@ height: %5</source>
 <context>
     <name>MyFileSystemModel</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="107"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="120"/>
         <source>Name</source>
         <translation>الإسم</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="108"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="121"/>
         <source>Size</source>
         <translation>الحجم</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="109"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="122"/>
         <source>Type</source>
         <translation>النوع</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="110"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="123"/>
         <source>Date Modified</source>
         <translation>تاريخ التعديل</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="124"/>
+        <source>Trashed On</source>
+        <translation>حذفت في</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/myfilesystemmodel.cpp" line="125"/>
+        <source>Original Location</source>
+        <translation>الموقع الاصلي</translation>
     </message>
 </context>
 <context>
@@ -1181,13 +1238,13 @@ height: %5</source>
 <context>
     <name>PageWidget</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="447"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="459"/>
         <source>%1 Folders selected %2 Files selected</source>
         <translation>%1 مجلد محدد  %2  ملف محدد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="541"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="618"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="553"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/pagewidget.cpp" line="636"/>
         <source>this path is no valid </source>
         <translation>هذا المسار غير صحيح</translation>
     </message>
@@ -1224,37 +1281,37 @@ height: %5</source>
 <context>
     <name>PlaceTree</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="73"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="75"/>
         <source>Places</source>
         <translation>المواقع</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="78"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="80"/>
         <source>Bookmarks</source>
         <translation>المفضلة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="83"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="85"/>
         <source>Devices</source>
         <translation>الاجهزة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="124"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="126"/>
         <source>Home</source>
         <translation>المنزل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="188"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="190"/>
         <source>Root</source>
         <translation>الجذر</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="196"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="198"/>
         <source>Trash</source>
         <translation>سلة المحذوفات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="518"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="520"/>
         <source>Add Bookmark</source>
         <translation>اضافة للمفضلة</translation>
     </message>
@@ -1263,27 +1320,27 @@ height: %5</source>
         <translation type="obsolete">تحرير المقصلة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="528"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="530"/>
         <source>Remove Bookmark</source>
         <translation>حذف المفضلة</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="538"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="540"/>
         <source>Mount</source>
         <translation>ضم</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="542"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="544"/>
         <source>UnMount</source>
         <translation>فصل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="548"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="550"/>
         <source>open in new tab</source>
         <translation>فتح في لسان جديد</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="553"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/placetree.cpp" line="555"/>
         <source>Properties</source>
         <translation>خصائص</translation>
     </message>
@@ -1618,6 +1675,94 @@ height: %5</source>
     </message>
 </context>
 <context>
+    <name>SettingsDlg</name>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>نافذة</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="24"/>
+        <source>General</source>
+        <translation type="unfinished">عام</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="30"/>
+        <source>One click to open files and folders</source>
+        <translation>نقر مفرد لفتح المجلدات والملفات</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="37"/>
+        <source>Expandable folders in view details</source>
+        <translation>مجلدات قابلة للتمدد في عرض التفاصيل</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="44"/>
+        <source>Confirm Drag Drop files</source>
+        <translation>تأكيد سحب و إسقاط الملفات</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="51"/>
+        <source>Classic Icons in icon view mode</source>
+        <translation>ايقونات كلاسيكية في عرض الايقونات</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="84"/>
+        <source>Thumbnails</source>
+        <translation type="unfinished">المصغرات</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="90"/>
+        <source>Pdf Thumbnails &quot;require imagemagick&quot;</source>
+        <translation>مصغرات ملفات pdf &quot;تتطلب imagemagick&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="97"/>
+        <source>Video Thumbnails &quot;require ffmpeg&quot;</source>
+        <translation type="unfinished">مصغرات الفيديو &quot;تتطلب ffmpeg&quot;</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="106"/>
+        <source>Remove Thumbnail file if original file no exist :</source>
+        <translation type="unfinished">تنقية المصغرات من الملفات الغير متوفرة :</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="119"/>
+        <source>Clean</source>
+        <translation type="unfinished">تنقية المصغرات</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="130"/>
+        <source>Remove All Thumbnails in cache :</source>
+        <translation type="unfinished">حذف كل المصغرات من المخبأ :</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="143"/>
+        <source>Remove</source>
+        <translation type="unfinished">حذف</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.ui" line="58"/>
+        <source>Terminal</source>
+        <translation type="unfinished">الطرفية</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.cpp" line="56"/>
+        <source>Do you want to Clean thumbnails in cache?</source>
+        <translation type="unfinished">هل تريد تنقية المصغرات في المخبأ ؟</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.cpp" line="57"/>
+        <source>This operation remove thumbnail file if original path no exist.</source>
+        <translation type="unfinished">هذه العملية تقوم بحذف كل المصغرات في المخبأ اذا كان الملف الاصلي غير متوفر.</translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/settingsdlg.cpp" line="80"/>
+        <source>Do you want to Delete all thumbnails in cache?</source>
+        <translation type="unfinished">هل تريد حذف كل تامصغرات في المخبأ ؟</translation>
+    </message>
+</context>
+<context>
     <name>SymLinkDlg</name>
     <message>
         <location filename="../../../../../common/filesutils/symlinkdlg.ui" line="14"/>
@@ -1667,135 +1812,149 @@ height: %5</source>
 <context>
     <name>Tab</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="309"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="291"/>
         <source>Trash</source>
         <translation>سلة المحذوفات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="315"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="297"/>
         <source>root</source>
         <translation>الجذر</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="319"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="301"/>
         <source>Home</source>
         <translation>المنزل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="602"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="483"/>
         <source>Delete Files.</source>
         <translation>حذف الملفات.</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="603"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="484"/>
         <source>Do you want to delete all selected files?</source>
         <translation>هل تريد حذف جميع الملفات المحددة؟</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="788"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="675"/>
         <source>Move</source>
         <translation>نقل</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="789"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="676"/>
         <source>Copy</source>
         <translation>نسخ</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="793"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="680"/>
         <source>%1 Files.</source>
         <translation>%1 الملفات.</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="796"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="683"/>
         <source>Do you want to %1 all selected files.</source>
         <translation>هل تريد %1 جميع الملفات المحددة.</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="797"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/tab.cpp" line="684"/>
         <source>To %1 ?</source>
         <translation>الى %1 ?</translation>
     </message>
 </context>
 <context>
-    <name>TrashView</name>
+    <name>Trash</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="55"/>
-        <source>File</source>
-        <translation>ملف</translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="56"/>
-        <source>Origin path</source>
-        <translation>المسار الاصلي</translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="57"/>
-        <source>Deletion date</source>
-        <translation>تاريخ الحذف</translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="58"/>
-        <source>Deletion Time</source>
-        <translation>وقت الحذف</translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="59"/>
-        <source>Type</source>
-        <translation>النوع</translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="146"/>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="433"/>
-        <source>%1 file(s) found</source>
-        <translation>%1 ملف(ت) موجودة</translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="327"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/trash.cpp" line="64"/>
         <source>A file named %1 already exists.</source>
         <translation>ملف باسم  %1 موجود مسبقا.</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="334"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/trash.cpp" line="71"/>
         <source>restor to %1 failed 
  please check if the path exist</source>
         <translation>الاستعادة الى %1 لم تنجح 
 الرجاء التأكد من ان المسار موجود مسبقا</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="360"/>
-        <source>Empty trash</source>
-        <translation>افراغ سلة المحذوفات</translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="365"/>
-        <source>Delete</source>
-        <translation>حذف</translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="366"/>
-        <source>Restor</source>
-        <translation>استعادة</translation>
-    </message>
-    <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="388"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/trash.cpp" line="137"/>
         <source>File doesnt exists, cant move to trash</source>
         <translation>الملف غير موجود لا يمكن النقل الى المهملات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="412"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/trash.cpp" line="162"/>
         <source>move to trash failed</source>
         <translation>لم ينجح النقل الى المهملات</translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="414"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fm/trash.cpp" line="164"/>
         <source>move to trash succeced</source>
         <translation>ارسال الى سلة المحذوفات تم بنجاح</translation>
     </message>
+</context>
+<context>
+    <name>TrashView</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fm/trashview.cpp" line="441"/>
+        <source>File</source>
+        <translation type="vanished">ملف</translation>
+    </message>
+    <message>
+        <source>Origin path</source>
+        <translation type="vanished">المسار الاصلي</translation>
+    </message>
+    <message>
+        <source>Deletion date</source>
+        <translation type="vanished">تاريخ الحذف</translation>
+    </message>
+    <message>
+        <source>Deletion Time</source>
+        <translation type="vanished">وقت الحذف</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation type="vanished">النوع</translation>
+    </message>
+    <message>
+        <source>%1 file(s) found</source>
+        <translation type="vanished">%1 ملف(ت) موجودة</translation>
+    </message>
+    <message>
+        <source>A file named %1 already exists.</source>
+        <translation type="vanished">ملف باسم  %1 موجود مسبقا.</translation>
+    </message>
+    <message>
+        <source>restor to %1 failed 
+ please check if the path exist</source>
+        <translation type="vanished">الاستعادة الى %1 لم تنجح 
+الرجاء التأكد من ان المسار موجود مسبقا</translation>
+    </message>
+    <message>
+        <source>Empty trash</source>
+        <translation type="vanished">افراغ سلة المحذوفات</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="vanished">حذف</translation>
+    </message>
+    <message>
+        <source>Restor</source>
+        <translation type="vanished">استعادة</translation>
+    </message>
+    <message>
+        <source>File doesnt exists, cant move to trash</source>
+        <translation type="vanished">الملف غير موجود لا يمكن النقل الى المهملات</translation>
+    </message>
+    <message>
+        <source>move to trash failed</source>
+        <translation type="vanished">لم ينجح النقل الى المهملات</translation>
+    </message>
+    <message>
+        <source>move to trash succeced</source>
+        <translation type="vanished">ارسال الى سلة المحذوفات تم بنجاح</translation>
+    </message>
+    <message>
         <source>%1 file(s) selected</source>
-        <translation>%1 ملف(ت) محدد</translation>
+        <translation type="vanished">%1 ملف(ت) محدد</translation>
     </message>
 </context>
 <context>
@@ -1891,9 +2050,13 @@ height: %5</source>
         <translation type="unfinished">معلومات:</translation>
     </message>
     <message>
-        <location filename="../../../../../common/about/widgetabout.cpp" line="28"/>
         <source>Abou zakaria</source>
-        <translation type="unfinished">أبو زكريا</translation>
+        <translation type="obsolete">أبو زكريا</translation>
+    </message>
+    <message>
+        <location filename="../../../../../common/about/widgetabout.cpp" line="28"/>
+        <source>Abouzakaria</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../../../common/about/widgetabout.cpp" line="29"/>

@@ -51,6 +51,14 @@ class TrashView : public QTreeWidget
           //!
           void moveFilesToTrash(const QStringList &list);
 
+          //!
+          void deleteFiles(const QStringList &list);
+          //!
+          void restorFiles(const QStringList &list);
+
+          //!
+          void cleanTrash();
+
      private slots:
 
           //!

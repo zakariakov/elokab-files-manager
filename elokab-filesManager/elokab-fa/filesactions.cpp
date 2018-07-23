@@ -28,6 +28,7 @@
 #include <QDateTime>
 #include <QProcess>
 #include <QFontMetrics>
+#include <EDir>
 //______________________________________________________________________________________
 FilesActions::FilesActions(QObject *parent) :
      QObject(parent),
@@ -202,8 +203,7 @@ void FilesActions::pastFiles(const QStringList &files,const QString &distDir)
               }
 
 
-
-
+             // if this file > 10mb write bolk size
               if(info.size()<10000000){
                   progress->setCopyVisible(false);
                   QFile::copy(i.key(),destination);
@@ -599,7 +599,9 @@ bool FilesActions::trashExists()
 //______________________________________________________________________________________Trash
 void FilesActions::moveFilesToTrash(const QStringList &list)
 {
-     if(!trashExists())return;
+    TrashPathInfo = Edir::trashInfo();
+    TrashPathFiles = Edir::trashFiles();
+
      foreach (QString file, list) {
           moveFileToTrash(file);
      }

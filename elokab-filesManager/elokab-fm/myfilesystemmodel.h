@@ -12,6 +12,7 @@ public:
     explicit MyFileSystemModel(QObject *parent = 0);
 
     void setPreview(bool preview){mPreview=preview;}
+
     void clearCache(const QString &path);
 
 
@@ -32,6 +33,7 @@ public:
                           int row,
                           int column,
                           const QModelIndex & parent );
+        int columnCount(const QModelIndex &parent = QModelIndex()) const ;
 
     public slots:
 
@@ -43,6 +45,7 @@ public:
 
 
         bool mPreview;
+
     //  QHash<QString,QModelIndex> *hashIndex;
        //QHash< QModelIndex,Thumbnail* > *mThumbnails;
          QHash<QString,QString>*mimcach;

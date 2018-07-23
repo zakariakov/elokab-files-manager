@@ -76,17 +76,17 @@ Modified: %3
 <context>
     <name>FilesActions</name>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="57"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="58"/>
         <source>Remove Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="148"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="149"/>
         <source>Read only...cannot create file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="155"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="156"/>
         <source>Copy Files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,17 +101,17 @@ Modified: %3
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="615"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="617"/>
         <source>File doesnt exists, cant move to trash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="639"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="641"/>
         <source>move to trash failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="641"/>
+        <location filename="../../../../../elokab-filesManager/elokab-fa/filesactions.cpp" line="643"/>
         <source>move to trash succeced</source>
         <translation type="unfinished"></translation>
     </message>

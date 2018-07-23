@@ -40,7 +40,7 @@ SymLinkDlg::SymLinkDlg(const QString &path, QWidget *parent) :
 SymLinkDlg::~SymLinkDlg()
 {
      qDebug()<<"SymLinkDlg========================deleted"<<mPath;
-    delete ui;
+   delete ui;
 
 }
 
@@ -100,6 +100,7 @@ bool SymLinkDlg::creatLink()
          if(!QFile::link(fileName,mPath+"/"+newName))
              return false;
 
+      mPath=  file.fileName();
 
   return true;
 

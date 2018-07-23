@@ -79,10 +79,14 @@ TrashView::TrashView(QWidget *parent) :
                 }
             }
         }
+        TrashPath=Edir::trashDir();
         if( TrashPath.isEmpty() )
             qDebug()<< "Cant detect trash folder------------------------------------------------------" ;
-        TrashPathInfo = TrashPath + "/info";
-        TrashPathFiles = TrashPath + "/files";
+        TrashPathInfo = Edir::trashInfo();
+        TrashPathFiles = Edir::trashFiles();
+        qDebug()<<  "Trash files"<<TrashPathFiles ;
+        qDebug()<<  "Trash info"<<TrashPathInfo ;
+
         if( !QDir( TrashPathInfo ).exists() || !QDir( TrashPathFiles ).exists() )
             qDebug()<<  "Trash doesnt looks like FreeDesktop.org Trash specification----------------------" ;
         TrashFilesChanged = true;
@@ -184,6 +188,44 @@ void TrashView::directoryChanged(QString)
 /**************************************************************************************
  *
  **************************************************************************************/
+void TrashView::cleanTrash()
+{
+    qDebug()<<"trash clean"<<TrashPathFiles;
+    QDir dir(TrashPathFiles);
+    QStringList list=dir.entryList();
+    qDebug()<<"trash clean"<<list;
+    foreach (QString s, list) {
+
+        QFileInfo fi(TrashPathFiles+"/"+s);
+        if(fi.isDir())
+        {
+            QProcess prop;
+            prop.start(QString("rm -r \"%1\"").arg(fi.filePath()));
+            prop.waitForFinished();
+
+        }else{
+            QFile::remove(fi.filePath());
+
+        }
+    }
+
+    QDir dirInfo(TrashPathInfo);
+    QStringList listInfo=dirInfo.entryList();
+    foreach (QString s, listInfo) {
+        QFileInfo fi(TrashPathInfo+"/"+s);
+        if(fi.isDir())
+        {
+            QProcess prop;
+            prop.start(QString("rm -r \"%1\"").arg(fi.filePath()));
+            prop.waitForFinished();
+
+        }else{
+            QFile::remove(fi.filePath());
+
+        }
+    }
+
+}
 void TrashView::clearTrash()
 {
     //fsWatcher->blockSignals(true);
@@ -224,6 +266,31 @@ void TrashView::clearTrash()
     //fsWatcher->blockSignals(false);
     //  TrashFilesChanged=true;
     // updateTrashFiles();
+}
+//!
+void TrashView::deleteFiles(const QStringList &list)
+{
+    foreach (QString file, list) {
+        QFileInfo fi(file);
+        QString fileName=file;
+        QString infoname=TrashPathInfo+"/"+fi.fileName()+".trashinfo";
+        if(fi.isDir())
+        {
+            QProcess prop;
+            prop.start(QString("rm -r \"%1\"").arg(fileName));
+            qDebug()<<QString("rm -r \"%1\"").arg(fileName);
+            prop.waitForFinished();
+            if(!QFile::exists(fileName)){
+                QFile::remove(infoname);
+               }
+        }else{
+            if(QFile::remove(fileName))
+            {
+                QFile::remove(infoname);
+            }
+        }
+
+    }
 }
 
 /**************************************************************************************
@@ -274,6 +341,37 @@ void TrashView::deleteFile()
     //fsWatcher->blockSignals(false);
 
 }
+void TrashView::restorFiles(const QStringList &list)
+{
+    foreach (QString fileName, list) {
+
+        QFileInfo info(fileName);
+         QString infoname=TrashPathInfo+"/"+info.fileName()+".trashinfo";
+          QStringList list=readDesktopFile(infoname);
+          //TODO replace list to hash
+          if(list.count()<1)return;
+
+           QString origeFile=list.at(0);
+
+           if(QFile::exists(origeFile)){
+               QMessageBox::information(0,"error",tr("A file named %1 already exists.")
+                                        .arg(origeFile));
+
+           }else{
+               QDir dir;
+               if( !dir.rename(fileName, origeFile ) ){
+                   QFileInfo fi(origeFile);
+                   QString t=tr("restor to %1 failed \n please check if the path exist" ).arg(fi.absolutePath());
+                   QMessageBox::information(0,"error",t);
+
+               }else{
+                   QFile::remove(infoname);
+
+               }
+           }
+    }
+}
+
 /**************************************************************************************
  *
  **************************************************************************************/

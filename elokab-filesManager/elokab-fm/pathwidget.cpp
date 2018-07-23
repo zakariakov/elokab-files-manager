@@ -19,7 +19,7 @@
 
 #include "pathwidget.h"
 #include "ui_pathwidget.h"
-//#include <EIcon>
+#include "defines.h"
 #include <EMimIcon>
 #include <QDebug>
 #include <QDir>
@@ -120,7 +120,7 @@ void  PathWidget::resizeEvent(QResizeEvent */*event*/)
 void PathWidget::setUrl(const QString &url)
 {
 
-    if(url==":/search")
+    if(url==_SEARCH)
         return;
 
    ui->lineEdit->setText(url); QString txt;
@@ -198,7 +198,7 @@ void PathWidget::setupToolUrl(const QString &url)
     //    listmenus.clear();
     mToolBar->clear();
 
-    if(urlBtn==":/trash"){
+    if(urlBtn==_TRASH){
         QAction *act=mToolBar->addAction
                 (EIcon::fromTheme("user-trash","emptytrash"),tr("Trash"));
         QFont font;font.setBold(true);

@@ -176,6 +176,8 @@ static void setlocale(QString lc);
     static QString mimLang(const QString &mim);
     static QString createDescktopFile(const QString &exec);
     static QString defaultTerminal();
+   static bool findProgram(const QString &program);
+  static QMap<QString, QString> trachInfo(const QString &fileName);
 signals:
 
 

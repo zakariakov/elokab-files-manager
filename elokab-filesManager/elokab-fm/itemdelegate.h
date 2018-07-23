@@ -31,7 +31,7 @@ class ItemDelegate : public QStyledItemDelegate
 public:
 
     //!
-    explicit ItemDelegate();
+    explicit ItemDelegate(bool modern);
 
     //!
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
@@ -43,8 +43,9 @@ public:
 
 signals:
 
+    void requireThumb(QFileInfo,QString)const;
     //!
-   // void imageHasThumb(const QString &path)const;
+    // void imageHasThumb(const QString &path)const;
 
 public slots:
 
@@ -52,7 +53,16 @@ public slots:
     void setTreeView(bool arg){isTreeview=arg;}
 
     //!
+    void setClassicIcons(bool arg){isModernMode=!arg;}
+
+    //!
     void setTumbnail(bool thumb){mThumbnail=thumb;}
+
+    //!
+    void setPdfTumbnail(bool thumb){mPdfThumbnail=thumb;}
+
+    //!
+    void setVideoTumbnail(bool thumb){mVideoThumbnail=thumb;}
 
     //!
     void clearCurentPath(const QString &path);
@@ -67,28 +77,25 @@ private:
     void paintIconView(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     QIcon mSymlinkIcon;
-    QSize mItemSize;
     bool  mThumbnail;
-
+    bool  mPdfThumbnail;
+    bool  mVideoThumbnail;
     QMap<QString ,QIcon>  *imageCache ;
     QMap<QString ,QIcon>  *iconCache ;
-    QMap<QString ,QIcon>  *folderCache;
-    QMap<QString ,QIcon>  *deskCache;
+     QMap<QString ,QIcon>  *deskCache;
 
-    QStringList *listThumb;
-    QString thumbnail;
-bool isTreeview;
+    QString thumbnailCache;
+    bool    isTreeview;
+    bool    isModernMode;
     //!
     static QIcon::Mode iconModeFromState(QStyle::State state);
 
     //!
     QIcon decoration(const QModelIndex &index) const;
 
-    //!
-    void saveImageThumb(const QFileInfo &fi,const QString &fileThumbnail)const;
 
     //!
-    QIcon iconThumbnails(const QString &file)const;
+    QIcon iconThumbnails(const QString &file,const QString &type=QString())const;
 
 };
 

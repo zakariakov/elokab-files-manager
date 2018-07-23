@@ -5,11 +5,13 @@
 #include <QUrl>
 #include <QDebug>
 #include <QApplication>
-
+//#include <QTextCodec>
+//#include <QSettings>
 /*****************************************************************************************************
  *
  *
  *****************************************************************************************************/
+
 
 MyFileSystemModel::MyFileSystemModel(QObject *parent):
      QFileSystemModel(parent)
@@ -33,12 +35,12 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())  return QVariant();
 
 
-    if(index.column()==0 && role == Qt::ToolTipRole){
+    if(index.column()==_COL_NAME && role == Qt::ToolTipRole){
         return fileName(index);
     }// column 0
 
     //تحميل نوع الملف بالغة النظام
-    if(index.column()==2 && role == Qt::DisplayRole){
+    if(index.column()==_COL_TYPE && role == Qt::DisplayRole){
        return localeType(fileInfo(index));
 
     }// column 2
@@ -67,10 +69,17 @@ QVariant MyFileSystemModel::data(const QModelIndex &index, int role) const
 
         if(fileInfo(index).isDir())return QVariant();
         return EMimIcon::formatSize(size(index));
-    }// column 2
+    }
 
+    if(index.column()==_COL_TRASHED && role == Qt::DisplayRole){
+       return EMimIcon::trachInfo(filePath(index)).value("date");
+    }
 
+    if(index.column()==_COL_ORIGPATH && role == Qt::DisplayRole){
+        QString fp=EMimIcon::trachInfo(filePath(index)).value("path");
+       return QFileInfo(fp).path();
 
+    }
 
     return QFileSystemModel::data(index,role);
 
@@ -104,11 +113,12 @@ QVariant MyFileSystemModel::headerData(int section,
         if(role == Qt::DisplayRole)
             switch(section)
             {
-            case 0: return tr("Name");
-            case 1: return tr("Size");
-            case 2: return tr("Type");
-            case 3: return tr("Date Modified");
-
+            case _COL_NAME:     return tr("Name");
+            case _COL_SIZE:     return tr("Size");
+            case _COL_TYPE:     return tr("Type");
+            case _COL_DATE:     return tr("Date Modified");
+            case _COL_TRASHED:  return tr("Trashed On");
+            case _COL_ORIGPATH: return tr("Original Location");
             default: return QVariant();
             }
 
@@ -116,6 +126,14 @@ QVariant MyFileSystemModel::headerData(int section,
 
 }
 
+int MyFileSystemModel::columnCount(const QModelIndex &parent) const
+{
+    Q_UNUSED ( parent )
+
+        return 6;
+
+
+}
 //--------------------------------------------------------------
 bool MyFileSystemModel::dropMimeData(const QMimeData * data,
                                      Qt::DropAction action,
@@ -170,3 +188,5 @@ void MyFileSystemModel::clearCache(const QString &path)
         if(mimcach->contains(path)) mimcach->remove(file);
     }
 }
+
+

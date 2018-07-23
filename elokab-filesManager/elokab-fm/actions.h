@@ -75,20 +75,21 @@ public:
     QAction *configToolAction(){return actConfigTool;}
 
      //!
-    QAction *anewTabAction(){return actNewTab;}
+   // QAction *anewTabAction(){return actNewTab;}
 
      //!
     QAction *pasteAction(){return actPaste;}
 
      //!
-    QAction *openTerminalAction(const QString &path){
-        actOpenTerminal->setData(path);
-        return actOpenTerminal;}
+    QAction *openTerminalAction(){ return actOpenTerminal;}
 
      //!
-    QAction *openInNewTabAction(const QString &path){
-        actOpenInNewTab->setData(path);
-        return actOpenInNewTab;}
+    QAction *openInNewTabAction(){ return actOpenInNewTab;}
+
+
+
+    //!
+    QAction *showSettingsAction(){return actShowSettings;}
 
      //!
     QAction *copyAction(){return actCopy;}
@@ -115,19 +116,24 @@ public:
     QMenu *menuEdit(){return mMenuEdit;}
 
     //!
-    QMenu *menuViewfile(){return mMenuViewfile;}
+    QMenu *menuEditePopup(){return mMenuEditePopup;}
 
     //!
     QMenu *menuPanels(){return mMenuPanels;}
 
     //!
-    QMenu *menuSettings(){return mMenuSettings;}
+    QMenu *menuTrach(){return mMenuTrash;}
+
+    //!
+    //QMenu *menuSettings(){return mMenuSettings;}
+
 
     //!
     QMenu *menuOpenWith(const QString &url, const QString &type);
 
     //!
     void addClosedTab(const QString &url);
+
 
     QList<QAction *>listActions(){return QList<QAction *>()
                 <<mMenuGo->actions()
@@ -185,6 +191,9 @@ signals:
     //!
     void sendGoSearch();
 
+    //!
+    void sendShowSettings();
+
     /*!< رسالة ببداية تغيير الاسم */
     void startEdit();
 
@@ -225,11 +234,18 @@ signals:
     void zoomInChanged();
     void ZoomOutChanged();
 
+    void newFileCreated(const QString &);
+
+    void trashRestoreFiles();
+    void trashDeleteFile();
+    void trashClean();
+
 
 public slots:
     //!
     void setUrl(const QString &);
-
+    void setSelectedDir(const QString &path){m_selectedPath=path;}
+    void restorePath(){m_selectedPath=m_dirPath;}
 
 private:
 
@@ -247,6 +263,8 @@ private:
 
     //!
     QString m_dirPath;
+    //!
+    QString m_selectedPath;
 
     //!
     QString m_lC;
@@ -264,7 +282,7 @@ private:
     QActionGroup *alignViewMode ;
 
     //!
-    QMenu *mMenufile,*mMenuViewfile,*mMenuView,*mMenuEdit,*mMenuTools,*mMenuSettings;
+    QMenu *mMenufile,*mMenuEditePopup,*mMenuView,*mMenuEdit,*mMenuTools/*,*mMenuSettings*/;
 
     QMenu *mMenuGo,*mMenuNew,*mMenuPanels,*mMenuClosedTab,*mMenuFavorite,*menuOpenW,*mMenuService;
 
@@ -274,7 +292,7 @@ private:
     QAction *actCloseTab,*actDelete,*actMoveToTrash,*actRename,*actProperties ;
     QAction *actAddArchive,*actExtractHere,*actTerminal;
     //menuEdit
-    QAction* actCut ,*actSelectAll,*actFind,* actPaste,*actCopy;
+    QAction* actCut ,*actSelectAll,*actFind,* actPaste,*actCopy,*actShowSettings;
 
     //menu go
     QAction*actGoBack ,*actGoUp,*actGoForward, *actGoHome, *actTrash;
@@ -289,13 +307,16 @@ private:
     // menu tools
     QAction *actFilter  ;
 
+    // Trash
+    QAction *actTrash_Clean ,*actTrash_restore ,*actTrash_Delete   ;
+    QMenu *mMenuTrash;
    // menu settings
-    QAction *actShooseTerminal, *actConfirmDragDrop;
-   QAction *actSingleClick,*actExpandableFolder;
+  /* QAction *actShooseTerminal, *actConfirmDragDrop*/
+//   QAction *actSingleClick,*actExpandableFolder;
     // menu other
 
 
-    QAction *actNewTab,*actQuit,*actConfigTool;
+    QAction /**actNewTab,*/*actQuit,*actConfigTool;
     QAction *actOpenInNewTab ,*actOpenTerminal;
     QWidgetAction * actPathWidget;
 
@@ -311,8 +332,8 @@ private slots:
     void setupMenuTemplate();
 
 
-    //!
-    void openNewTab();
+//    //!
+//    void openNewTab();
 
     //!
     void openInNewTab();
@@ -342,7 +363,7 @@ private slots:
     void actionOpenwith();
 
     //!
-    void openTerminal();
+   // void openTerminal();
 
     //!
     void openInTerminal();
@@ -354,11 +375,11 @@ private slots:
     void toggleSortBy(QAction* act);
 
     //!
-    bool findProgram(const QString &program);
+   // bool findProgram(const QString &program);
 
 
     //!
-    void ShooseTerminal();
+   // void chooseTerminal();
 
     //!
     void archiveExtractHere();

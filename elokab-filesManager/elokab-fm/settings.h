@@ -87,6 +87,12 @@ class Settings : public QSettings
 
           void confirmDragDropChanged(bool);
 
+          void classicIconsChanged(bool);
+
+          void pdfThumbnailsChanged(bool);
+
+          void VideoThumbnailsChanged(bool);
+
      private:
 
 
@@ -141,9 +147,7 @@ class Settings : public QSettings
           bool showThumbnails(){return value("ShowThumbnails",false).toBool();}
           void setshowThumbnails(const bool &arg){  setValue("ShowThumbnails",arg);emit showThumbnailsChanged(arg);}
 
-          /*!< عرض  ايقونات بسيطة */
-          bool showStandardIcons(){return value("StandardIcons",false).toBool();}
-          void setshowStandardIcons(const bool &arg){  setValue("StandardIcons",arg);emit showStandardIconsChanged(arg);}
+
 
           /*!< عرص اخفاء الملفات المخفية */
           bool showHidden(){return value("ShowHidden",false).toBool();}
@@ -170,16 +174,26 @@ class Settings : public QSettings
           void setSingleclick(const bool &arg){setValue("Singleclick",arg);emit singleclickChanged();}
 
           /*!< اظهار خطوط الشجرة */
-          bool rootIsDecorated(){return value("RootIsDecorated",true).toBool();}
+          bool isRootDecorated(){return value("RootIsDecorated",true).toBool();}
           void setRootIsDecorated(const bool &arg){setValue("RootIsDecorated",arg);emit rootDecorationChanged(arg);}
 
           /*!< رسالة الاعلام عند سحب الملفات */
-          bool confirmDragDrop(){return value("ConfirmDragDrop",true).toBool();}
+          bool isConfirmDragDrop(){return value("ConfirmDragDrop",true).toBool();}
           void setConfirmDragDrop(const bool &arg){setValue("ConfirmDragDrop",arg);emit confirmDragDropChanged(arg);}
 
+            /*!< عرض  ايقونات بسيطة */
+          bool isClassicIcons(){return value("ClassicIcons",false).toBool();}
+          void setClassicIcons(const bool &arg){setValue("ClassicIcons",arg);emit classicIconsChanged(arg);}
+
+          /*!< عرض مصغرات ملفات pdf */
+          bool pdfThumbnails(){return value("PdfThumbnails",false).toBool();}
+          void setPdfThumbnails(const bool &arg){setValue("PdfThumbnails",arg);emit pdfThumbnailsChanged(arg);}
+
+            /*!< عرض مصغرات الفيديو */
+          bool videoThumbnails(){return value("VideoThumbnails",false).toBool();}
+          void setVideoThumbnails(const bool &arg){setValue("VideoThumbnails",arg);emit VideoThumbnailsChanged(arg);}
 
      private slots:
-
 
 
 };

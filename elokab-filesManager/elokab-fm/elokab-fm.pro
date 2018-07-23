@@ -36,11 +36,11 @@ SOURCES += \
     pathwidget.cpp \
     pagewidget.cpp \
     actions.cpp \
-    iconprovider.cpp \
+#    iconprovider.cpp \
     placetree.cpp \
     filterbar.cpp \
 #    mycomputer.cpp \
-    trashview.cpp \
+#    trashview.cpp \
     mylistview.cpp \
     mytreeview.cpp \
     fileinformation.cpp \
@@ -54,7 +54,10 @@ SOURCES += \
     udiskdevice.cpp \
     itemdelegate.cpp \
     messages.cpp \
-    myfilesystemmodel.cpp
+    myfilesystemmodel.cpp \
+    settingsdlg.cpp \
+    trash.cpp \
+    thumbnails.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -62,11 +65,11 @@ HEADERS  += \
     pathwidget.h \
     pagewidget.h \
     actions.h \
-    iconprovider.h \
+#    iconprovider.h \
     placetree.h \
     filterbar.h \
 #    mycomputer.h \
-    trashview.h \
+#   trashview.h \
     mylistview.h \
     mytreeview.h \
     settings.h \
@@ -82,7 +85,10 @@ HEADERS  += \
     udiskdevice.h \
     itemdelegate.h \
     defines.h \
-    myfilesystemmodel.h
+    myfilesystemmodel.h \
+    settingsdlg.h \
+    trash.h \
+    thumbnails.h
 
 FORMS    += mainwindow.ui \
     pathwidget.ui \
@@ -94,7 +100,8 @@ FORMS    += mainwindow.ui \
     ../../common/filesutils/openwithdlg.ui \
     ../../common/about/widgetabout.ui \
     ../../common/filesutils/symlinkdlg.ui \
-    ../../common/filesutils/dialogxdesktop.ui
+    ../../common/filesutils/dialogxdesktop.ui \
+    settingsdlg.ui
 
 RESOURCES += \
     icons.qrc

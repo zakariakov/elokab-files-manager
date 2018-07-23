@@ -46,10 +46,10 @@ QIcon MyIconProvider::icon(const QFileInfo &info)const
 
     return QFileIconProvider::icon(info);
 }
+
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
-
 MainWindow::MainWindow( QString pathUrl,QWidget *parent) :
      QMainWindow(parent),
      ui(new Ui::MainWindow)/*,m_fileWatcher(0)*/
@@ -113,7 +113,7 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
     ui->menuBar->addMenu(mActions->menuEdit());
     ui->menuBar->addMenu(mActions->menuGo());
     ui->menuBar->addMenu(mActions->menuTools());
-    ui->menuBar->addMenu(mActions->menuSettings());
+   // ui->menuBar->addMenu(mActions->menuSettings());
     QMenu *menuHelp=new QMenu(tr("Help"));
     ui->menuBar->addMenu(menuHelp);
     menuHelp->addAction(EIcon::fromTheme("help-about","help-about"),tr("&About"),this,SLOT(showAboutThis()));
@@ -190,6 +190,7 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
     connect(mSettings,SIGNAL(showMenuBarChanged(bool)),ui->menuBar,SLOT(setVisible(bool)));
     connect(mSettings,SIGNAL(showToolbarChanged(bool)),ui->mainToolBar,SLOT(setVisible(bool)));
     connect(mSettings,SIGNAL(singleclickChanged()),this,SLOT(changeSingleClick()));
+    connect(mActions,SIGNAL(sendShowSettings()),this,SLOT(showSettings()));
 
 
 
@@ -219,10 +220,6 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
 //     setUrl(pathUrl);
   Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 
-//ui->widgetPlace->setGeometry(0,0,150,150);
-
-
-
 }
 
 /**************************************************************************************
@@ -230,16 +227,10 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
  **************************************************************************************/
 void MainWindow::changeSingleClick()
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::MainWindow()");
-#endif
 
   mTab->   setStyleSheet( QString("QAbstractItemView {activate-on-singleclick : %1; }")
                     .arg(mSettings->isSingleclick()));
 
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::MainWindow()");
-#endif
 }
 
 /**************************************************************************************
@@ -263,38 +254,9 @@ MainWindow::~MainWindow()
     QSettings settings(QApplication::organizationName(),QApplication::applicationName());
     settings.beginGroup("Window");
     settings.setValue("geometry", saveGeometry());
-
     settings.setValue("splitterSizes", ui->splitter->saveState());
-
     settings.endGroup();
 
-//         QString homeThambnail=Edir::cachDir()+"/thumbnails";
-//         QDir dir(homeThambnail);
-//         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-//         foreach (QString subfile, dir.entryList(QDir::Files|QDir::NoDotAndDotDot))
-//         {
-//             QByteArray encodedString =QByteArray::fromHex(subfile.toUtf8());
-
-//             QString string = codec->toUnicode(encodedString);
-//             QFile file(string);
-//             if(!file.exists()){
-//                QFile::remove(homeThambnail+"/"+subfile);
-//              //  qDebug()<<subfile<<"noexist";
-//             }
-//         }
-     QString homeThumbnails=Edir::cachDir()+"/thumbnails";
-         QSettings setting(QApplication::organizationName(),"thumbnails");
-         foreach (QString s, setting.allKeys()) {
-         //    qDebug()<<"setting"<<"/"+s;
-             if(!QFile::exists("/"+s)){
-
-                qDebug()<<s;
-                qDebug()<<setting.value(s);
-
-                QFile::remove(homeThumbnails+"/"+setting.value(s).toString());
-                 setting.remove(s);
-             }
-         }
     //mIconProvider->saveCacheIcons();
     blockSignals(true);
     pathWidget->blockSignals(true);
@@ -302,9 +264,7 @@ MainWindow::~MainWindow()
     myModel->blockSignals(true);
     placesTree->blockSignals(true);
     mSettings->blockSignals(true);
-
     mActions->blockSignals(true);
-
     filterBar->blockSignals(true);
 
     delete pathWidget;
@@ -326,9 +286,6 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
  **************************************************************************************/
 void MainWindow::toolCustomContextMenu(QPoint)
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"MainWindow::toolCustomContextMenu()");
-#endif
 
      QMenu menu;
      menu.addActions(mActions->menuPanels()->actions());
@@ -336,9 +293,6 @@ void MainWindow::toolCustomContextMenu(QPoint)
      menu.addAction(mActions->configToolAction());
      menu.exec(QCursor::pos());
 
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"MainWindow::toolCustomContextMenu()");
-#endif
 }
 
 /**************************************************************************************
@@ -586,12 +540,32 @@ void MainWindow::refreshIcons()
     placesTree->refreshIcons();
 //    mActions->refreshIcons();
 }
+/**************************************************************************************
+ *
+ **************************************************************************************/
+void MainWindow::showSettings()
+{
+     SettingsDlg *mSettingsDlg=new SettingsDlg(mSettings);
+     if(mSettingsDlg->exec()==QDialog::Accepted){
+         mSettings->setSingleclick(mSettingsDlg->isSingleclick());
+         mSettings->setConfirmDragDrop(mSettingsDlg->isConfirmDragDrop());
+         mSettings->setRootIsDecorated(mSettingsDlg->isRootDecorated());
+         mSettings->setClassicIcons(mSettingsDlg->isClassicIcons());
+         mSettings->setTerminal(mSettingsDlg->terminal());
+         mSettings->setPdfThumbnails(mSettingsDlg->pdfThumbNails());
+         mSettings->setVideoThumbnails(mSettingsDlg->videoThumbNails());
+     }
+
+         delete mSettingsDlg;
+
+}
 
 /**************************************************************************************
  *
  **************************************************************************************/
 void MainWindow::showAboutThis()
 {
+
     QDialog *dlg=new QDialog;
 
     WidgetAbout *wid=new WidgetAbout(dlg);
@@ -609,6 +583,7 @@ void MainWindow::showAboutThis()
     dlg->exec();
     delete wid;
     delete dlg;
+
 }
 
 /**************************************************************************************
@@ -616,5 +591,5 @@ void MainWindow::showAboutThis()
  **************************************************************************************/
 void MainWindow::showHelp()
 {
- EMimIcon::launchApp("https://sourceforge.net/project/elokab/");
+     EMimIcon::launchApp("https://sourceforge.net/project/elokab/");
 }

@@ -32,6 +32,24 @@
 #include <QDebug>
 #include <QApplication>
 
+//class Worker : public QObject {
+//    Q_OBJECT
+
+//public:
+//    Worker(const QFileInfo &info);
+//    ~Worker();
+
+//public slots:
+//    void process();
+
+//signals:
+//    void finished();
+//    void error();
+
+//private:
+//    // add your variables here
+//    QFileInfo fi;
+//};
 /**
  * @brief The Tab class السنة البرنامج
  */
@@ -76,12 +94,6 @@ void  tabAdded(const QString &url);
 
      private slots:
 
-          //!
-          void createThumbnail(const QString &dir);
-          void saveImageThumb(const QFileInfo &fi) ;
-          //void dataFileChanged(const QString &dir);
-//void loadIcons(const QString &currentPath);
-//void iconUpdate(QModelIndex index);
           //!
          // void setLargeDirectory(const QString &dir);
 

@@ -46,6 +46,7 @@ public:
          */
         explicit DialogXdesktop(const QString &path, QWidget *parent = 0);
         ~DialogXdesktop();
+    QString fileName(){return m_path;}
         
 private:
         Ui::DialogXdesktop *ui;

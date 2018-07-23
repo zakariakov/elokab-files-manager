@@ -46,6 +46,8 @@
 #include <QStandardPaths>
 #include <QApplication>
 #include <QMessageAuthenticationCode>
+#include <QMessageBox>
+
 Q_GLOBAL_STATIC(EMimIcon, EMimIconInstance)
 EMimIcon *EMimIcon::instance()
 {
@@ -393,7 +395,11 @@ QIcon EMimIcon::iconDesktopFile(const QString &f)
 
     QHash<QString ,QVariant> hash=desktopFile(f);
    // QString iconXdg=hash["Icon"];
-    return EIcon::fromTheme(hash.value("Icon").toString(),"application-x-desktop");
+    QString icon=hash.value("Icon").toString();
+    if(icon.isEmpty() )
+      return  EIcon::fromTheme("application-x-desktop");
+
+    return EIcon::fromTheme(icon,"application-x-desktop");
 }
 
 //______________________________________________________________________________________
@@ -418,7 +424,9 @@ QIcon EMimIcon::iconByMimType(const QString &mim,const QString &f)
 
           }
      }
+
      return EIcon::fromTheme(icon,"unknown");
+
 }
 
 //______________________________________________________________________________________
@@ -730,6 +738,7 @@ qDebug()<<fileName;
     //     if(info.isExecutable()){
     if(mimetype=="application/x-executable"){
         //            cde ffor text/x-shellscript
+        qDebug()<<"lanchapp"<<"application/x-executable";
 
         process.startDetached("\""+fileName+"\"");
 
@@ -737,14 +746,56 @@ qDebug()<<fileName;
     }
 
     /*------------------------------------File-------------------------------------------*/
-    if(info.isFile()){
-        if(info.isExecutable()){
-            process.setWorkingDirectory(info.path());
-            QDir::setCurrent(info.path());
-            QString proc=replaceArgument(fileName);
-            if(process.startDetached(proc)==true)
-                return true;
+    if(info.isFile() && info.isExecutable()){
+        if( mimetype.startsWith("text") || mimetype.contains("application/x-shellscript"))
+               {
+            qDebug()<<"lanchapp"<<info.isExecutable()<<mimetype.startsWith("text");
+            QMessageBox msgBox;
+             msgBox.setText("The document has been modified.");
+           //  msgBox.setInformativeText("Do you want to save your changes?");
+             msgBox.setStandardButtons(QMessageBox::Cancel );
+             msgBox.setDefaultButton(QMessageBox::Cancel);
+             QPushButton *execButton = msgBox.addButton(QObject::tr("Execute"), QMessageBox::ActionRole);
+             QPushButton *execTerminalButton = msgBox.addButton(QObject::tr("Execute in terminal"), QMessageBox::ActionRole);
+             QPushButton *editButton = msgBox.addButton(QObject::tr("Edit"), QMessageBox::ActionRole);
+
+
+             msgBox.exec();
+
+              if (msgBox.clickedButton() == execButton) {
+                  process.setWorkingDirectory(info.path());
+                  QDir::setCurrent(info.path());
+                  QString proc=replaceArgument(fileName);
+                  if(process.startDetached(proc)==true)
+                      return true;
+
+              } else if (msgBox.clickedButton() == execTerminalButton) {
+                    qDebug()<<"lanchapp"<<"execTerminalButton";
+                  QString proc=replaceArgument(fileName);
+                 QString terminal=defaultTerminal();
+                 QStringList list;
+                 list<<"-e"<<proc;
+
+                   process.setWorkingDirectory(info.path());
+                   QDir::setCurrent(info.path());
+
+                   if(process.startDetached(terminal,list,info.path())==true)
+                       return true;
+
+              } else if (msgBox.clickedButton() == editButton) {
+                    qDebug()<<"lanchapp"<<"abortButton";
+
+              } else{
+                   qDebug()<<"lanchapp"<<"Cancel";
+                  return true;
+              }
+
+
+
         }
+ }
+
+    if(info.isFile()){
         QStringList list=associatedApplication(mimetype);
 
         if(list.count()>0){  /*  has associatedApplication*/
@@ -1061,6 +1112,7 @@ void EMimIcon::AddMimeAssociatedApplication(const QString &mimType,const QString
      settings.setValue(mimType,list);
 
      settings.endGroup();
+
 }
 
 //______________________________________________________________________________________
@@ -1185,13 +1237,13 @@ QString EMimIcon::defaultTerminal()
     QByteArray sS=qgetenv("DESKTOP_SESSION");
     qDebug()<<"envirenment"<<sS;
     QString terminal;
-//    if(sS=="elokab-session"){
-//        QSettings setting(QApplication::organizationName(),"elokabsettings");
-//        setting.beginGroup("Terminal");
-//        terminal=  setting.value("Default","xterm").toString();
-//        setting.endGroup();
-//        return terminal;
-//    }
+
+    QSettings setting(QApplication::organizationName(),QApplication::applicationName());
+    setting.beginGroup("Main");
+    terminal=setting.value("Terminal").toString();
+    setting.endGroup();
+    if(findProgram(terminal))
+        return terminal;
 
     //search in enverenment
     if(sS=="xfce")
@@ -1215,9 +1267,9 @@ QString EMimIcon::defaultTerminal()
         QStringList list;
         list<<"elokab-terminal"<<"gnome-terminal"<<"konsole"<<"termite"
            <<"deepin-terminal"<<"terminology"<<"xfce4-terminal"
-           << "lxterminal"<<"qterminal"<<"mate-terminal"<<"pantheon-terminal"
-           <<"terminator"<<"theterminal"<<"aterm"
-           <<"urxvt"<<"eterm"<<"mlterm"<<" tilda";
+          << "lxterminal"<<"qterminal"<<"mate-terminal"<<"pantheon-terminal"
+          <<"terminator"<<"theterminal"<<"aterm"
+         <<"urxvt"<<"eterm"<<"mlterm"<<" tilda";
 
         QStringList dirs = QString(getenv("PATH")).split(":");
 
@@ -1233,7 +1285,9 @@ QString EMimIcon::defaultTerminal()
             if(!terminal.isEmpty())break;
         }
     }
-    if(terminal.isEmpty())
+
+    if(findProgram(terminal))
+        return terminal;
         terminal="xterm";
 
     qDebug()<<"defaultTerminal"<<terminal;
@@ -1241,3 +1295,54 @@ QString EMimIcon::defaultTerminal()
 
 }
 
+/*********************************************************************
+ *
+ *********************************************************************/
+bool EMimIcon::findProgram(const QString &program)
+{
+
+    if(program.isEmpty()) return false;
+
+     QFileInfo fi(program);
+     if (fi.isExecutable())
+          return true;
+
+     QString path = qgetenv("PATH");
+     foreach(QString dir, path.split(":"))
+     {
+          QFileInfo fi= QFileInfo(dir + QDir::separator() + program);
+          //  qDebug()<<fi.filePath();
+
+          if (fi.isExecutable() )
+               return true;
+     }
+     return false;
+}
+
+QMap<QString, QString> EMimIcon::trachInfo(const QString &fileName)
+{
+
+    QFileInfo info(fileName);
+    QString name=  info.fileName();
+    QString infoname=Edir::trashInfo()+"/"+name+".trashinfo";
+
+
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+
+    QSettings setting(infoname,QSettings::IniFormat);
+    setting.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    setting.beginGroup("Trash Info");
+    QString path=setting.value("Path","").toString();
+    QString dat=setting.value("DeletionDate","").toString();
+    setting.endGroup();
+
+    QByteArray encodedString =QByteArray::fromPercentEncoding(path.toUtf8());
+
+    QString string = codec->toUnicode(encodedString);
+    QMap <QString,QString>map;
+    map["path"]=string;
+    map["date"]=dat;
+
+    return map;
+
+}

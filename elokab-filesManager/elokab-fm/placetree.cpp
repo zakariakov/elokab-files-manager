@@ -19,6 +19,8 @@
 
 #include "placetree.h"
 #include "messages.h"
+#include "defines.h"
+
 #include <EMimIcon>
 #include "filesutils/propertiesdlg.h"
 //#include <EIcon>
@@ -194,9 +196,9 @@ void PlaceTree::chargeFoldersPlaces()
     //TRASH
     itemTrashFolder=new QTreeWidgetItem(mPlacesItem);
     itemTrashFolder->setText(0,tr("Trash"));
-    itemTrashFolder->setData(0,Qt::ToolTipRole,":/trash");
+    itemTrashFolder->setData(0,Qt::ToolTipRole,_TRASH);
     itemTrashFolder->setIcon(0,EIcon::fromTheme("user-trash","emptytrash"));
-    mHashItems[":/trash"]=itemTrashFolder;
+    mHashItems[_TRASH]=itemTrashFolder;
     //--------------------------------------------------------------------------------------
     QSettings setting(QApplication::organizationName(),QApplication::applicationName());
 
@@ -447,7 +449,7 @@ void PlaceTree::itemPlacesClicked(QTreeWidgetItem* item,int)
                mHashItems[url]=item;
      }
 
-      if(QFile::exists(url)||url==":/trash")
+      if(QFile::exists(url)||url==_TRASH)
           emit urlPlacesChanged(url);
 
 }

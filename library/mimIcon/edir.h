@@ -63,6 +63,12 @@ public:
     //!
     static QString picturesDir();
 
+    //!
+    static QString trashDir();
+    //!
+    static QString trashFiles();
+    //!
+    static QString trashInfo();
 };
 
 #endif // EDIR_H

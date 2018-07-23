@@ -63,13 +63,13 @@ class FileInformation : public QWidget
           QString getDirSize(const QString &path);
 
           //!
-          void setDirInformation(const QFileInfo &fi);
+         // void setDirInformation(const QFileInfo &fi);
 
           //!
           void setFileInformation(const QFileInfo &fi);
 
           //!
-          void setImageInformation(const QFileInfo &fi,const QString &mim);
+         // void setImageInformation(const QFileInfo &fi,const QString &mim);
 
 };
 

@@ -16,6 +16,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+
 #include "defines.h"
 #include "itemdelegate.h"
 #include <EMimIcon>
@@ -29,13 +30,14 @@
 #include <QDir>
 #include <QStandardPaths>
 #include <QBuffer>
+#include <QDir>
 #include <QImageWriter>
 #include <QImageReader>
 #include <QtConcurrent>
 #include <QMessageAuthenticationCode>
 
 //____________________________________________________________________
-ItemDelegate::ItemDelegate()
+ItemDelegate::ItemDelegate(bool modern):isTreeview(false),isModernMode(modern)
 {
 
     mSymlinkIcon=EIcon::fromTheme("emblem-symbolic-link");
@@ -44,13 +46,13 @@ ItemDelegate::ItemDelegate()
     imageCache  =new QMap<QString ,QIcon>  ;
 
     iconCache   =new QMap<QString ,QIcon>  ;
-    folderCache =new QMap<QString ,QIcon>  ;
+
     deskCache   =new QMap<QString ,QIcon>  ;
-    listThumb =new QStringList;
-    thumbnail=Edir::thumbnaileCachDir();
 
-isTreeview=false;
+    thumbnailCache=Edir::thumbnaileCachDir();
 
+//isTreeview=false;
+//isModernMode=true;
 }
 
 
@@ -105,92 +107,49 @@ int lineNumber(QString txt,const QStyleOptionViewItem &option,int _w)
 
 }
 
-//TODO RMOVE THIS
-void ItemDelegate::saveImageThumb(const QFileInfo &fi,const QString &fileThumbnail) const
+
+QIcon ItemDelegate::iconThumbnails(const QString &file, const QString &type) const
 {
-//qDebug()<<"creatthumb"<<fi.filePath();
+     QFileInfo fi(file);
+    if(fi.path()==thumbnailCache)return QIcon();
 
-    QImage image;
-   if( image.load(fi.filePath()))
-   {
+    QMessageAuthenticationCode code(QCryptographicHash::Md5);
+    code.addData(file.toLatin1());
+    QString md5Name=code.result().toHex();
+    QString fileThumbnail=thumbnailCache+"/"+md5Name;
 
-    image.setText("DATETIME",fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
-    image= image.scaled(QSize(128,128),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-    image.setText("DATETIME",fi.lastModified().toString("dd MM yyyy hh:mm:ss"));
-    QByteArray format="jpg";
-    if(image.hasAlphaChannel())
-        format="png";
-
-    if(image.save(fileThumbnail,format,50))   {
-//        QSettings setting("elokab","thumbnails");
-//        setting.setValue(fi.filePath(),QFileInfo(fileThumbnail).fileName());
-        qApp->processEvents();
-        //TODO RMOVE THIS imageHasThumb
-       // emit imageHasThumb(fi.filePath());
-        listThumb->removeAll(fi.filePath());
-    }
-
-   }
-}
-
-QIcon ItemDelegate::iconThumbnails(const QString &file) const
-{
-
-    QFileInfo fi(file);
-
-
-
-        QMessageAuthenticationCode code(QCryptographicHash::Md5);
-        code.addData(file.toLatin1());
-
-  //  qDebug()<<code.result().toHex();
-    QString fileThumbnail=thumbnail+"/"+code.result().toHex();
-   // QString fileThumbnail=thumbnail+"/"+file.toHex();
-   //    if(fileThumbnail.length()>255)
-  //      fileThumbnail=  fileThumbnail.left(255);
-
-
-    QImage image;
     bool hasThumb=false;
     bool hasImage=false;
     QString fileIcon;
-    // if this Thumbnail file exist and canread
-    if(QFile::exists(fileThumbnail)){
 
+    // ---------------------- if Thumbnail file exist -----------------------
+    if(QFile::exists(fileThumbnail)){
         QImageReader reader(fileThumbnail);
         if(reader.canRead()){
-            QString fModified=reader.text("DATETIME");
+            QString fModified=reader.text(_KEY_DATETIME);
             if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss")){
-                // hasImage=  image.load(fileThumbnail);
                 hasImage=true;
                 hasThumb=true;
                 fileIcon=fileThumbnail;
-            }
-        }
+            }else{ QFile::remove(fileThumbnail); }
+
+        }else{ QFile::remove(fileThumbnail); }
     }
 
-    // write this Thumbnail file if canread this orig file
+    // ----------------if no thumbnail file and size < 128--------------------
     if(!hasThumb){
         QImageReader reader(file);
         if(reader.canRead()){
             if(qMax(reader.size().width(),reader.size().height())<=128){
-               // hasImage=   image.load((file));
+                // hasImage=   image.load((file));
                 hasImage=true;
                 fileIcon=file;
-            }else{
-               // if(fi.absolutePath()!=thumbnail){
-                    if(!listThumb->contains(fi.filePath())) {
-                       // listThumb->append(fi.filePath());
-
-//                        QFuture<void> f1 =QtConcurrent::run(this, &ItemDelegate::saveImageThumb,fi,fileThumbnail);
-//                              f1.waitForFinished();
-
-                        //QtConcurrent::run(this, &ItemDelegate::saveImageThumb,fi,fileThumbnail);
-                    }
-               // }
             }
         }
     }
+
+    //-------------if no thumbnail and image size > 128-------------------
+    if(!hasThumb && ! hasImage )  emit requireThumb(fi,type);
 
 
     if(hasImage && !fileIcon.isEmpty()){
@@ -208,81 +167,81 @@ QIcon ItemDelegate::decoration(const QModelIndex &index)const
     QString filePath=index.data(_MFPATH).toString();
     QFileInfo info(filePath);
     bool isSym=false;
-//    if(!QFile::exists(filePath))
-//        return QIcon();
 
-//    if( info.fileName()=="." || info.fileName()==".." )
-//        return QIcon();
-
+    //---------------------------------------SYMLINK
     if(info.isSymLink()){
-     //  qDebug()<<"isSymLink"<<filePath<<info.symLinkTarget();
+        //  qDebug()<<"isSymLink"<<filePath<<info.symLinkTarget();
         if(QFile::exists(info.symLinkTarget())){
             filePath=info.symLinkTarget();
             info.setFile(filePath);
             isSym=true;
 
         }else{
-          //  qDebug()<<"symLinkTarget"<<filePath;
             return  EIcon::fromTheme("inode-symlink","application-x-zerosize");
-
         }
-
     }
 
     QIcon retIcon;
 
-    if(info.isDir())
-    {
-        return EMimIcon::iconFolder(filePath);
+    //--------------------------------------- DIRECTORY
+    if(info.isDir()) { return EMimIcon::iconFolder(filePath); }
 
-    }
     //---------------------------------------
     QString mim;
-    if(isSym)
-        mim= EMimIcon::mimeTyppe(info);
-    else
-        mim= index.data(_MMIM).toString();
+    if(isSym)  mim= EMimIcon::mimeTyppe(info);
+    else  mim= index.data(_MMIM).toString();
 
-    //---------------------------------------
-
-    QString suf=info.suffix().toLower();
-    if(suf=="desktop" || mim=="application-x-desktop"){
-        if(deskCache->contains(filePath))
-            return deskCache->value(filePath);
+    //---------------------------------------X-DESKTOP
+    if( mim=="application/x-desktop"){
+        if(deskCache->contains(filePath)) return deskCache->value(filePath);
 
         retIcon=  EMimIcon::iconDesktopFile(filePath).pixmap(128).scaled(128,128);
-        if(!retIcon.isNull())
-            deskCache->insert(filePath,retIcon);
+
+        if(!retIcon.isNull())  deskCache->insert(filePath,retIcon);
 
         return retIcon;
     }
 
-
-    if(mThumbnail && mim.startsWith("image"))
+    //---------------------------------------THUMBNAILS
+    if(mThumbnail)
     {
+        //--------------------------------------- IMAGES TYPE
+        if( mim.startsWith(_IMAGE_TYPE) )
+        {
+            if(imageCache->contains(filePath)) return imageCache->value(filePath);
+            if( QImageReader::supportedMimeTypes().contains(mim.toLatin1()))
+               { retIcon=iconThumbnails(filePath,_IMAGE_TYPE); }
+        }// image
 
-        if(imageCache->contains(filePath))
-            return imageCache->value(filePath);
+        //--------------------------------------- PDF TYPE
+        else if( mPdfThumbnail && mim.endsWith(_PDF_TYPE) )
+        {
+            if(imageCache->contains(filePath)) return imageCache->value(filePath);
+            retIcon=iconThumbnails(filePath,_PDF_TYPE);        
+        }// pdf
 
-        if( QImageReader::supportedMimeTypes().contains(mim.toLatin1())){
-            retIcon=iconThumbnails(filePath);
-            if(!retIcon.isNull()){
-                imageCache->insert(filePath,retIcon);
-                return retIcon;
-            }
+        //--------------------------------------- VIDEO TYPE
+        else if(mVideoThumbnail && mim.startsWith(_VIDEO_TYPE) )
+        {
+            if(imageCache->contains(filePath)) return imageCache->value(filePath);
+            retIcon=iconThumbnails(filePath,_VIDEO_TYPE);   
+        }// video
+
+        //--------------------------------------- CACHE
+        if(!retIcon.isNull()){
+            imageCache->insert(filePath,retIcon);
+            return retIcon;
         }
-    }
+    }// mThumbnail
 
+    //--------------------------------------- OTHER TYPE
     if(iconCache->contains(mim))
         return iconCache->value(mim);
 
     retIcon=EMimIcon::iconByMimType(mim,filePath);
 
     // ---------------iconCach---------------------
-    if(!retIcon.isNull()){
-        iconCache->insert(mim,retIcon);
-        return retIcon;
-    }
+    if(!retIcon.isNull()){ iconCache->insert(mim,retIcon); return retIcon; }
 
     return QIcon::fromTheme("unknon");
 
@@ -299,13 +258,11 @@ void ItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, 
        //اذا لم لم يكن العنصر يحمل ايقونة
     //سيتم حمل الاعدادات الافتراضية
     if(index.column()!=0){
-
         QStyledItemDelegate::paint(painter,option,index);
         return;
-
      }
 
-       //منظور الايقونات (ICON view)---------------------
+       //منظور الايقونات (ICON view)-----------------------------------------------
     if(option.decorationPosition == QStyleOptionViewItem::Top ||
             option.decorationPosition == QStyleOptionViewItem::Bottom) {
 
@@ -324,7 +281,6 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
 
     QSize itemSize=QSize(option.rect.width(),option.rect.height());
 
-
     // المتغيرات--------------------------------------
     QTextOption textOption;
     QString txt=index.data(Qt::EditRole).toString();
@@ -338,7 +294,6 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
 
     QPixmap pixmap = ico.pixmap(option.decorationSize,iconModeFromState(option.state));
 
-
         //  painter->save();
         painter->setClipRect(option.rect);
 
@@ -351,11 +306,20 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
         // in case the pixmap is smaller than the requested size
         QSize margin = ((option.decorationSize - pixmap.size()) / 2).expandedTo(QSize(0, 0));
 
-        ///رسم الايقونة والنص كاملا عند التحدبد
-        //draw selected item area
-        //        if((opt.state & QStyle::State_Selected) ) {
-        //            painter->fillRect(opt.rect, opt.palette.highlight());
-        //        }
+
+         //----------------  ModernMode  --------------------------
+        //draw RoundedRect if isModernMode in item area
+        if(isModernMode){
+            QRect rectborder=option.rect;
+            rectborder.adjust(0,0,-1,-1);
+            painter->setOpacity(0.3);
+            painter->setPen(option.palette.highlight().color());
+            painter->drawRoundedRect(rectborder,qreal(2.0),qreal(2.0));
+            if(option.state & QStyle::State_Selected)
+               painter->fillRect(rectborder,option.palette.highlight());
+            painter->setOpacity(1.0);
+        }
+         //------------------------------------------------------------
 
         //رسم ايقونة مخفية
         if(fn.isHidden())
@@ -375,7 +339,6 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
                         itemSize.height() - option.decorationSize.height());
 
 
-
         textOption.setAlignment(Qt::AlignHCenter);
 
         //رسم التحديد على مربع النص
@@ -388,60 +351,26 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
         else
             painter->setPen(option.palette.color( QPalette::Text));
 
-        painter->setOpacity(1.0);
+
         //qDebug()<<"draw"<<txt<<textRect.height();
-        textRect.adjust(0,_MARGINS+fm1.leading(),0,0);
+
+        //----------------  ModernMode  --------------------------
+         if(isModernMode){
+             painter->setOpacity(0.1);
+             painter->fillRect(textRect, option.palette.highlight());
+              painter->setOpacity(1.0);
+                textRect.adjust(1,_MARGINS+fm1.leading(),-2,0);
+             txt=fm1.elidedText(txt,Qt::ElideRight,textRect.width());
+
+              painter->drawText(textRect,txt,textOption);
+              return;
+         }
+          painter->setOpacity(1.0);
+          //-------------- Classic style --------------------------
+         textRect.adjust(0,_MARGINS+fm1.leading(),0,0);
 
         int height=fm1.height()+fm1.leading();
-        /*  //انشاء تقطيع النص عندما يكون اكبر من مربع النص
-        QTextLayout txtLayout(txt, option.font);
-        txtLayout.setTextOption(textOption);
-        //int numLines=0;
-        txtLayout.beginLayout();
-       int height=0;
-
-        for(int i=0;i<3;++i) {
-            QTextLine txtLine = txtLayout.createLine();
-            if(!txtLine.isValid()) {
-                break;
-            }
-
-//            if(numLines>=3) {
-//                break;
-//            }
-
-            txtLine.setLineWidth(textRect.width()-2);
-            height +=fm1.leading();
-            txtLine.setPosition(QPointF(0, height));
-
-            //اذا كان النص اكبر من الحاوي
-            if(txtLine.naturalTextWidth()>textRect.width()-2){
-
-                textOption.setAlignment(Qt::AlignJustify);
-                QTextLine lastLine;
-                if(i>0)
-                 lastLine = txtLayout.lineAt(-i );
-                else
-                 lastLine = txtLayout.lineAt(0 );
-qDebug()<<txt<<i<<lastLine.textStart();
-                QString  lastText=txt.mid(lastLine.textStart()); ;
-
-                lastText=fm1.elidedText(lastText,Qt::ElideRight,textRect.width());
-                QRectF rrect=textRect;
-                rrect.adjust(2,height,0,0);
-
-                painter->drawText(rrect,lastText,textOption);
-                //break;
-            }else{
-                txtLine.draw(painter, textRect.topLeft());
-            }
-
-            height += txtLine.height();
-           // numLines++;
-        }
-         txtLayout.endLayout();
-        */
-        // QRectF rrect=textRect;
+           // QRectF rrect=textRect;
         QString firstTxt=txt;
         for (int i = 0; i < 3; ++i) {
             if(firstTxt.isEmpty())break;
@@ -457,8 +386,6 @@ qDebug()<<txt<<i<<lastLine.textStart();
 
         }
 
-        //**********************************************
-        //  painter->drawText(textRect,txt,textOption);
 
 }
 
@@ -590,7 +517,6 @@ void ItemDelegate::paintDetailView(QPainter *painter, const QStyleOptionViewItem
             painter->drawText(rect,size,textOption);
         }
 
-
 }
 
 //______________________________________________________________________________
@@ -616,12 +542,19 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
         else if(size<=64)defW=40;
         else if(size<=72)defW=20;
         else if(size<=96)defW=10;
-        else if(size<=128)defW=0;
+        else if(size<=128)defW=10;
 
         //طول الحاوي للنص
         int _w=option.decorationSize.width()+(defW);
+        int line;
+         if(isModernMode){
+             line=option.fontMetrics.height()+option.fontMetrics.leading();
+             line+=_MARGINS*2;
+         }else{
+              line=lineNumber(txt,option,_w-4);
+         }
 
-        int line=lineNumber(txt,option,_w-4);
+
 
         int _h=option.decorationSize.height()+(_MARGINS*2)+line;
 
@@ -688,6 +621,6 @@ QIcon::Mode ItemDelegate::iconModeFromState(const QStyle::State state)
      iconCache ->remove(file)  ;
     // folderCache->remove(file)   ;
      deskCache->remove(file)  ;
-     listThumb->removeAll(file);
+
 
  }

@@ -23,6 +23,7 @@
 #include "messages.h"
 #include <QFileInfo>
 #include <QDateTime>
+#include <QMessageAuthenticationCode>
 //#ifdef DEBUG_APP
 //#include <QDebug>
 //#endif
@@ -105,9 +106,9 @@ void FileInformation::setFileName(const QString &file)
          }
 
          ui->labelTitle->setText(txt);
-         if(fi.isDir())
-             setDirInformation(fi);
-         else
+//         if(fi.isDir())
+//             setDirInformation(fi);
+//         else
              setFileInformation(fi);
 
 
@@ -123,49 +124,6 @@ void FileInformation::setFileName(const QString &file)
 #endif
 }
 
-/**************************************************************************************
- *                                 DIRSINFORMATION
- **************************************************************************************/
-void FileInformation::setDirInformation(const QFileInfo &fi)
-{
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"FileInformation::setDirInformation()");
-#endif
-
-     QDateTime time=fi.lastModified();
- //    QIcon icon=MimeTypeXdg::iconFolder(mFile);
-//     if(fi.isSymLink())
-//     {
-//          ui->labelPixmap->setPixmap(MimeTypeXdg::iconSymLink(icon).pixmap(128).scaled(128,128));
-//     }else{
-//          ui->labelPixmap->setPixmap(icon.pixmap(128).scaled(128,128));
-//     }
-     QIcon icon=EMimIcon::icon(fi,false);
-     ui->labelPixmap->setPixmap(icon.pixmap(128).scaled(128,128));
-
-     QString sym;
-     if(fi.isSymLink())
-              sym=tr("Point To: ")+fi.symLinkTarget()+"\n";
-     QString info=QString(tr("\n %7"
-                              "Type: %6 \n "
-                             "Size: %1 \n"
-                             "Modified: %2 \n"
-                             "\n"
-                             "User Permission: %3 %4 %5")).
-               arg(getDirSize(mFile)).
-               arg(time.toString("dd.MM.yyyy hh:mm")).
-               arg(fi.permission(QFile::ReadUser) ? "r" : "-").
-               arg(fi.permission(QFile::WriteUser) ? "w" : "-").
-               arg(fi.permission(QFile::ExeUser) ? "x" : "-").
-               arg(EMimIcon::mimLang("inode/directory"/*,locale().name().section("_",0,0)*/)).
-               arg(sym)  ;
-
-     ui->labelInfo->setText(info);
-
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"FileInformation::setDirInformation()");
-#endif
-}
 
 /**************************************************************************************
  *                                  FILEINFORMATION
@@ -173,99 +131,72 @@ void FileInformation::setDirInformation(const QFileInfo &fi)
 void FileInformation::setFileInformation(const QFileInfo &fi)
 {
 #ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"FileInformation::setFileInformation()");
+    Messages::showMessage(Messages::BEGIN,"FileInformation::setFileInformation()");
 #endif
 
-     QString mim=EMimIcon::mimeTyppe(fi);
-     if(mim.startsWith("image"))
-     {
-          setImageInformation(fi,mim);
-     }else{
-  QDateTime time=fi.lastModified();
-          QIcon icon=EMimIcon::icon(fi,false);
-          ui->labelPixmap->setPixmap(icon.pixmap(128).scaled(128,128));
-          QString sym;
-          if(fi.isSymLink())
-              sym=tr("Point To: ")+fi.symLinkTarget()+"\n";
+    QString mim=EMimIcon::mimeTyppe(fi);
+bool hasImage=false;
+    QPixmap pix;
+    int scal=128;
+    if(mim.startsWith("video") || mim.endsWith("pdf"))
+    {
 
-          QString info=QString(tr("\n %7"
-                                   "Type: %1 \n "
-                                  "Size: %2 \n"
-                                  "Modified: %3 \n"
-                                  "\n"
-                                  "User Permission: %4 %5 %6")).
-                    arg(EMimIcon::mimLang(mim/*,locale().name().section("_",0,0)*/)).
-                    arg(EMimIcon::formatSize(fi.size())).
-                    arg(time.toString("dd.MM.yyyy hh:mm")).
-                    arg(fi.permission(QFile::ReadUser) ? "r" : "-").
-                    arg(fi.permission(QFile::WriteUser) ? "w" : "-").
-                    arg(fi.permission(QFile::ExeUser) ? "x" : "-").
-                    arg(sym)  ;
+        QMessageAuthenticationCode code(QCryptographicHash::Md5);
+        code.addData(mFile.toLatin1());
+        QString md5Name=code.result().toHex();
+        QString fileThumbnail=Edir::thumbnaileCachDir()+"/"+md5Name;
+
+        if(QFile::exists(fileThumbnail)){
+            if(pix.load(fileThumbnail))
+            pix=(QPixmap(fileThumbnail));
+        }
+
+    }else if(mim.startsWith("image")) {
+
+        if(pix.load(mFile)){
+            hasImage=true;
+            int max=qMax(pix.width(),pix.height());
+            if(max>=200) scal=200;
+            else if(max<=200) scal=128;
+            else scal=max;
+
+        }
+
+    }
+
+    if(pix.isNull())
+        pix=EMimIcon::icon(fi,false).pixmap(128).scaled(128,128);
+    //QIcon icon=EMimIcon::icon(fi,false);
+    ui->labelPixmap->setPixmap(QPixmap(pix.scaled(QSize(scal,scal),Qt::KeepAspectRatio,Qt::SmoothTransformation)));
+
+    QString infoStr;
+    if(fi.isSymLink()) infoStr+=tr("Point To: %1 \n"). arg(fi.symLinkTarget());
+    infoStr+= QString(tr("Type: %1 \n")).arg(EMimIcon::mimLang(mim));
+
+    if(fi.isDir())
+        infoStr+= QString(tr("Size: %1 \n")).arg(getDirSize(mFile));
+    else
+        infoStr+= QString(tr("Size: %1 \n")).arg(EMimIcon::formatSize(fi.size()));
+
+    infoStr+= QString(tr("Modified: %1 \n")).arg(fi.lastModified().toString("dd.MM.yyyy hh:mm"));
+    infoStr+= "\n";
+    infoStr+= QString(tr("User Permission: %1  %2  %3\n"))
+            . arg(fi.permission(QFile::ReadUser) ? "r" : "-")
+            . arg(fi.permission(QFile::WriteUser) ? "w" : "-")
+            . arg(fi.permission(QFile::ExeUser) ? "x" : "-");
+
+    if(hasImage){
+        infoStr+= QString(tr("Width: %1 \n")).arg(pix.width());
+        infoStr+= QString(tr("Height: %1 \n")).arg(pix.height());
+    }
+
+    //-------------------------------------------------------------------
+    ui->labelInfo->setText(infoStr);
 
 
-
-          ui->labelInfo->setText(info);
-     }
 
 #ifdef DEBUG_APP
      Messages::showMessage(Messages::END,"FileInformation::setFileInformation()");
-#endif
-}
-
-/**************************************************************************************
- *                                 IMAGEINFORMATION
- **************************************************************************************/
-void FileInformation::setImageInformation(const QFileInfo &fi,const QString &mim)
-{
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"FileInformation::setImageInformation()");
-#endif
-
-     QDateTime time=fi.lastModified();
-     QPixmap pix(mFile);
-//     int w=0;
-//     int h=0;
-
-     if(pix.isNull()){
-
-          QIcon icon=EMimIcon::icon(fi);
-          ui->labelPixmap->setPixmap(icon.pixmap(128).scaled(128,128));
-
-     }else{
-          int scal=128;
-//          w=pix.width();
-//          h=pix.height();
-int max=qMax(pix.width(),pix.height());
-          if(max>=200)
-               scal=200;
-          else if(max<=200)
-               scal=128;
-          else
-              scal=max;
-
-          ui->labelPixmap->setPixmap(QPixmap(pix.scaled(QSize(scal,scal),Qt::KeepAspectRatio,Qt::SmoothTransformation)));
-     }
-
-     QString sym;
-     if(fi.isSymLink())
-         sym=tr("Point To: ")+fi.symLinkTarget()+"\n";
-     QString info=QString(tr("\n %6"
-                              "Type: %1 \n "
-                             "Size: %2 \n"
-                             "Modified: %3 \n \n "
-                             "width: %4  \n"
-                             "height: %5")).
-               arg(EMimIcon::mimLang(mim/*,locale().name().section("_",0,0)*/)).
-               arg(EMimIcon::formatSize(fi.size())).
-               arg(time.toString("dd.MM.yyyy hh:mm")).
-               arg(pix.width()).
-               arg(pix.height()).
-               arg(sym)  ;
-
-     ui->labelInfo->setText(info);
-
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"FileInformation::setImageInformation()");
 #endif
 }
 
@@ -274,26 +205,22 @@ int max=qMax(pix.width(),pix.height());
  **************************************************************************************/
 QString FileInformation::getDirSize(const QString &path)
 {
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::BEGIN,"FileInformation::getDirSize()");
-#endif
+
 
      QDir dir(path);
      int folder=0,file=0;
 
      foreach (QString subfile, dir.entryList(QDir::AllEntries|  QDir::NoDotAndDotDot|QDir::Hidden))
      {
-          QFileInfo fi(path+"/"+subfile);
+          QFileInfo fi(dir.absoluteFilePath(subfile));
 
-          if(fi.isDir())
-               folder++;
-          else
-               file++;
+          if(fi.isDir()) folder++;
+
+          else file++;
+
 
      }
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"FileInformation::getDirSize()");
-#endif
+
      return (QString::number(folder)+tr(" sub-folders ")+QString::number(file)+ tr(" files"));
 
      //return size;

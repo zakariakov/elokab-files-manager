@@ -22,8 +22,11 @@
 
 #include <QWidget>
 #include"actions.h"
-#include "trashview.h"
+#include"thumbnails.h"
+//#include "trashview.h"
+#include "trash.h"
 #include "searchview.h"
+#include "myfilesystemmodel.h"
 #include "mylistview.h"
 #include "mytreeview.h"
 #include "itemdelegate.h"
@@ -50,10 +53,10 @@ class PageWidget : public QWidget
      * @param url
      * @param parent
      */
-          explicit PageWidget(QFileSystemModel *model,
+          explicit PageWidget(MyFileSystemModel *model,
                               Settings *setting,
                               Actions *action,
-                              const QString &url,                  
+                              const QString &url,
                               QWidget *parent = 0);
 
           //!
@@ -151,7 +154,7 @@ class PageWidget : public QWidget
           void renameFiles();
 
           //!
-          void moveFilesToTrash();
+        //  void moveFilesToTrash();
 
           //!
           void selectAll();
@@ -162,10 +165,11 @@ class PageWidget : public QWidget
           //!
           void showOpenwithDlg(const QString &fileName);
  void iconUpdate(QModelIndex index);
+ void iconThumbUpdate(const QString &file);
 
+void selectIndex(const QString &file);
 
-
-
+void trashDeleteFiles();
 //  void iconThumbUpdate(const QString &fileName);
 
 
@@ -185,14 +189,16 @@ class PageWidget : public QWidget
           //!
           int focusedWidget();
 
+void trashRestoreFiles();
 
      private:
 
+Thumbnails *mThumbnails;
           //!
           Settings *mSettings;
 
           //!
-          QFileSystemModel *myModel ;
+          MyFileSystemModel *myModel ;
 
           //!
           Actions *mActions;
@@ -210,7 +216,9 @@ class PageWidget : public QWidget
           MyTreeView *treeView;
 
           //!
-          TrashView *trashView;
+         // TrashView *trashView;
+          //!
+          Trash *mTrash;
 
           //!
           SearchView *searchView;
@@ -245,8 +253,8 @@ class PageWidget : public QWidget
           enum ViewWidget{
                WListView,
                WTreeView,
-               WTrashView,
-               WSearchView
+               WSearchView,
+              WTrashView
           };
 
           enum ViewMode{
