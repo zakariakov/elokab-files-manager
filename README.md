@@ -3,7 +3,18 @@ A lightweight  file manager for Linux desktops built in Qt.
 
 # مدير ملفات العقاب
 
-![Screenshots](https://github.com/zakariakov/screenshots/blob/master/elokab-fm.png)
+New look in Icons mode
+
+![Screenshots](https://github.com/zakariakov/screenshots/blob/master/elokabfm-iconmode.png)
+
+New look in compact mode
+
+![Screenshots](https://github.com/zakariakov/screenshots/blob/master/elokabfm-compact.png)
+
+Image and pdf and video thumbnails
+
+
+![Screenshots](https://github.com/zakariakov/screenshots/blob/master/elokabFm-thumbnails.png)
 
 # Install
 
