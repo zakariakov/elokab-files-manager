@@ -33,7 +33,9 @@ DesktopFile::DesktopFile(const QString &fileName,const QString &group ,const QSt
     }
     bool  hasGroup=false;
     QString mgroup=group;
-    if(mgroup.isEmpty()) mgroup=="General";
+
+    if(mgroup.isEmpty())
+        mgroup="General";
 
     QFile files(fileName);
     if(!files.open( QFile::ReadOnly))

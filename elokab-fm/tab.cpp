@@ -48,7 +48,7 @@ Tab::Tab(Settings *setting, Actions *actions, QWidget *parent) :
     mSettings (setting),
     mActions(actions),
     mCute(0),
-    pageWidget(0)
+    pageWidget(nullptr)
 {
 
     Messages::debugMe(0,__LINE__,"Tab",__FUNCTION__);
@@ -187,7 +187,7 @@ void Tab::setShowThumbnails(bool arg)
     Messages::debugMe(0,__LINE__,"Tab",__FUNCTION__);
 
 
-    myModel->setPreview(arg);
+  //  myModel->setPreview(arg);
 
     QApplication::setOverrideCursor(Qt::WaitCursor) ;
 
@@ -286,7 +286,7 @@ void Tab::setCurTabText(const QString &title)
     QDir dir(title);
     QString name=dir.dirName();
     QIcon iconF;
-    if(title==_TRASH ){
+    if(title==D_TRASH ){
         iconF=  EIcon::fromTheme("user-trash","emptytrash");
         name=tr("Trash");
     }else
@@ -398,7 +398,7 @@ void Tab::goHome()
 void Tab::goTrash()
 {
     if(pageWidget)
-        pageWidget->setUrl(_TRASH);
+        pageWidget->setUrl(D_TRASH);
 }
 
 /*****************************************************************************
@@ -408,7 +408,7 @@ void Tab::goTrash()
 void Tab::goSearch()
 {
     if(pageWidget)
-        pageWidget->setUrl(_SEARCH);
+        pageWidget->setUrl(D_SEARCH);
 }
 
 /**************************************************************************************
@@ -462,7 +462,7 @@ void Tab::renameFiles()
 {
 
     if(!pageWidget)return;
-    if(pageWidget->dirPath()==_TRASH)return;
+    if(pageWidget->dirPath()==D_TRASH)return;
 
         pageWidget->renameFiles();
 }
@@ -474,7 +474,7 @@ void Tab::renameFiles()
 void Tab::deleteFiles()
 {
     if(!pageWidget)return;
-    if(pageWidget->dirPath()==_TRASH){
+    if(pageWidget->dirPath()==D_TRASH){
         pageWidget->trashDeleteFiles();
         return;
     }
@@ -538,7 +538,7 @@ void Tab::copyFiles()
 void Tab::cutFiles()
 {
     if(!pageWidget)return;
-    if(pageWidget->curentDir()==_TRASH) return;
+    if(pageWidget->curentDir()==D_TRASH) return;
 
     mCute=true;
     QList<QUrl>listUrl;
@@ -562,7 +562,7 @@ void Tab::pastFiles()
 {
     if(!pageWidget)return;
 
-   if(pageWidget->curentDir()==_TRASH || pageWidget->curentDir()==_SEARCH) return;
+   if(pageWidget->curentDir()==D_TRASH || pageWidget->curentDir()==D_SEARCH) return;
 
     QStringList list;
     //   const QClipboard *clipboard = QApplication::clipboard();
@@ -612,7 +612,7 @@ void Tab::pastFiles()
 void Tab::moveFilesToTrash()
 {
     if(!pageWidget)return;
-    if(pageWidget->dirPath()==_TRASH)return;
+    if(pageWidget->dirPath()==D_TRASH)return;
 
     QStringList list;
     list= pageWidget->selectedFiles();
@@ -668,7 +668,7 @@ void Tab::slotShowProperties()
 void Tab::dragDropFiles(bool copy,QString path, QStringList list)
 {
      if(!pageWidget)return;
-     if(pageWidget->dirPath()==_TRASH) return;
+     if(pageWidget->dirPath()==D_TRASH) return;
 
              if(mSettings->isConfirmDragDrop()){
 

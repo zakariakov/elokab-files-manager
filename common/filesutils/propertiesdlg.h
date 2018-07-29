@@ -33,7 +33,7 @@ class PropertiesDlg : public QDialog
     Q_OBJECT
     
 public:
-    explicit PropertiesDlg(const QStringList &urls,QWidget *parent = 0);
+    explicit PropertiesDlg(const QStringList &urls,QWidget *parent = nullptr);
     ~PropertiesDlg();
 signals:
     void finiched();
@@ -48,6 +48,7 @@ bool mPermsChanged;
 QString mMim;
 bool mFolderColor;
 QIcon mIcon;
+QString mCustomIcon;
 QHash<QString,QToolButton*>mHashColors;
 private slots:
 //QString mimLang(const QString &mim);
@@ -69,9 +70,11 @@ void setupFolderColor();
 void toggleIcon(bool checked);
 void setFolderColor();
 void saveColorFolder(const QString &color);
+void saveCustomFolder();
 void removePercentEncoding(const QString &path);
 //QString getChmod(bool isExec);
 bool setPermission(const QString &path, bool isExecutable);
+void on_toolButton_clicked();
 };
 
 #endif // PROPERTIESDLG_H

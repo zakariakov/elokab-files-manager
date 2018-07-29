@@ -22,7 +22,7 @@
 #include <EMimIcon>
 #include <EIcon>
 #include "openwithdlg.h"
-
+#include "dialogfoldericons.h"
 #include <QFileInfo>
 #include <QXmlStreamReader>
 #include <QDebug>
@@ -78,9 +78,9 @@ PropertiesDlg::PropertiesDlg(const QStringList &urls, QWidget *parent) :
           if(fi.isDir())
           {
                QHash<QString ,qint64>hash=(EMimIcon::getDriveInfo(fi.absoluteFilePath()));
-               int Perc=(hash["Perc"]);
-               QString Total=EMimIcon::formatSize(hash["Total"]);
+                QString Total=EMimIcon::formatSize(hash["Total"]);
                QString Free=EMimIcon::formatSize(hash["Total"]-hash["Used"]);
+               int Perc=(hash.value("Perc"));
 
                ui->progressBarDevice->setFormat(QString(tr("%1 free Of %2 %p%")).arg(Free).arg(Total));
                ui->progressBarDevice->setValue(Perc);
@@ -374,7 +374,11 @@ void PropertiesDlg::on_buttonBox_accepted()
      }else{
          if(mFolderColor)
              saveColorFolder(NO_VALID);
+
+         if(!mCustomIcon.isEmpty())
+             saveCustomFolder();
      }
+
 
 
  if(ui->lineEditFileName->isModified()){
@@ -560,6 +564,27 @@ void PropertiesDlg::saveColorFolder(const QString &color)
     removePercentEncoding(path);
 }
 
+void PropertiesDlg::saveCustomFolder()
+{
+
+    QString path=mUrls.at(0)+"/.directory";
+
+    QSettings setting(path,QSettings::IniFormat);
+    setting.sync();
+    setting.beginGroup("Desktop Entry");
+
+    if(!mCustomIcon.isEmpty()){
+        if(mCustomIcon=="folder")
+            setting.remove("Icon");
+        else
+            setting.setValue("Icon",mCustomIcon);
+    }
+    setting.endGroup();
+    qApp->processEvents();
+    removePercentEncoding(path);
+
+}
+
 void PropertiesDlg::removePercentEncoding(const QString &path)
 {
     qApp->processEvents();
@@ -583,3 +608,24 @@ void PropertiesDlg::removePercentEncoding(const QString &path)
 
 }
 
+
+void PropertiesDlg::on_toolButton_clicked()
+{
+    QFileInfo fi=mUrls.at(0);
+    if(! fi.isDir())return;
+
+   DialogFolderIcons *dlg=new  DialogFolderIcons();
+   if(dlg->exec()==QDialog::Accepted){
+        qDebug()<<"accepted";
+        if(!dlg->iconName().isEmpty()){
+
+            ui->toolButton->setIcon(QIcon::fromTheme(dlg->iconName()));
+            mCustomIcon=dlg->iconName();
+
+        }
+
+   }
+
+
+  delete dlg;
+}

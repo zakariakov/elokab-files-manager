@@ -51,7 +51,7 @@ ElokabSettings::ElokabSettings(QObject *parent) :
 const ElokabSettings *ElokabSettings::ESettings()
 {
     static QMutex mutex;
-    static ElokabSettings *instance = 0;
+    static ElokabSettings *instance = nullptr;
     if (!instance)
     {
         mutex.lock();

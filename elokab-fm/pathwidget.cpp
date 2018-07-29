@@ -120,7 +120,7 @@ void  PathWidget::resizeEvent(QResizeEvent */*event*/)
 void PathWidget::setUrl(const QString &url)
 {
 
-    if(url==_SEARCH)
+    if(url==D_SEARCH)
         return;
 
    ui->lineEdit->setText(url); QString txt;
@@ -198,7 +198,7 @@ void PathWidget::setupToolUrl(const QString &url)
     //    listmenus.clear();
     mToolBar->clear();
 
-    if(urlBtn==_TRASH){
+    if(urlBtn==D_TRASH){
         QAction *act=mToolBar->addAction
                 (EIcon::fromTheme("user-trash","emptytrash"),tr("Trash"));
         QFont font;font.setBold(true);

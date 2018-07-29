@@ -61,7 +61,7 @@ void Trash::restorFiles(const QStringList &list)
          //  QString origeFile=map.value("path");
 
            if(QFile::exists(origeFile)){
-               QMessageBox::information(0,"error",tr("A file named %1 already exists.")
+               QMessageBox::information(nullptr,"error",tr("A file named %1 already exists.")
                                         .arg(origeFile));
 
            }else{
@@ -69,7 +69,7 @@ void Trash::restorFiles(const QStringList &list)
                if( !dir.rename(fileName, origeFile ) ){
                    QFileInfo fi(origeFile);
                    QString t=tr("restor to %1 failed \n please check if the path exist" ).arg(fi.absolutePath());
-                   QMessageBox::information(0,"error",t);
+                   QMessageBox::information(nullptr,"error",t);
 
                }else{
                    QFile::remove(infoname);

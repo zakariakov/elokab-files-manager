@@ -35,7 +35,7 @@ class PlaceTree : public QTreeWidget
           * @brief PlaceTree
           * @param parent
           */
-          explicit PlaceTree(QWidget *parent = 0);
+          explicit PlaceTree(QWidget *parent = nullptr);
 ~PlaceTree();
      signals:
 

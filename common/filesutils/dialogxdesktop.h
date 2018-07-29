@@ -44,7 +44,7 @@ public:
          * @param path مسار سطخ المكتب
          * @param parent
          */
-        explicit DialogXdesktop(const QString &path, QWidget *parent = 0);
+        explicit DialogXdesktop(const QString &path, QWidget *parent = nullptr);
         ~DialogXdesktop();
     QString fileName(){return m_path;}
         

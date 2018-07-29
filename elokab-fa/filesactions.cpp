@@ -146,7 +146,7 @@ void FilesActions::pastFiles(const QStringList &files,const QString &distDir)
 {
 
      if(!QFileInfo(distDir).isWritable()){
-          QMessageBox::critical(0,"",tr("Read only...cannot create file"));
+          QMessageBox::critical(nullptr,"",tr("Read only...cannot create file"));
           return;
      }
 

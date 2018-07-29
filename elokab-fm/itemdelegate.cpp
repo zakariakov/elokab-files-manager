@@ -89,7 +89,7 @@ int lineNumber(QString txt,const QStyleOptionViewItem &option,int _w)
     txtlayout.endLayout();
     */
 //qDebug()<<txt<<numLines;
-     int height=_MARGINS;
+     int height=D_MARGINS;
     QString firstTxt=txt;
     for (int i = 0; i < 3; ++i) {
         if(firstTxt.isEmpty())break;
@@ -103,7 +103,7 @@ int lineNumber(QString txt,const QStyleOptionViewItem &option,int _w)
 
     }
    //  qDebug()<<txt<<height;
-    return height+_MARGINS;
+    return height+D_MARGINS;
 
 }
 
@@ -114,7 +114,7 @@ QIcon ItemDelegate::iconThumbnails(const QString &file, const QString &type) con
     if(fi.path()==thumbnailCache)return QIcon();
 
     QMessageAuthenticationCode code(QCryptographicHash::Md5);
-    code.addData(file.toLatin1());
+    code.addData(file.toUtf8());
     QString md5Name=code.result().toHex();
     QString fileThumbnail=thumbnailCache+"/"+md5Name;
 
@@ -126,7 +126,7 @@ QIcon ItemDelegate::iconThumbnails(const QString &file, const QString &type) con
     if(QFile::exists(fileThumbnail)){
         QImageReader reader(fileThumbnail);
         if(reader.canRead()){
-            QString fModified=reader.text(_KEY_DATETIME);
+            QString fModified=reader.text(D_KEY_DATETIME);
             if(fModified== fi.lastModified().toString("dd MM yyyy hh:mm:ss")){
                 hasImage=true;
                 hasThumb=true;
@@ -164,7 +164,7 @@ QIcon ItemDelegate::iconThumbnails(const QString &file, const QString &type) con
 //______________________________________________________________________________
 QIcon ItemDelegate::decoration(const QModelIndex &index)const
 {
-    QString filePath=index.data(_MFPATH).toString();
+    QString filePath=index.data(D_MFPATH).toString();
     QFileInfo info(filePath);
     bool isSym=false;
 
@@ -189,7 +189,7 @@ QIcon ItemDelegate::decoration(const QModelIndex &index)const
     //---------------------------------------
     QString mim;
     if(isSym)  mim= EMimIcon::mimeTyppe(info);
-    else  mim= index.data(_MMIM).toString();
+    else  mim= index.data(D_MMIM).toString();
 
     //---------------------------------------X-DESKTOP
     if( mim=="application/x-desktop"){
@@ -206,25 +206,25 @@ QIcon ItemDelegate::decoration(const QModelIndex &index)const
     if(mThumbnail)
     {
         //--------------------------------------- IMAGES TYPE
-        if( mim.startsWith(_IMAGE_TYPE) )
+        if( mim.startsWith(D_IMAGE_TYPE) )
         {
             if(imageCache->contains(filePath)) return imageCache->value(filePath);
             if( QImageReader::supportedMimeTypes().contains(mim.toLatin1()))
-               { retIcon=iconThumbnails(filePath,_IMAGE_TYPE); }
+               { retIcon=iconThumbnails(filePath,D_IMAGE_TYPE); }
         }// image
 
         //--------------------------------------- PDF TYPE
-        else if( mPdfThumbnail && mim.endsWith(_PDF_TYPE) )
+        else if( mPdfThumbnail && mim.endsWith(D_PDF_TYPE) )
         {
             if(imageCache->contains(filePath)) return imageCache->value(filePath);
-            retIcon=iconThumbnails(filePath,_PDF_TYPE);        
+            retIcon=iconThumbnails(filePath,D_PDF_TYPE);
         }// pdf
 
         //--------------------------------------- VIDEO TYPE
-        else if(mVideoThumbnail && mim.startsWith(_VIDEO_TYPE) )
+        else if(mVideoThumbnail && mim.startsWith(D_VIDEO_TYPE) )
         {
             if(imageCache->contains(filePath)) return imageCache->value(filePath);
-            retIcon=iconThumbnails(filePath,_VIDEO_TYPE);   
+            retIcon=iconThumbnails(filePath,D_VIDEO_TYPE);
         }// video
 
         //--------------------------------------- CACHE
@@ -285,7 +285,7 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
     QTextOption textOption;
     QString txt=index.data(Qt::EditRole).toString();
     QFontMetrics fm1=option.fontMetrics;
-    QString filePath=index.data(_MFPATH).toString();
+    QString filePath=index.data(D_MFPATH).toString();
     QFileInfo fn(filePath);
     QIcon ico;
     ico=decoration(index);
@@ -302,7 +302,7 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
 //            painter->fillRect(option.rect, option.palette.highlight());
 
         // draw the icon
-        QPoint iconPos(option.rect.x() + (option.rect.width() - option.decorationSize.width()) / 2, option.rect.y() + _MARGINS);
+        QPoint iconPos(option.rect.x() + (option.rect.width() - option.decorationSize.width()) / 2, option.rect.y() + D_MARGINS);
         // in case the pixmap is smaller than the requested size
         QSize margin = ((option.decorationSize - pixmap.size()) / 2).expandedTo(QSize(0, 0));
 
@@ -333,8 +333,8 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
 
         //------------------------  رسم النص  --------------------------
         //مربع النص
-        QRectF textRect(option.rect.x() + (option.rect.width() - itemSize.width()) / 2,
-                        option.rect.y() + _MARGINS + option.decorationSize.height(),
+        QRect textRect(option.rect.x() + (option.rect.width() - itemSize.width()) / 2,
+                        option.rect.y() + D_MARGINS + option.decorationSize.height(),
                         itemSize.width(),
                         itemSize.height() - option.decorationSize.height());
 
@@ -359,7 +359,7 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
              painter->setOpacity(0.1);
              painter->fillRect(textRect, option.palette.highlight());
               painter->setOpacity(1.0);
-                textRect.adjust(1,_MARGINS+fm1.leading(),-2,0);
+                textRect.adjust(1,D_MARGINS+fm1.leading(),-2,0);
              txt=fm1.elidedText(txt,Qt::ElideRight,textRect.width());
 
               painter->drawText(textRect,txt,textOption);
@@ -367,7 +367,7 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
          }
           painter->setOpacity(1.0);
           //-------------- Classic style --------------------------
-         textRect.adjust(0,_MARGINS+fm1.leading(),0,0);
+         textRect.adjust(0,D_MARGINS+fm1.leading(),0,0);
 
         int height=fm1.height()+fm1.leading();
            // QRectF rrect=textRect;
@@ -389,6 +389,7 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
 
 }
 
+
 //______________________________________________________________________________
 void ItemDelegate::paintDetailView(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
@@ -397,7 +398,7 @@ void ItemDelegate::paintDetailView(QPainter *painter, const QStyleOptionViewItem
     QTextOption textOption;
     QString txt=index.data(Qt::EditRole).toString();
 
-    QString filePath=index.data(_MFPATH).toString();
+    QString filePath=index.data(D_MFPATH).toString();
     QFileInfo fn(filePath);
     QIcon ico;
     ico=decoration(index);
@@ -417,24 +418,24 @@ void ItemDelegate::paintDetailView(QPainter *painter, const QStyleOptionViewItem
 
         if(qApp->isRightToLeft()){
 
-            iconPos=QPoint(option.rect.x() + (option.rect.width() - option.decorationSize.width()-_MARGINS),
+            iconPos=QPoint(option.rect.x() + (option.rect.width() - option.decorationSize.width()-D_MARGINS),
                            option.rect.y() +(option.rect.height()-pixmap.height())/2);
 
             rect=QRect(option.rect.x(),
                        option.rect.y(),
-                       option.rect.width()-option.decorationSize.width()-(_MARGINS*2),
+                       option.rect.width()-option.decorationSize.width()-(D_MARGINS*2),
                        option.rect.height());
 
             textOption.setAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
         }else{
 
-            iconPos=QPoint(option.rect.x() + _MARGINS ,
+            iconPos=QPoint(option.rect.x() + D_MARGINS ,
                            option.rect.y() +(option.rect.height()-pixmap.height())/2);
 
-            rect=QRect(option.rect.x()+ option.decorationSize.width()+(_MARGINS*2),
+            rect=QRect(option.rect.x()+ option.decorationSize.width()+(D_MARGINS*2),
                        option.rect.y(),
-                       option.rect.width()-option.decorationSize.width()-(_MARGINS*2),
+                       option.rect.width()-option.decorationSize.width()-(D_MARGINS*2),
                        option.rect.height());
 
             textOption.setAlignment(Qt::AlignLeft| Qt::AlignVCenter);
@@ -470,8 +471,8 @@ void ItemDelegate::paintDetailView(QPainter *painter, const QStyleOptionViewItem
 
         }else{
 
-            QString type=index.data(_MTYPE).toString();
-            QString size=index.data(_MSize).toString();
+            QString type=index.data(D_MTYPE).toString();
+            QString size=index.data(D_MSize).toString();
             painter->save();
             QFont font(option.font);
             font.setBold(true);
@@ -489,7 +490,7 @@ void ItemDelegate::paintDetailView(QPainter *painter, const QStyleOptionViewItem
           if((h*4)<option.rect.height())
                 top= (option.rect.height()-(h*4))/2;
             else
-             top=_MARGINS+fm2.leading();
+             top=D_MARGINS+fm2.leading();
 
             rect.moveTop(rect.top()+top+fm2.leading());
             painter->drawText(rect,firstTxt,textOption);
@@ -549,14 +550,14 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
         int line;
          if(isModernMode){
              line=option.fontMetrics.height()+option.fontMetrics.leading();
-             line+=_MARGINS*2;
+             line+=D_MARGINS*2;
          }else{
               line=lineNumber(txt,option,_w-4);
          }
 
 
 
-        int _h=option.decorationSize.height()+(_MARGINS*2)+line;
+        int _h=option.decorationSize.height()+(D_MARGINS*2)+line;
 
         return  QSize(_w,_h);
 
@@ -569,8 +570,8 @@ QSize ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 
         }else{
 
-            int h=option.decorationSize.height()+(_MARGINS*2);
-            int minH=(option.fontMetrics.height()*3)+(option.fontMetrics.leading()*3)+(_MARGINS*2);;
+            int h=option.decorationSize.height()+(D_MARGINS*2);
+            int minH=(option.fontMetrics.height()*3)+(option.fontMetrics.leading()*3)+(D_MARGINS*2);;
             if(h<minH) h=minH;
             // qDebug()<<__LINE__<<__FILE__<<__FUNCTION__;
             return  QSize(option.decorationSize.width()+200,h);

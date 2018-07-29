@@ -285,7 +285,7 @@ int UdiskDevice::mediaType(const QString &drive)
     else
         return  Device::MediaTypeDRIVE;
 
-    return  Device::MediaTypeUnknown;
+ //   return  Device::MediaTypeUnknown;
 }
 
 QString UdiskDevice::iconName(int type)
@@ -293,16 +293,16 @@ QString UdiskDevice::iconName(int type)
     switch (type) {
     case Device::MediaTypeUSB:
          return "drive-removable-media-usb";
-        break;
+       // break;
     case Device::MediaTypeCDROM:
         return "media-optical-dvd";
-        break;
+      //  break;
     case Device::MediaTypeDRIVE:
         return "drive-harddisk";
-        break;
+      //  break;
     case  Device::MediaTypeUnknown:
          return "drive-harddisk";
-        break;
+      //  break;
     default:
         break;
     }

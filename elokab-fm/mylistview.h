@@ -34,26 +34,28 @@ public:
      * @param model
      * @param parent
      */
-    explicit MyListView(QFileSystemModel *model, Actions *action, QWidget *parent = 0);
+    explicit MyListView(QFileSystemModel *model, Actions *action, QWidget *parent = nullptr);
 
     /**
      * @brief selectedIndexes
      * @return
      */
     QModelIndexList selectedIndexes() const;
- virtual void startDrag(Qt::DropActions supportedActions);
+    virtual void startDrag(Qt::DropActions supportedActions);
     virtual void dragEnterEvent(QDragEnterEvent* event);
     virtual void dragMoveEvent(QDragMoveEvent* e);
     virtual void dragLeaveEvent(QDragLeaveEvent* e);
-  virtual void dropEvent(QDropEvent* e);
+    virtual void dropEvent(QDropEvent* e);
+
+    void  setdDoubleClickTriggers(bool arg);
 
 signals:
     /**
    * @brief selectedAvailabe
    */
     void  selectedAvailabe(bool);
-   // void curDirSelected(const QString &);
-   void setUrlDir(const QString &);
+    // void curDirSelected(const QString &);
+    void setUrlDir(const QString &);
     void fileEntered(const QString &);
 public slots:
 
@@ -76,8 +78,8 @@ public slots:
 
     void   setViewIconSize(int size) ;
 
-     //!
-     void setListViewMode(ViewMode mode);
+    //!
+    void setListViewMode(ViewMode mode);
 private slots:
 
     /**
@@ -86,7 +88,7 @@ private slots:
      */
     void onItemEntered(QModelIndex index);
 
-     //!
+    //!
     void viewEntered();
 
     /**
@@ -99,11 +101,11 @@ private slots:
 
 private:
 
-     //!
+    //!
     QFileSystemModel *mModel;
 
-     //!
-     Actions *mActions;
+    //!
+    Actions *mActions;
 
     //QItemSelectionModel *listSelectionModel;
 };

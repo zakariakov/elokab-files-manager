@@ -51,13 +51,15 @@ SOURCES += \
     ../common/about/widgetabout.cpp \
     ../common/filesutils/symlinkdlg.cpp \
     ../common/filesutils/dialogxdesktop.cpp \
+    ../common/filesutils/dialogfoldericons.cpp \
     udiskdevice.cpp \
     itemdelegate.cpp \
     messages.cpp \
     myfilesystemmodel.cpp \
     settingsdlg.cpp \
     trash.cpp \
-    thumbnails.cpp
+    thumbnails.cpp \
+
 
 HEADERS  += \
     mainwindow.h \
@@ -82,13 +84,15 @@ HEADERS  += \
     ../common/about/widgetabout.h \
     ../common/filesutils/symlinkdlg.h \
     ../common/filesutils/dialogxdesktop.h \
+    ../common/filesutils/dialogfoldericons.h \
     udiskdevice.h \
     itemdelegate.h \
     defines.h \
     myfilesystemmodel.h \
     settingsdlg.h \
     trash.h \
-    thumbnails.h
+    thumbnails.h \
+
 
 FORMS    += mainwindow.ui \
     pathwidget.ui \
@@ -96,12 +100,13 @@ FORMS    += mainwindow.ui \
     progressdlg.ui \
     dialogactions.ui \
     searchview.ui \
+    settingsdlg.ui \
     ../common/filesutils/propertiesdlg.ui \
     ../common/filesutils/openwithdlg.ui \
     ../common/about/widgetabout.ui \
     ../common/filesutils/symlinkdlg.ui \
     ../common/filesutils/dialogxdesktop.ui \
-    settingsdlg.ui
+    ../common/filesutils/dialogfoldericons.ui
 
 RESOURCES += \
     icons.qrc

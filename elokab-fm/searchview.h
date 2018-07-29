@@ -41,7 +41,7 @@ class SearchView : public QWidget
      public:
 
           //!
-          explicit SearchView(QWidget *parent = 0);
+          explicit SearchView(QWidget *parent = nullptr);
 
           //!
           ~SearchView();

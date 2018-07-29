@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
 {
 
     ElokabApplication a(argc, argv);
-    a.setApplicationName(_APPNAME);
-    a.setApplicationVersion(_APPVERSION);
-    a.setOrganizationName(_APPORGNAME);
+    a.setApplicationName(D_APPNAME);
+    a.setApplicationVersion(D_APPVERSION);
+    a.setOrganizationName(D_APPORGNAME);
 
     QStringList args = a.arguments();
 

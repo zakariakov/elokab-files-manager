@@ -27,7 +27,7 @@ class ElokabSettings : public QSettings
     Q_OBJECT
 
 public:
-    explicit ElokabSettings(QObject *parent = 0);
+    explicit ElokabSettings(QObject *parent = nullptr);
 static const ElokabSettings *ESettings();
 
 signals:

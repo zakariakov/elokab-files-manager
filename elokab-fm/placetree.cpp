@@ -196,9 +196,9 @@ void PlaceTree::chargeFoldersPlaces()
     //TRASH
     itemTrashFolder=new QTreeWidgetItem(mPlacesItem);
     itemTrashFolder->setText(0,tr("Trash"));
-    itemTrashFolder->setData(0,Qt::ToolTipRole,_TRASH);
+    itemTrashFolder->setData(0,Qt::ToolTipRole,D_TRASH);
     itemTrashFolder->setIcon(0,EIcon::fromTheme("user-trash","emptytrash"));
-    mHashItems[_TRASH]=itemTrashFolder;
+    mHashItems[D_TRASH]=itemTrashFolder;
     //--------------------------------------------------------------------------------------
     QSettings setting(QApplication::organizationName(),QApplication::applicationName());
 
@@ -223,7 +223,7 @@ void PlaceTree::chargeFoldersPlaces()
     } // for
 
     setting.endArray();
-//TODO:add refresh icons
+
   Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__,"end");
 }
 void PlaceTree::refreshIcons()
@@ -250,8 +250,6 @@ void PlaceTree::refreshIcons()
         QString  path = itemBookMark->data(0,Qt::ToolTipRole).toString();
         itemBookMark->setIcon(0,EMimIcon::iconFolder(path));
     }
-   // myComputer->updateDevices();
-    //TODO ADD refresh icons devices
 
 }
 
@@ -313,7 +311,7 @@ void PlaceTree::removeDiskItem(QString s)
 {
       Messages::debugMe(0,__LINE__,"PlaceTree",__FUNCTION__);
 
-     QTreeWidgetItem *itemDev;
+     QTreeWidgetItem *itemDev=nullptr;
     for (int i = 0; i < mDivecesItem->childCount(); ++i) {
         QTreeWidgetItem *item=mDivecesItem->child(i);
         QString devStr=item->data(0,Qt::UserRole).toString();
@@ -449,7 +447,7 @@ void PlaceTree::itemPlacesClicked(QTreeWidgetItem* item,int)
                mHashItems[url]=item;
      }
 
-      if(QFile::exists(url)||url==_TRASH)
+      if(QFile::exists(url)||url==D_TRASH)
           emit urlPlacesChanged(url);
 
 }

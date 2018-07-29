@@ -46,12 +46,19 @@ MyListView::MyListView(QFileSystemModel *model, Actions *action,QWidget *parent)
     setDragDropMode(QAbstractItemView::DragDrop);
     setDefaultDropAction(Qt::MoveAction);
     setDropIndicatorShown(true);
-    setEditTriggers(QAbstractItemView::EditKeyPressed |
-                    QAbstractItemView::SelectedClicked);
+
     setMouseTracking(true);
     setWordWrap(false);
 }
-
+void MyListView::setdDoubleClickTriggers(bool arg)
+{
+    if(arg){
+        setEditTriggers(QAbstractItemView::EditKeyPressed |
+                        QAbstractItemView::SelectedClicked);
+    }else{
+        setEditTriggers(QAbstractItemView::NoEditTriggers);
+    }
+}
 
 void MyListView::startDrag(Qt::DropActions supportedActions) {
 //    if(movement() != Static) {

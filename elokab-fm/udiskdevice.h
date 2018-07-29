@@ -23,33 +23,32 @@
 #include <QObject>
 #include <QProcess>
 #include <QHash>
-#include "udiskdevice.h"
 
 class Device : public QObject
 {
     Q_OBJECT
 public:
     enum MediaType {
-              MediaTypeUnknown,
-              MediaTypeDRIVE,
-              MediaTypeUSB,
-              MediaTypeCDROM
+        MediaTypeUnknown,
+        MediaTypeDRIVE,
+        MediaTypeUSB,
+        MediaTypeCDROM
     };
 
-     int mediaType() const { return mType; }
+    int mediaType() const { return mType; }
     QString mountPath() const { return mMountPath; }
     QString iconName() const { return mIconName; }
     QString id() const { return mId; }
     QString label() const { return mLabel; }
-     QString devPath() const { return mDevPath; }
+    QString devPath() const { return mDevPath; }
 
-void setId(const QString &id){mId=id;}
+    void setId(const QString &id){mId=id;}
     void setDevPath(const QString &devicePath){mDevPath=devicePath;}
     void setLabel(const QString &label){mLabel=label;}
     void setFileSystem(const QString &fsystem){mFileSystem=fsystem;}
     void setMountPath(const QString &mountPath){mMountPath=mountPath;}
     void setIconName(const QString &iconName){mIconName=iconName;}
-     void setMediaType(int type){mType=type;}
+    void setMediaType(int type){mType=type;}
 
     bool isValid() const { return mIsValid; }
     bool isExternal() const { return mIsExternal; }
@@ -62,8 +61,9 @@ private:
     QString mFileSystem;
     QString mMountPath;
     QString mIconName;
+    QString mId;
+
      int mType;
-QString mId;
 
     bool mIsValid;
     bool mIsExternal;
@@ -75,10 +75,10 @@ class UdiskDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit UdiskDevice(QObject *parent = 0);
-     ~UdiskDevice();
+    explicit UdiskDevice(QObject *parent = nullptr);
+    ~UdiskDevice();
 signals:
-void deviceAdd(Device *D);
+    void deviceAdd(Device *D);
 
     void devicesChanged();
     void propertiesChanged();
@@ -98,14 +98,14 @@ public slots:
     //QList<Device*> listDevice(){return mListDevice;}
 
 private slots:
-   void deviceStatuChanged();
-   int mediaType(const QString &drive);
-   void UpdateDevicesProperties(const QString &result);
-      QString iconName(int type);
+    void deviceStatuChanged();
+    int mediaType(const QString &drive);
+    void UpdateDevicesProperties(const QString &result);
+    QString iconName(int type);
 private:
- //  QList<Device*> mListDevice;
+    //  QList<Device*> mListDevice;
     QHash <QString,Device*> mDevicesHash;
-//QStringList mListdev;
+    //QStringList mListdev;
     QProcess *mProcess;
     //     QHash<QString, QString> hash;
 };

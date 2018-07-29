@@ -53,6 +53,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="checkBoxRename">
+         <property name="text">
+          <string>Double Click to rename file</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Terminal</string>

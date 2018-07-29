@@ -44,230 +44,241 @@
  */
 class PageWidget : public QWidget
 {
-          Q_OBJECT
-     public:
-          /**
+    Q_OBJECT
+public:
+    /**
      * @brief PageWidget
      * @param model
      * @param obj
      * @param url
      * @param parent
      */
-          explicit PageWidget(MyFileSystemModel *model,
-                              Settings *setting,
-                              Actions *action,
-                              const QString &url,
-                              QWidget *parent = 0);
+    explicit PageWidget(MyFileSystemModel *model,
+                        Settings *setting,
+                        Actions *action,
+                        const QString &url,
+                        QWidget *parent = nullptr);
 
-          //!
-          ~PageWidget();
+    //!
+    ~PageWidget();
 
 
-          //! return curent url path
-          QString curentDir(){return m_dirPath;}
+    //! return curent url path
+    QString curentDir(){return m_dirPath;}
 
-          //! return true if goback is enabled
-          bool backEnabled(){return mbackEnabled;}
+    //! return true if goback is enabled
+    bool backEnabled(){return mbackEnabled;}
 
-          //! return true if goForward is enabled
-          bool forwardEnabled(){return mForwardEnabled;}
+    //! return true if goForward is enabled
+    bool forwardEnabled(){return mForwardEnabled;}
 
-          void clearCurentPath(){ mItemDelegate->clearCurentPath(m_dirPath); }
+    void clearCurentPath(){ mItemDelegate->clearCurentPath(m_dirPath); }
 
 
-     protected:
+protected:
 
-     signals:
+signals:
 
-          //! رسالة الى الحاوي بان المسار بحجم كبير
-         // void isLargeDirectory(const QString &url);
+    //! رسالة الى الحاوي بان المسار بحجم كبير
+    // void isLargeDirectory(const QString &url);
 
-          //! رسالة الى الاب بتغير المسار
-          void urlChanged(const QString &url);
+    //! رسالة الى الاب بتغير المسار
+    void urlChanged(const QString &url);
 
-          //!
-        //  void urlBeginChanged(const QString &url);
-          //!
-          void indexHasChanged(QModelIndex);
+    //!
+    //  void urlBeginChanged(const QString &url);
+    //! اشارة بتغير العنصر لتغير المسار
+    void indexHasChanged(QModelIndex);
 
-          //! رسالة بتوفر عناصر محددة
-          void  selectedAvailabe(bool);
+    //! رسالة بتوفر عناصر محددة
+    void  selectedAvailabe(bool);
 
-          //! رسالة لعرض معلومات عن الملفات المحددة الى النافذة الام
-          void selectedFoldersFiles(QString);
+    //! رسالة لعرض معلومات عن الملفات المحددة الى النافذة الام
+    void selectedFoldersFiles(QString);
 
-          //! رسالة بتوفر التنقل للامام
-          void historyForwardAvailable(bool);
+    //! رسالة بتوفر التنقل للامام
+    void historyForwardAvailable(bool);
 
-          //! رسالة بتوفر التنقل للخلف
-          void historyBackAvailable(bool);
+    //! رسالة بتوفر التنقل للخلف
+    void historyBackAvailable(bool);
 
-     public slots:
+public slots:
 
-          //!
-          void closeAll();
+    //!
+    void closeAll();
 
-          //!
-          void setBackEnabled(bool enabled){mbackEnabled=enabled;}
+    //! تفعيل زر الذهاب للخلف
+    void setBackEnabled(bool enabled){mbackEnabled=enabled;}
 
-          //!
-          void setForwardEnabled(bool enabled){mForwardEnabled=enabled;}
+    //! تفعيل زر الذهاب للامام
+    void setForwardEnabled(bool enabled){mForwardEnabled=enabled;}
 
-          //!
-          void setUrl(const QString &url);
+    //! الذهاب الى المسار
+    void setUrl(const QString &url);
 
-          //!
-          void setUrlChange(const QString &url);
+    //! غير المسار
+    void setUrlChange(const QString &url);
 
-          //!
-          void viewChangged(int index);
+    //! تغير المنظر
+    void viewChangged(int index);
 
-          //!
-          void updateSignals();
+    //! تحديق الاشارات
+    void updateSignals();
 
-          //!
-          void goForward();
+    //! الذهاب للامام
+    void goForward();
 
-          //!
-          void goBack();
+    //! الذهاب للخلف
+    void goBack();
 
-          //!
-          void  setViewMode(int mode);
+    //! طريقة العرض ايقونات او قياسي او تفصيلي
+    void  setViewMode(int mode);
 
-          //!
-          QString dirPath(){return m_dirPath;}
+    //! يرجع المسار الحالي
+    QString dirPath(){return m_dirPath;}
 
-          //!
-          QString selectedFile();
+    //! مسار الملف المحدد
+    QString selectedFile();
 
-          //!
-          QStringList selectedFiles();
+    //! قائمة بمسارات الملفات المحددة
+    QStringList selectedFiles();
 
-          //!
-          QModelIndexList selectedIndex();
+    //! قائمة باعناصر المحددة
+    QModelIndexList selectedIndex();
 
-          //!
-          void setZoomIn();
-          //!
-          void setZoomOut();
-          //!
-          void renameFiles();
+    //! تكبير
+    void setZoomIn();
+    //! تصغير
+    void setZoomOut();
+    //! تغيير الاسم
+    void renameFiles();
 
-          //!
-        //  void moveFilesToTrash();
+    //!
+    //  void moveFilesToTrash();
 
-          //!
-          void selectAll();
+    //! تحديد الكل
+    void selectAll();
 
-          //!
-          void showProperties();
+    //! نافذة الخصائص
+    void showProperties();
 
-          //!
-          void showOpenwithDlg(const QString &fileName);
- void iconUpdate(QModelIndex index);
- void iconThumbUpdate(const QString &file);
+    //! نلفذة فتح باستخدام
+    void showOpenwithDlg(const QString &fileName);
 
-void selectIndex(const QString &file);
+    //! تحديق الايقونات
+    void iconUpdate(QModelIndex index);
 
-void trashDeleteFiles();
-//  void iconThumbUpdate(const QString &fileName);
+    //! تحديث المصغرات
+    void iconThumbUpdate(const QString &file);
 
+    //! تحديد العنصر بواسطة المسار
+    void selectIndex(const QString &file);
 
-     private slots:
-          //!
-          void selectionHasChanged(const QItemSelection &/*selected*/, const QItemSelection &);
+    //! حذف الملفات المحددة
+    void trashDeleteFiles();
 
-          //!
-          void slotItemActivated(QModelIndex index);
 
-          //!
-          void slotItemPressed(QModelIndex index);
+private slots:
 
-          //!
-          void customContextMenu(QPoint);
+    //! تفعيل /تعطيل النقر المزدوج لاعادة التسمية
+    void setDoubleClickEdit(bool arg);
 
-          //!
-          int focusedWidget();
+    //! عند تغير التحديد
+    void selectionHasChanged(const QItemSelection &/*selected*/, const QItemSelection &);
 
-void trashRestoreFiles();
+    //! عند تفعيل العنصر
+    void slotItemActivated(QModelIndex index);
 
-     private:
+    //! عند النقر على العنصر
+    void slotItemPressed(QModelIndex index);
 
-Thumbnails *mThumbnails;
-          //!
-          Settings *mSettings;
+    //! القائمة الفرعية المنسدلة
+    void customContextMenu(QPoint);
 
-          //!
-          MyFileSystemModel *myModel ;
+    //! الودجت المفعلة
+    int focusedWidget();
 
-          //!
-          Actions *mActions;
+     //! استرجاع ملفات من سلة المحذوفات
+    void trashRestoreFiles();
 
-          //!
-          QItemSelectionModel *listSelectionModel;
 
-          //!
-          QStackedWidget *stackedWidget;
+private:
 
-          //!
-          MyListView *listView;
+    Thumbnails *mThumbnails;
+    //!
+    Settings *mSettings;
 
-          //!
-          MyTreeView *treeView;
+    //!
+    MyFileSystemModel *myModel ;
 
-          //!
-         // TrashView *trashView;
-          //!
-          Trash *mTrash;
+    //!
+    Actions *mActions;
 
-          //!
-          SearchView *searchView;
+    //!
+    QItemSelectionModel *listSelectionModel;
 
-          //!
-         ItemDelegate *mItemDelegate;
+    //!
+    QStackedWidget *stackedWidget;
 
-         //!
-         QStack< QString > mHistoryBack;
+    //!
+    MyListView *listView;
 
-          //!
-          QStack< QString > mHistoryForward;
+    //!
+    MyTreeView *treeView;
 
-          //!
-          QString m_dirPath;
+    //!
+    // TrashView *trashView;
+    //!
+    Trash *mTrash;
 
+    //!
+    SearchView *searchView;
 
-          //!
-          bool mbackEnabled;
+    //!
+    ItemDelegate *mItemDelegate;
 
-          //!
-          bool mForwardEnabled;
+    //!
+    QStack< QString > mHistoryBack;
 
+    //!
+    QStack< QString > mHistoryForward;
 
-          //!
-          PropertiesDlg *propertiesDlg;
+    //!
+    QString m_dirPath;
 
-          //!
-          OpenWithDlg *openWithDlg;
 
-          //!
-          enum ViewWidget{
-               WListView,
-               WTreeView,
-               WSearchView,
-              WTrashView
-          };
+    //!
+    bool mbackEnabled;
 
-          enum ViewMode{
-               IconView,
-               CompactView,
-               DetailView
-          };
+    //!
+    bool mForwardEnabled;
 
-          //!
-          int mViewMode;
+    bool mDoubleClickEdit;
 
-  //: TODO FIX RESTOR HIDEN FILES
-bool restorHiden;
+    //!
+    PropertiesDlg *propertiesDlg;
+
+    //!
+    OpenWithDlg *openWithDlg;
+
+    //!
+    enum ViewWidget{
+        WListView,
+        WTreeView,
+        WSearchView,
+        WTrashView
+    };
+
+    enum ViewMode{
+        IconView,
+        CompactView,
+        DetailView
+    };
+
+    //!
+    int mViewMode;
+
+
 
 };
 

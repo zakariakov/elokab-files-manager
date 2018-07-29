@@ -31,7 +31,7 @@ class SymLinkDlg : public QDialog
     Q_OBJECT
     
 public:
-    explicit SymLinkDlg(const QString &path,QWidget *parent = 0);
+    explicit SymLinkDlg(const QString &path,QWidget *parent = nullptr);
     ~SymLinkDlg();
     QString fileName(){return mPath;}
 private:

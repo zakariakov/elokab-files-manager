@@ -13,7 +13,7 @@ class SettingsDlg : public QDialog
     Q_OBJECT
 
 public:
-    explicit SettingsDlg(Settings *settings,QWidget *parent = 0);
+    explicit SettingsDlg(Settings *settings,QWidget *parent = nullptr);
     ~SettingsDlg();
 
     bool   isSingleclick();
@@ -22,9 +22,12 @@ public:
     bool   isClassicIcons();
     bool   videoThumbNails();
     bool   pdfThumbNails();
+    bool   doubleClickRemame();
 
     QString terminal();
+
 private slots:
+
     void on_buttonBox_accepted();
 
     void on_pushButtonClean_clicked();

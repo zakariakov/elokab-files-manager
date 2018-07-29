@@ -35,8 +35,6 @@ MyTreeView::MyTreeView(QFileSystemModel *model,QWidget *parent) :
      setDragDropMode(QAbstractItemView::DragDrop);
      setDefaultDropAction(Qt::MoveAction);
      setDropIndicatorShown(true);
-     setEditTriggers(QAbstractItemView::EditKeyPressed |
-                     QAbstractItemView::SelectedClicked);
 
      header()->setProperty("showSortIndicator", QVariant(true));
      setSortingEnabled(true);
@@ -89,4 +87,13 @@ void MyTreeView::setRootPath(const QString &url)
      setRootIndex(mModel->index(url));
      collapseAll();
 
+}
+void MyTreeView::setdDoubleClickTriggers(bool arg)
+{
+    if(arg){
+        setEditTriggers(QAbstractItemView::EditKeyPressed |
+                        QAbstractItemView::SelectedClicked);
+    }else{
+        setEditTriggers(QAbstractItemView::NoEditTriggers);
+    }
 }

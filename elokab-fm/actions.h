@@ -36,7 +36,7 @@ public:
      * @param lc اللغة
      * @param parent
      */
-    explicit Actions(Settings *setting,const QString &lc,QObject *parent = 0);
+    explicit Actions(Settings *setting,const QString &lc,QObject *parent = nullptr);
 
     //!
     enum ViewMode{
@@ -85,8 +85,6 @@ public:
 
      //!
     QAction *openInNewTabAction(){ return actOpenInNewTab;}
-
-
 
     //!
     QAction *showSettingsAction(){return actShowSettings;}

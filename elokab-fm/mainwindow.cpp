@@ -357,8 +357,8 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
                if(fi.isDir())
                     ui->statusBar->showMessage(QFileInfo(msg).fileName());
                else
-                    ui->statusBar->showMessage(QFileInfo(msg).fileName()
-                                               +"   "+EMimIcon::formatSize(QFileInfo(msg).size()));
+                    ui->statusBar->showMessage(EMimIcon::formatSize(QFileInfo(msg).size())
+                                               +" :  "+QFileInfo(msg).fileName());
 
 
           } else if(msg.startsWith("fileName://")){
@@ -554,6 +554,8 @@ void MainWindow::showSettings()
          mSettings->setTerminal(mSettingsDlg->terminal());
          mSettings->setPdfThumbnails(mSettingsDlg->pdfThumbNails());
          mSettings->setVideoThumbnails(mSettingsDlg->videoThumbNails());
+         mSettings->setDoubleClickEdit(mSettingsDlg->doubleClickRemame());
+
      }
 
          delete mSettingsDlg;

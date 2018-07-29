@@ -36,10 +36,13 @@ class MyTreeView : public QTreeView
      * @param model
      * @param parent
      */
-          explicit MyTreeView(QFileSystemModel *model,QWidget *parent = 0);
+          explicit MyTreeView(QFileSystemModel *model,QWidget *parent = nullptr);
 
           //!
           QModelIndexList selectedIndexes() const;
+
+          void  setdDoubleClickTriggers(bool arg);
+
      signals:
 
      public slots:

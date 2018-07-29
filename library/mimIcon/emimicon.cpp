@@ -371,7 +371,7 @@ QString EMimIcon::getMimeTypeByFile(QString fileName)
     // magic_t cookie = magic_open(MAGIC_MIME);
      magic_t cookie = magic_open(MAGIC_MIME_TYPE);
 
-     magic_load(cookie, 0);
+     magic_load(cookie, nullptr);
      QString temp = magic_file(cookie, fileName.toLocal8Bit());
 
      magic_close(cookie);
@@ -753,7 +753,7 @@ qDebug()<<fileName;
     QString proc=replaceArgument(fileName);
     return  process.startDetached(proc);
 
-    return true;
+   // return true;
 }
 
 //______________________________________________________________________________________
@@ -1198,7 +1198,7 @@ QString EMimIcon::defaultTerminal()
     //search list of terminal
 
     if(terminal.isEmpty()){
-        //TODO remplace this list
+        //NOTE تغيير هذه القائمة بعد مدة
         QStringList list;
         list<<"elokab-terminal"<<"gnome-terminal"<<"konsole"<<"termite"
            <<"deepin-terminal"<<"terminology"<<"xfce4-terminal"

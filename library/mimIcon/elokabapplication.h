@@ -28,15 +28,24 @@ class ElokabApplication : public QApplication
 public:
 
     ElokabApplication(int& argc, char** argv);
-   const QString translationPath();
-  Qt::LayoutDirection layoutDirection(){return mLd;}
-private slots:
-   void setIconsThemeName();
+
+    Qt::LayoutDirection layoutDirection(){return mLd;}
+
+    const QString translationPath();
 
 private:
-   void setLayoutDirection(Qt::LayoutDirection ld){mLd=ld;}
-  ElokabSettings *msetting;
-  Qt::LayoutDirection mLd;
+
+    void setLayoutDirection(Qt::LayoutDirection ld){mLd=ld;}
+
+    ElokabSettings *msetting;
+
+    Qt::LayoutDirection mLd;
+
+
+private slots:
+
+    void setIconsThemeName();
+
 };
 
 #endif // ELOKABAPPLICATION_H

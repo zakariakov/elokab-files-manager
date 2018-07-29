@@ -9,50 +9,45 @@ class MyFileSystemModel : public QFileSystemModel
     Q_OBJECT
 public:
 
-    explicit MyFileSystemModel(QObject *parent = 0);
+    explicit MyFileSystemModel(QObject *parent = nullptr);
 
-    void setPreview(bool preview){mPreview=preview;}
-
+     //! مسح مسار الحالي في المخبأ
     void clearCache(const QString &path);
 
 
-    signals:
-     //void imageLoaded(QFileInfo minfo);
-     void dragDropFiles(bool copy,QString path, QStringList list);
-     //void iconUpdate(const QModelIndex index)const;
+signals:
+     //! اشارة بان الملف تم سحبه وافلاته
+    void dragDropFiles(bool copy,QString path, QStringList list);
 
-    protected:
+protected:
 
-       QVariant data(const QModelIndex &index, int role) const ;
+     //! بيانات العناصر في الاعمدة
+    QVariant data(const QModelIndex &index, int role) const ;
 
-        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+     //! ارجاع اسماء الاعمدة
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-     //   int columnCount(const QModelIndex &parent) const;
-        bool dropMimeData(const QMimeData * data,
-                          Qt::DropAction action,
-                          int row,
-                          int column,
-                          const QModelIndex & parent );
-        int columnCount(const QModelIndex &parent = QModelIndex()) const ;
+     //! عند عملية السحب والافلات
+    bool dropMimeData(const QMimeData * data,
+                      Qt::DropAction action,
+                      int row,
+                      int column,
+                      const QModelIndex & parent );
 
-    public slots:
+    //! ارجاع عدد الاعمدة
+    int columnCount(const QModelIndex &parent = QModelIndex()) const ;
 
-    //    void updateIcons(const QString &file){
-    //        if(index(file).isValid())
-    //          iconUpdate(index(file));
-    //    }
-    private:
+public slots:
+
+private:
+
+      //! مخبأة انواع الملفات
+    QHash<QString, QString> *mimcach;
+
+      //! جلب نوع الملف بلغة المظام
+    QString localeType(const QFileInfo &info)const;
 
 
-        bool mPreview;
-
-    //  QHash<QString,QModelIndex> *hashIndex;
-       //QHash< QModelIndex,Thumbnail* > *mThumbnails;
-         QHash<QString,QString>*mimcach;
-       //   QHash<QString,QIcon>*iconmimCach;
-       //      QHash<QString,QIcon>*iconDesktopCach;
-       //   QHash<QString,QByteArray> *hashImages;
-QString localeType(const QFileInfo &info)const;
 
 };
 

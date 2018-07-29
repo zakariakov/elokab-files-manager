@@ -27,7 +27,9 @@
 
 class ItemDelegate : public QStyledItemDelegate
 {
+
     Q_OBJECT
+
 public:
 
     //!
@@ -43,59 +45,66 @@ public:
 
 signals:
 
+      //! اشارة بان الملف بحاجة الى مصغرة
     void requireThumb(QFileInfo,QString)const;
-    //!
-    // void imageHasThumb(const QString &path)const;
 
 public slots:
 
-    //!
-    void setTreeView(bool arg){isTreeview=arg;}
+    //!  هل عرض التفصيل
+    void setTreeView(bool arg)      {isTreeview=arg;}
 
-    //!
-    void setClassicIcons(bool arg){isModernMode=!arg;}
+    //!  تفعيل/تعطيل الايقونات الكلاسيكية
+    void setClassicIcons(bool arg)  {isModernMode=!arg;}
 
-    //!
-    void setTumbnail(bool thumb){mThumbnail=thumb;}
+    //!  تفعيل /تعطيل المصغرات
+    void setTumbnail(bool thumb)    {mThumbnail=thumb;}
 
-    //!
-    void setPdfTumbnail(bool thumb){mPdfThumbnail=thumb;}
+    //!  تفعيل/تعطيل مصغرات الكتب pdf
+    void setPdfTumbnail(bool thumb) {mPdfThumbnail=thumb;}
 
-    //!
+    //! تفعيل/تعطيل مصعرات الفيديو
     void setVideoTumbnail(bool thumb){mVideoThumbnail=thumb;}
 
-    //!
+    //! مسح معلومات المسار الحالي
     void clearCurentPath(const QString &path);
 
-    //!
+    //!  مسح معلومات املف الحالي
     void clearItemCache(const QString &file);
 
-private:
-    //!
+private slots:
+    //!  رسم الايقونة عند الوضع التفصيلي والقياسي
     void paintDetailView(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    //!
+
+    //!  رسم الايقونة في حالة وضع الايقونات
     void paintIconView(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
+    //!  ...جلب حالة الايقونة بين مفعلة وعادية و
+    static QIcon::Mode iconModeFromState(QStyle::State state);
+
+    //!   جلب الايقونة
+    QIcon decoration(const QModelIndex &index) const;
+
+    //!   جلب ايقونة المصغرات
+    QIcon iconThumbnails(const QString &file,const QString &type=QString())const;
+
+private:
+
+    QMap<QString ,QIcon>  *imageCache ;
+    QMap<QString ,QIcon>  *iconCache ;
+    QMap<QString ,QIcon>  *deskCache;
+
+
+    QString thumbnailCache;
+
     QIcon mSymlinkIcon;
+
     bool  mThumbnail;
     bool  mPdfThumbnail;
     bool  mVideoThumbnail;
-    QMap<QString ,QIcon>  *imageCache ;
-    QMap<QString ,QIcon>  *iconCache ;
-     QMap<QString ,QIcon>  *deskCache;
-
-    QString thumbnailCache;
-    bool    isTreeview;
-    bool    isModernMode;
-    //!
-    static QIcon::Mode iconModeFromState(QStyle::State state);
-
-    //!
-    QIcon decoration(const QModelIndex &index) const;
+    bool  isTreeview;
+    bool  isModernMode;
 
 
-    //!
-    QIcon iconThumbnails(const QString &file,const QString &type=QString())const;
 
 };
 

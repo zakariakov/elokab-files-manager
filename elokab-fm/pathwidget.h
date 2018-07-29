@@ -50,7 +50,7 @@ class PathWidget : public QWidget
      * @param url
      * @param parent
      */
-          explicit PathWidget(QWidget *parent = 0);
+          explicit PathWidget(QWidget *parent = nullptr);
 
           ~PathWidget();
 

@@ -32,7 +32,7 @@ class FilterBar : public QWidget
      public:
 
           //!
-          explicit FilterBar(QWidget* parent = 0);
+          explicit FilterBar(QWidget* parent = nullptr);
 
           //!
           virtual ~FilterBar();

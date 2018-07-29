@@ -18,6 +18,8 @@ public:
 
 signals:
     void terminated(const QString &path);
+    void excluded(const QString &path);
+
 
 protected:
     void run();
@@ -25,7 +27,7 @@ protected:
 private:
     QFileInfo   mInfo;
     QString     mType;
-    QStringList mListExclude;
+
 
     void createImageThumbnail();
     void createPdfThumbnail();
@@ -51,9 +53,12 @@ public slots:
 private slots:
     void startRender();
     void startNewThread();
+    void setLisExclude(const QString &path){mListExclude.append(path);}
 
 private:
     Thread   *mThread;
+
+     QStringList mListExclude;
 
     QString   mCurentPath;
     QString   mCurType;

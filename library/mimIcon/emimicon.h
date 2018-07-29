@@ -47,8 +47,13 @@ public:
     //!
     explicit  EMimIcon(){/*instance()->hashMimLang=new QHash<QString,QString>; */}
 
+    //!
     static EMimIcon *instance();
-static void setlocale(QString lc);
+
+    //!
+    static void setlocale(QString lc);
+
+    //!
     static  QIcon icon(const QFileInfo &info,bool previw=false);
 
     //!
@@ -174,20 +179,26 @@ static void setlocale(QString lc);
 
     //!
     static QString mimLang(const QString &mim);
+
+    //!
     static QString createDescktopFile(const QString &exec);
+
+    //!
     static QString defaultTerminal();
-   static bool findProgram(const QString &program);
-  static QMap<QString, QString> trachInfo(const QString &fileName);
-signals:
 
+    //!
+    static bool findProgram(const QString &program);
 
-
-protected:
+    //!
+    static QMap<QString, QString> trachInfo(const QString &fileName);
 
 
 private:
-QHash<QString,QString>hashMimLang;
-QString mLocal;
+
+    QHash<QString,QString>hashMimLang;
+
+    QString mLocal;
+
 private slots:
 
     //!

@@ -34,6 +34,7 @@
 #include <QDateTime>
 #include <QtConcurrent>
 #include <QMessageBox>
+#include <QInputDialog>
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
@@ -46,8 +47,8 @@ PageWidget::PageWidget(MyFileSystemModel *model,
     mSettings(setting),
     myModel( model),
     mActions(action),
-    propertiesDlg(0),
-    openWithDlg(0)
+    propertiesDlg(nullptr),
+    openWithDlg(nullptr)
 {
 
     setObjectName("PageWidget");
@@ -119,30 +120,31 @@ PageWidget::PageWidget(MyFileSystemModel *model,
     connect(searchView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(customContextMenu(QPoint)));
 
     //   connect(mSettings,SIGNAL(iconSizeChanged(int)),this,SLOT(setZoomIn(int)));
-    connect(mActions,SIGNAL(zoomInChanged()),this,SLOT(setZoomIn()));
-    connect(mActions,SIGNAL(ZoomOutChanged()),this,SLOT(setZoomOut()));
-    connect(mActions,SIGNAL(newFileCreated(QString)),this,SLOT(selectIndex(QString))) ;
-    connect(mActions,SIGNAL(trashDeleteFile()),this,SLOT(trashDeleteFiles())) ;
-    connect(mActions,SIGNAL(trashClean()),mTrash,SLOT(cleanTrash())) ;
-    connect(mActions,SIGNAL(trashRestoreFiles()),this,SLOT(trashRestoreFiles())) ;
+    connect(mActions,SIGNAL(zoomInChanged()),              this,SLOT(setZoomIn()));
+    connect(mActions,SIGNAL(ZoomOutChanged()),             this,SLOT(setZoomOut()));
+    connect(mActions,SIGNAL(newFileCreated(QString)),      this,SLOT(selectIndex(QString))) ;
+    connect(mActions,SIGNAL(trashDeleteFile()),            this,SLOT(trashDeleteFiles())) ;
+    connect(mActions,SIGNAL(trashRestoreFiles()),          this,SLOT(trashRestoreFiles())) ;
+    connect(mActions,SIGNAL(trashClean()),                 mTrash,SLOT(cleanTrash())) ;
 
-    connect(mSettings,SIGNAL(rootDecorationChanged(bool)),treeView,SLOT(setExpandable(bool)));
-    connect(mSettings,SIGNAL(showThumbnailsChanged(bool)),mItemDelegate,SLOT(setTumbnail(bool))) ;
-    connect(mSettings,SIGNAL(classicIconsChanged(bool)),mItemDelegate,SLOT(setClassicIcons(bool))) ;
-    connect(mSettings,SIGNAL(pdfThumbnailsChanged(bool)),mItemDelegate,SLOT(setPdfTumbnail(bool))) ;
+    connect(mSettings,SIGNAL(rootDecorationChanged(bool)), treeView,SLOT(setExpandable(bool)));
+    connect(mSettings,SIGNAL(showThumbnailsChanged(bool)), mItemDelegate,SLOT(setTumbnail(bool))) ;
+    connect(mSettings,SIGNAL(classicIconsChanged(bool)),   mItemDelegate,SLOT(setClassicIcons(bool))) ;
+    connect(mSettings,SIGNAL(pdfThumbnailsChanged(bool)),  mItemDelegate,SLOT(setPdfTumbnail(bool))) ;
     connect(mSettings,SIGNAL(VideoThumbnailsChanged(bool)),mItemDelegate,SLOT(setVideoTumbnail(bool))) ;
+    connect(mSettings,SIGNAL(doubleClickEditChanged(bool)),this,SLOT(setDoubleClickEdit(bool ))) ;
 
-    connect(searchView,SIGNAL(setUrl(QString)),this,SLOT(setUrl(QString)));
-    connect(searchView,SIGNAL(searchingCanceled(QString)),this,SLOT(setUrlChange(QString)));
-    connect(searchView,SIGNAL(showOpenwithDlg(QString)),this,SLOT(showOpenwithDlg(QString)));
-    connect(searchView,SIGNAL(fileSelected(QString)),this,SIGNAL(selectedFoldersFiles(QString)));
+    connect(searchView,SIGNAL(setUrl(QString)),            this,SLOT(setUrl(QString)));
+    connect(searchView,SIGNAL(searchingCanceled(QString)), this,SLOT(setUrlChange(QString)));
+    connect(searchView,SIGNAL(showOpenwithDlg(QString)),   this,SLOT(showOpenwithDlg(QString)));
+    connect(searchView,SIGNAL(fileSelected(QString)),      this,SIGNAL(selectedFoldersFiles(QString)));
 
-    connect(this,SIGNAL(historyBackAvailable(bool)),mActions,SIGNAL(backAvailable(bool))) ;
-    connect(this,SIGNAL(historyForwardAvailable(bool)),mActions,SIGNAL(forwardAvailable(bool))) ;
-    connect(this,SIGNAL(selectedAvailabe(bool)),mActions,SIGNAL(selectionAvialable(bool)));
+    connect(this,SIGNAL(historyBackAvailable(bool)),       mActions,SIGNAL(backAvailable(bool))) ;
+    connect(this,SIGNAL(historyForwardAvailable(bool)),    mActions,SIGNAL(forwardAvailable(bool))) ;
+    connect(this,SIGNAL(selectedAvailabe(bool)),           mActions,SIGNAL(selectionAvialable(bool)));
 
-    connect(this,SIGNAL(historyBackAvailable(bool)),this,SLOT(setBackEnabled(bool)));
-    connect(this,SIGNAL(historyForwardAvailable(bool)),this,SLOT(setForwardEnabled(bool)));
+    connect(this,SIGNAL(historyBackAvailable(bool)),       this,SLOT(setBackEnabled(bool)));
+    connect(this,SIGNAL(historyForwardAvailable(bool)),    this,SLOT(setForwardEnabled(bool)));
 
     listView->setViewIconSize      (mSettings->viewIconSize());
     treeView->setTreeIconSize      (mSettings->treeIconSize());
@@ -150,11 +152,13 @@ PageWidget::PageWidget(MyFileSystemModel *model,
     mItemDelegate->setTumbnail     (mSettings->showThumbnails());
     mItemDelegate->setPdfTumbnail  (mSettings->pdfThumbnails());
     mItemDelegate->setVideoTumbnail(mSettings->videoThumbnails());
-
+    setDoubleClickEdit(mSettings->doubleClickEdit());
     setUrl(url);
 
 
+
 }
+
 
 //___________________________________________________________________
 PageWidget::~PageWidget()
@@ -218,7 +222,7 @@ void PageWidget::customContextMenu(QPoint)
     QMenu menu;
     bool isSearch=false;
     bool isTrash=false;
-    if(m_dirPath==_TRASH){isTrash=true;}
+    if(m_dirPath==D_TRASH){isTrash=true;}
 
 
     switch (focusedWidget()) {
@@ -251,7 +255,7 @@ void PageWidget::customContextMenu(QPoint)
     QString mim;
 
     if(idx.isValid())
-        mim=idx.data(_MMIM).toString();
+        mim=idx.data(D_MMIM).toString();
     else
         mim=EMimIcon::mimeTyppe(info);
 
@@ -356,12 +360,12 @@ void PageWidget::slotItemActivated(QModelIndex index)
 
         if(myModel->isDir( listSelectionModel->currentIndex()))
         {
-            if(m_dirPath==_TRASH)
+            if(m_dirPath==D_TRASH)
                 return;
 
             setUrl(myModel->filePath(index));
         }else{
-           QString mim=index.data(_MMIM).toString();
+           QString mim=index.data(D_MMIM).toString();
            qDebug()<<mim<<myModel->filePath(index);
            // QString mim=EMimIcon::mimeTyppe(myModel->fileInfo(index));
             if (EMimIcon::launchApp(myModel->filePath(index),mim)==false)
@@ -435,7 +439,7 @@ void PageWidget::selectionHasChanged(const QItemSelection &/*selected*/,
 
     emit selectedFoldersFiles(msg);
 
-    if(!QFileInfo(m_dirPath).isWritable() && m_dirPath!=_TRASH)
+    if(!QFileInfo(m_dirPath).isWritable() && m_dirPath!=D_TRASH)
     {
         emit selectedAvailabe(false);
         mActions->copyAction()->setEnabled(listSelectionModel->selectedIndexes().count());
@@ -482,6 +486,14 @@ void PageWidget::setViewMode(int mode)
 
 
 }
+
+void PageWidget::setDoubleClickEdit(bool arg)
+{
+    mDoubleClickEdit=arg;
+listView->setdDoubleClickTriggers(arg);
+treeView->setdDoubleClickTriggers(arg);
+}
+
 //__________________________________________________________________________________
 bool urlIsHidden(QString url)
 {
@@ -510,12 +522,12 @@ void PageWidget::setUrl(const QString &url)
 
     if(m_dirPath==url)return;
     if(url.isEmpty())return;
-    if(m_dirPath==_TRASH && url==_SEARCH)return;
+    if(m_dirPath==D_TRASH && url==D_SEARCH)return;
 
 
 
     QModelIndex i = myModel->index(url);
-    if(url!=_TRASH && url!=_SEARCH){
+    if(url!=D_TRASH && url!=D_SEARCH){
 
         if(!i.isValid()){
             if(urlIsHidden(url)){
@@ -532,7 +544,7 @@ void PageWidget::setUrl(const QString &url)
 
     }
 
-    if(!m_dirPath.isEmpty() && m_dirPath!=_SEARCH){
+    if(!m_dirPath.isEmpty() && m_dirPath!=D_SEARCH){
         mHistoryBack.push(m_dirPath);
 
         mHistoryForward.clear();
@@ -562,22 +574,24 @@ void PageWidget::setUrlChange(const QString &url)
 
     if(m_dirPath.isEmpty())
         m_dirPath=QDir::rootPath();
-    if(curPath==_SEARCH)
+    if(curPath==D_SEARCH)
     {
 
         stackedWidget->setCurrentIndex(WSearchView);
-        if(oldPath!=_SEARCH)
+        if(oldPath!=D_SEARCH)
             searchView->setPath(oldPath);
 
     }else{
 
-        if(url==_TRASH)
+        if(url==D_TRASH)
             curPath=Edir::trashFiles();
 
         QModelIndex i = myModel->index(curPath);
         if(!i.isValid()){
             if(urlIsHidden(curPath)){
                 qDebug()<<"isHidden"<<curPath;
+                myModel->setFilter( QDir::AllEntries | QDir::System|QDir::NoDotAndDotDot|QDir::Hidden);
+
                 myModel->setRootPath(curPath);
                 restorRoot=true;
             }else{
@@ -605,10 +619,10 @@ void PageWidget::setUrlChange(const QString &url)
             break;
         case DetailView:
             stackedWidget->setCurrentIndex(WTreeView);
-            treeView->setColumnHidden(_COL_TYPE,    m_dirPath==_TRASH);
-            treeView->setColumnHidden(_COL_DATE,    m_dirPath==_TRASH);
-            treeView->setColumnHidden(_COL_TRASHED, m_dirPath!=_TRASH);
-            treeView->setColumnHidden(_COL_ORIGPATH,m_dirPath!=_TRASH);
+            treeView->setColumnHidden(D_COL_TYPE,    m_dirPath==D_TRASH);
+            treeView->setColumnHidden(D_COL_DATE,    m_dirPath==D_TRASH);
+            treeView->setColumnHidden(D_COL_TRASHED, m_dirPath!=D_TRASH);
+            treeView->setColumnHidden(D_COL_ORIGPATH,m_dirPath!=D_TRASH);
 
             treeView->setRootPath(curPath);
             treeView->setFocus();
@@ -625,8 +639,10 @@ void PageWidget::setUrlChange(const QString &url)
     emit indexHasChanged(myModel->index(m_dirPath));
 
     if(restorRoot){
-        myModel->setRootPath(QDir::rootPath());
-        myModel->setFilter(myModel->filter());
+
+        //  myModel->setFilter(myModel->filter());
+        myModel->setFilter( QDir::AllEntries | QDir::System|QDir::NoDotAndDotDot);
+        myModel->setRootPath(QDir::homePath());
     }
 
 
@@ -702,24 +718,66 @@ void PageWidget::goForward()
  **************************************************************************************/
 void PageWidget::renameFiles()
 {
+    if(mDoubleClickEdit){
+
+        switch (focusedWidget()) {
+
+        case WListView:
+            listView->edit(listSelectionModel->currentIndex());
+            break;
+
+        case WTreeView:
+            treeView->edit(listSelectionModel->currentIndex());
+            break;
+
+        case WSearchView:
+            searchView->editCurentItem();
+            break;
+
+        default:
+            break;
+
+        }
+        return;
+    }
+qDebug()<<"is not double click";
+    //------------------------------------------------DIALOG
+    QString filePath;
     switch (focusedWidget()) {
 
     case WListView:
-        listView->edit(listSelectionModel->currentIndex());
+        filePath=listSelectionModel->currentIndex().data(D_MFPATH).toString();
         break;
 
     case WTreeView:
-        treeView->edit(listSelectionModel->currentIndex());
+        filePath=listSelectionModel->currentIndex().data(D_MFPATH).toString();
         break;
 
     case WSearchView:
-        searchView->editCurentItem();
+        searchView->selectedFile();
         break;
 
     default:
         break;
 
     }
+    qDebug()<<"filepath"<<filePath;
+    if(filePath.isEmpty())
+        return;
+    QFile file(filePath);
+    QFileInfo info(filePath);
+    if(!info.isWritable())
+        return;
+    QString baseName=info.fileName();
+
+        bool ok;
+           QString text = QInputDialog::getText(nullptr, tr("Rename file"),
+                                                tr("file Name:"), QLineEdit::Normal,
+                                                baseName, &ok);
+           if (ok && !text.isEmpty())
+               file.rename(info.path()+"/"+text);
+
+
 
 }
 
@@ -931,7 +989,7 @@ void PageWidget::showProperties()
     QStringList list=selectedFiles();
 
     if(propertiesDlg){
-        propertiesDlg=0;
+        propertiesDlg=nullptr;
         delete propertiesDlg;
     }
     if(list.count()<1)
@@ -953,7 +1011,7 @@ void PageWidget::showOpenwithDlg(const QString &fileName)
     QString mim;
     QModelIndex idx=myModel->index(fileName);
     if(idx.isValid())
-        mim=idx.data(_MMIM).toString();
+        mim=idx.data(D_MMIM).toString();
     else
         mim=EMimIcon::mimeTyppe(QFileInfo(fileName));
 

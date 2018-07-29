@@ -35,7 +35,7 @@ class Settings : public QSettings
      public:
 
            //!
-          explicit Settings(QObject *parent = 0):
+          explicit Settings(QObject *parent = nullptr):
                QSettings(QApplication::organizationName(),QApplication::applicationName(), parent)
           {
                beginGroup("Main");
@@ -92,6 +92,8 @@ class Settings : public QSettings
           void pdfThumbnailsChanged(bool);
 
           void VideoThumbnailsChanged(bool);
+
+          void doubleClickEditChanged(bool);
 
      private:
 
@@ -192,6 +194,10 @@ class Settings : public QSettings
             /*!< عرض مصغرات الفيديو */
           bool videoThumbnails(){return value("VideoThumbnails",false).toBool();}
           void setVideoThumbnails(const bool &arg){setValue("VideoThumbnails",arg);emit VideoThumbnailsChanged(arg);}
+
+          /*!< عرض مصغرات الفيديو */
+        bool doubleClickEdit(){return value("DoubleClickEdit",true).toBool();}
+        void setDoubleClickEdit(const bool &arg){setValue("DoubleClickEdit",arg);emit doubleClickEditChanged(arg);}
 
      private slots:
 

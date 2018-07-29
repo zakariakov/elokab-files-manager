@@ -33,7 +33,7 @@
 #include<QMimeData>
 #include<QDirIterator>
 #include<QSettings>
-#include<QInputDialog>
+
 
 
 /*********************************************************************
@@ -688,8 +688,8 @@ void Actions::setUrl(const QString &url)
 
      m_dirPath=url;
      m_selectedPath=url;
-     actGoUp->setEnabled(m_dirPath!=QDir::rootPath()&&m_dirPath!=_TRASH);
-     if(m_dirPath==_TRASH || m_dirPath==_SEARCH){
+     actGoUp->setEnabled(m_dirPath!=QDir::rootPath()&&m_dirPath!=D_TRASH);
+     if(m_dirPath==D_TRASH || m_dirPath==D_SEARCH){
        mMenuNew->setEnabled(false);
      }else{
           mMenuNew->setEnabled(true);
@@ -889,7 +889,7 @@ void Actions::creatNewFile(const QString &fileSource)
 
      QFileInfo fiS(fileSource);
      bool ok;
-     QString newName = QInputDialog::getText(0, tr("New File"),
+     QString newName = QInputDialog::getText(nullptr, tr("New File"),
                                              tr("Enter name:"), QLineEdit::Normal,
                                              fiS.baseName(), &ok);
      if (ok && !newName.isEmpty())
@@ -916,7 +916,7 @@ void Actions::creatNewDir()
      QDir  path(m_dirPath);
 
      bool ok;
-     QString newName = QInputDialog::getText(0, tr("New Folder"),
+     QString newName = QInputDialog::getText(nullptr, tr("New Folder"),
                                              tr("Enter name:"), QLineEdit::Normal,
                                              tr("New Folder"), &ok);
 
@@ -994,7 +994,7 @@ void Actions::toggleView(QAction *action)
 void Actions::openInNewTab()
 {
     QString path=m_selectedPath;
-    if(path==_TRASH || path==_SEARCH)
+    if(path==D_TRASH || path==D_SEARCH)
         path=QDir::homePath();
 
      emit sendNewTab(path);
@@ -1021,7 +1021,7 @@ void Actions::openInTerminal()
 //     if(path.isEmpty()) path=m_dirPath;
 
      QString path=m_selectedPath;
-     if(path==_TRASH || path==_SEARCH)
+     if(path==D_TRASH || path==D_SEARCH)
          path=QDir::homePath();
        QProcess proc;
      proc.setWorkingDirectory(path);
@@ -1252,7 +1252,7 @@ void Actions::addArchive()
     // DIALOG----------
     bool ok;
 
-    QString text = QInputDialog::getText(0, tr("Create archive"),
+    QString text = QInputDialog::getText(nullptr, tr("Create archive"),
                                          tr("Archive name:"), QLineEdit::Normal,
                                          archName, &ok);
     if (ok && !text.isEmpty())

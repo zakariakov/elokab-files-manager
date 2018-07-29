@@ -37,7 +37,7 @@ class FileInformation : public QWidget
      public:
 
           //!
-          explicit FileInformation(QWidget *parent = 0);
+          explicit FileInformation(QWidget *parent = nullptr);
 
           //!
           ~FileInformation();

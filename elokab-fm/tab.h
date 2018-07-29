@@ -65,7 +65,7 @@ class Tab : public QTabWidget
           * @param parent
           */
           explicit Tab(Settings *setting,
-                       Actions *actions, QWidget *parent = 0);
+                       Actions *actions, QWidget *parent = nullptr);
           ~Tab();
 
      signals:
@@ -79,15 +79,17 @@ void  tabAdded(const QString &url);
      public slots:
 
           void updateIcons();
+
+          //!  غلق كل الالسنة
           void closeAll();
 
-          //!
+          //! اضافة لسان جديد
           void addNewTab( const QString &url=QDir::homePath());
 
-          //!
+          //! تغيير المسار
           void setUrl(const QString &url=QDir::homePath());
 
-          //!
+          //! مرشح الفلترة
           void setModelFiltrer(const QString& nf);
 //!
 
@@ -97,11 +99,11 @@ void  tabAdded(const QString &url);
           //!
          // void setLargeDirectory(const QString &dir);
 
-          //!
+          //! عرض المصغرات او اخفائها
           void setShowThumbnails(bool arg);
 
 
-          //!
+          //! غلق اللسان الحالي
           void closeCurentTab();
 
           //!

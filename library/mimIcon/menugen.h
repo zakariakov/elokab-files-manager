@@ -33,21 +33,13 @@ class MenuGen : public QObject
 {
     Q_OBJECT
 public:
-    explicit MenuGen(const QString &locale,QObject *parent = 0);
+    explicit MenuGen(const QString &locale,QObject *parent = nullptr);
 
 signals:
     /*!
          * \brief appDesktopChanged عند تغير احد ملفات ديسكتوب
          */
     void appDesktopChanged();
-private:
-    QTimer *mtimer;
-    QString m_locale;//اللغة الحالية
-    QStringList wordList;//قائمة بجميع الملفات من نوع ديسكتوب
-    QStringList m_desktopList;
- //   QStringList mimList;//قائمة بكل انواع الملفات والبرامج المرتبطة بها
-    int m_appCount;//عدد التطبيقات
-    QFileSystemWatcher *m_sWatcher; //مراقب تغير الملفات والمجلدات
 
 public slots:
     /*!
@@ -64,6 +56,18 @@ public slots:
      * \brief genirateAppFile انشاء ملف البرامج والتطبيقات المظمنة مع الملفات
      */
     void genirateAppFile();
+
+private:
+    QTimer *mtimer;
+    QFileSystemWatcher *m_sWatcher; //مراقب تغير الملفات والمجلدات
+
+    QStringList wordList;//قائمة بجميع الملفات من نوع ديسكتوب
+    QStringList m_desktopList;
+ //   QStringList mimList;//قائمة بكل انواع الملفات والبرامج المرتبطة بها
+
+    QString m_locale;//اللغة الحالية
+
+    int m_appCount;//عدد التطبيقات
 
 private slots:
     /**

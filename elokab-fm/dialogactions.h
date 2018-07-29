@@ -38,7 +38,7 @@ class DialogActions : public QDialog
           Q_OBJECT
 
      public:
-          explicit DialogActions(QWidget *parent = 0);
+          explicit DialogActions(QWidget *parent = nullptr);
           ~DialogActions();
 
 

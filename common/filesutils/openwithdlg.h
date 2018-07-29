@@ -34,7 +34,7 @@ class OpenWithDlg : public QDialog
     Q_OBJECT
     
 public:
-    explicit OpenWithDlg(bool remember=true,QWidget *parent = 0);
+    explicit OpenWithDlg(bool remember=true,QWidget *parent = nullptr);
     ~OpenWithDlg();
     QString execName(){return mExecName;}
     QString desktopFileName(){return mDesktopFileName;}
