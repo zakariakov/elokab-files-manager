@@ -22,6 +22,7 @@
 #include "defines.h"
 #include "filesutils/propertiesdlg.h"
 #include "filesutils/openwithdlg.h"
+#include "dialogrenamefiles.h"
 //#include "itemdelegate.h"
 #include "messages.h"
 //#ifdef DEBUG_APP
@@ -177,39 +178,7 @@ void PageWidget::closeAll()
 
     searchView->stopSearch();
 }
-/**************************************************************************************
- *
- **************************************************************************************/
-bool isArchive(const QString &mim)
-{
-    QStringList listArchive;
-    listArchive<<"application/x-7z-compressed"<<"application/x-7z-compressed-tar"
-              <<"application/x-ace"<<"application/x-alz"<<"application/x-ar"
-             <<"application/x-arj"<<"application/x-bzip"<<"application/x-bzip-compressed-tar"
-            <<"application/x-bzip1"<<"application/x-bzip1-compressed-tar"
-           <<"application/x-cabinet"<<"application/x-cd-image"<<"application/x-compress"
-          <<"application/x-compressed-tar"<<"application/x-cpio"<<"application/x-deb"
-         <<"application/x-ear"<<"application/x-ms-dos-executable"<<"application/x-gtar"
-        <<"application/x-gzip"<<"application/x-gzpostscript"<<"application/x-java-archive"
-       <<"application/x-lha"<<"application/x-lhz"<<"application/x-lrzip"
-      <<"application/x-lrzip-compressed-tar"<<"application/x-lzma"
-      <<"application/x-lz4"<<"application/x-lzip"<<"application/x-lzip-compressed-tar"
-     <<"application/x-lzma-compressed-tar"<<"application/x-lzop"<<"application/x-lz4-compressed-tar"
-    <<"application/x-lzop-compressed-tar"<<"application/x-ms-wim"
-    <<"application/x-rar"<<"application/x-rar-compressed"
-    <<"application/x-rpm"<<"application/x-source-rpm"<<"application/x-rzip"
-    <<"application/x-rzip-compressed-tar"<<"application/x-tar"
-    <<"application/x-tarz"<<"application/x-stuffit"<<"application/x-war"
-    <<"application/x-xz"<<"application/x-xz-compressed-tar"
-    <<"application/x-zip"<<"application/x-zip-compressed"
-    <<"application/x-zoo"<<"application/zip"<<"application/x-archive"
-    <<"application/vnd.ms-cab-compressed"<<"application/vnd.debian.binary-package"
-    <<"application/gzip"<<"application/vnd.rar";
 
-    if(listArchive.contains(mim))
-        return true;
-    return false;
-}
 /**************************************************************************************
  *
  **************************************************************************************/
@@ -334,7 +303,7 @@ void PageWidget::customContextMenu(QPoint)
     menu.addActions(mActions->menuEditePopup()->actions());
     // archive-------------------------------------
     if(QFileInfo(m_dirPath).isWritable()){
-        if(count==1  && isArchive(mim))
+        if(count==1  && EMimIcon::isArchive(mim))
             menu.addAction(mActions->extractHereAction(info.filePath()));
         menu.addAction(mActions->AddArchiveAction(selectedFiles()));
         menu.addSeparator();
@@ -574,6 +543,7 @@ void PageWidget::setUrlChange(const QString &url)
 
     if(m_dirPath.isEmpty())
         m_dirPath=QDir::rootPath();
+
     if(curPath==D_SEARCH)
     {
 
@@ -590,7 +560,7 @@ void PageWidget::setUrlChange(const QString &url)
         if(!i.isValid()){
             if(urlIsHidden(curPath)){
                 qDebug()<<"isHidden"<<curPath;
-                myModel->setFilter( QDir::AllEntries | QDir::System|QDir::NoDotAndDotDot|QDir::Hidden);
+               // myModel->setFilter( QDir::AllEntries | QDir::System|QDir::NoDotAndDotDot|QDir::Hidden);
 
                 myModel->setRootPath(curPath);
                 restorRoot=true;
@@ -602,7 +572,7 @@ void PageWidget::setUrlChange(const QString &url)
             }
         }
 
-        //myModel->setRootPath(oldPath);
+       // myModel->setRootPath(curPath);
         //-----------------------------------
         switch (mViewMode)
         {
@@ -640,9 +610,10 @@ void PageWidget::setUrlChange(const QString &url)
 
     if(restorRoot){
 
-        //  myModel->setFilter(myModel->filter());
-        myModel->setFilter( QDir::AllEntries | QDir::System|QDir::NoDotAndDotDot);
-        myModel->setRootPath(QDir::homePath());
+        myModel->setFilter(myModel->filter());
+        //myModel->setFilter( QDir::AllEntries | QDir::System|QDir::NoDotAndDotDot);
+       myModel->setRootPath(QDir::rootPath());
+
     }
 
 
@@ -718,6 +689,15 @@ void PageWidget::goForward()
  **************************************************************************************/
 void PageWidget::renameFiles()
 {
+  if(  selectedFiles().count()>1){
+   //  QStringList list=selectedFiles();
+
+      DialogRenameFiles *dlg=new DialogRenameFiles(selectedFiles());
+     if( dlg->exec())
+         delete  dlg;
+
+      return;
+  }
     if(mDoubleClickEdit){
 
         switch (focusedWidget()) {
@@ -1039,7 +1019,7 @@ void PageWidget::showOpenwithDlg(const QString &fileName)
         }
 
     }
-    openWithDlg=0;
+    openWithDlg=nullptr;
     delete openWithDlg;
 
 

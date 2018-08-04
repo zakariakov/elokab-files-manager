@@ -32,24 +32,7 @@
 #include <QDebug>
 #include <QApplication>
 
-//class Worker : public QObject {
-//    Q_OBJECT
 
-//public:
-//    Worker(const QFileInfo &info);
-//    ~Worker();
-
-//public slots:
-//    void process();
-
-//signals:
-//    void finished();
-//    void error();
-
-//private:
-//    // add your variables here
-//    QFileInfo fi;
-//};
 /**
  * @brief The Tab class السنة البرنامج
  */

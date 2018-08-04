@@ -315,8 +315,10 @@ void ItemDelegate::paintIconView(QPainter *painter, const QStyleOptionViewItem &
             painter->setOpacity(0.3);
             painter->setPen(option.palette.highlight().color());
             painter->drawRoundedRect(rectborder,qreal(2.0),qreal(2.0));
-            if(option.state & QStyle::State_Selected)
+            if(option.state & QStyle::State_Selected){
+               rectborder.adjust(1,1,0,0);
                painter->fillRect(rectborder,option.palette.highlight());
+            }
             painter->setOpacity(1.0);
         }
          //------------------------------------------------------------

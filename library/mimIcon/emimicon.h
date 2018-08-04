@@ -192,6 +192,7 @@ public:
     //!
     static QMap<QString, QString> trachInfo(const QString &fileName);
 
+    static bool isArchive(const QString &mim);
 
 private:
 

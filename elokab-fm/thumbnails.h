@@ -32,7 +32,7 @@ private:
     void createImageThumbnail();
     void createPdfThumbnail();
     void createVideoThumbnail();
-    QString videoInfo();
+    QMap<QString,QString> videoInfo();
 };
 
 //*********************THUMBNAILS**************************

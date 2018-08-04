@@ -17,21 +17,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include  "mainwindow.h"
+#include  "ui_mainwindow.h"
 //#include <EMimIcon>
-#include "dialogactions.h"
+#include  "dialogactions.h"
 #include  "messages.h"
 #include  "about/widgetabout.h"
-#include <QDebug>
-#include <QDialogButtonBox>
-#include <QMessageBox>
-#include <QMetaProperty>
-#include <QTextCodec>
-#include<QDesktopServices>
-#include<QUrl>
-#include<QClipboard>
-#include<QSplitter>
+#include  <QDebug>
+#include  <QDialogButtonBox>
+#include  <QMessageBox>
+#include  <QMetaProperty>
+#include  <QTextCodec>
+#include  <QDesktopServices>
+#include  <QUrl>
+#include  <QClipboard>
+#include  <QSplitter>
 
 QIcon MyIconProvider::icon(const QFileInfo &info)const
 {

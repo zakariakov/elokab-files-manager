@@ -130,19 +130,18 @@ void FileInformation::setFileName(const QString &file)
  **************************************************************************************/
 void FileInformation::setFileInformation(const QFileInfo &fi)
 {
-#ifdef DEBUG_APP
-    Messages::showMessage(Messages::BEGIN,"FileInformation::setFileInformation()");
-#endif
+
 
     QString mim=EMimIcon::mimeTyppe(fi);
-bool hasImage=false;
+    bool hasImage=false;
     QPixmap pix;
     int scal=128;
+
     if(mim.startsWith("video") || mim.endsWith("pdf"))
     {
 
         QMessageAuthenticationCode code(QCryptographicHash::Md5);
-        code.addData(mFile.toLatin1());
+        code.addData(mFile.toUtf8());
         QString md5Name=code.result().toHex();
         QString fileThumbnail=Edir::thumbnaileCachDir()+"/"+md5Name;
 
@@ -193,11 +192,6 @@ bool hasImage=false;
     //-------------------------------------------------------------------
     ui->labelInfo->setText(infoStr);
 
-
-
-#ifdef DEBUG_APP
-     Messages::showMessage(Messages::END,"FileInformation::setFileInformation()");
-#endif
 }
 
 /**************************************************************************************
@@ -208,20 +202,20 @@ QString FileInformation::getDirSize(const QString &path)
 
 
      QDir dir(path);
-     int folder=0,file=0;
+     int folders=0,files=0;
 
      foreach (QString subfile, dir.entryList(QDir::AllEntries|  QDir::NoDotAndDotDot|QDir::Hidden))
      {
           QFileInfo fi(dir.absoluteFilePath(subfile));
 
-          if(fi.isDir()) folder++;
+          if(fi.isDir()) folders++;
 
-          else file++;
+          else files++;
 
 
      }
 
-     return (QString::number(folder)+tr(" sub-folders ")+QString::number(file)+ tr(" files"));
+     return (QString::number(folders)+tr(" sub-folders ")+QString::number(files)+ tr(" files"));
 
      //return size;
 }

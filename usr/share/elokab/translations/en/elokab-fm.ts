@@ -541,6 +541,102 @@
     </message>
 </context>
 <context>
+    <name>DialogRenameFiles</name>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="30"/>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="48"/>
+        <source>Replace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="58"/>
+        <source>With</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="74"/>
+        <source>Ignore Extension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="82"/>
+        <source>Insert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="103"/>
+        <source>At</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="116"/>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="292"/>
+        <source>Before Extension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="126"/>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="302"/>
+        <source>After Extension</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="134"/>
+        <source>Numerical</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="148"/>
+        <source>Prefix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="171"/>
+        <source>Starting at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="200"/>
+        <source>Suffix</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="223"/>
+        <source>Keep Existing Names</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="269"/>
+        <source>Insert At</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="357"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="362"/>
+        <source>New name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.cpp" line="13"/>
+        <source>Preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.cpp" line="17"/>
+        <source>Undo Change</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DialogXdesktop</name>
     <message>
         <location filename="../../../../../common/filesutils/dialogxdesktop.ui" line="14"/>
@@ -631,55 +727,55 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="173"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="172"/>
         <source>Point To: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="174"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="173"/>
         <source>Type: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="177"/>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="179"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="176"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="178"/>
         <source>Size: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="181"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="180"/>
         <source>Modified: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="183"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="182"/>
         <source>User Permission: %1  %2  %3
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="189"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="188"/>
         <source>Width: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="190"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="189"/>
         <source>Height: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="224"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="218"/>
         <source> sub-folders </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="224"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="218"/>
         <source> files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -914,23 +1010,23 @@
 <context>
     <name>PageWidget</name>
     <message>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="437"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="438"/>
         <source>%1 Folders selected %2 Files selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="539"/>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="598"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="540"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="602"/>
         <source>this path is no valid </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="770"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="786"/>
         <source>Rename file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="771"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="787"/>
         <source>file Name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1342,7 +1438,7 @@
     <name>SettingsDlg</name>
     <message>
         <location filename="../../../../../elokab-fm/settingsdlg.ui" line="14"/>
-        <source>Dialog</source>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

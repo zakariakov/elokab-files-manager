@@ -137,6 +137,7 @@ void MyListView::setListViewMode(ViewMode mode)
     setResizeMode(QListView::Adjust);
     setViewMode(mode);
     setWrapping(true);
+    // setMouseTracking(true);
 }
 
 /**************************************************************************************
@@ -212,12 +213,12 @@ void MyListView::onItemEntered(QModelIndex index)
 
 void MyListView::viewEntered()
 {
-     setToolTip(QString());
-     QModelIndex index=   this->selectionModel()->currentIndex();
-     if(index.isValid())
+//     setToolTip(QString());
+//     QModelIndex index=   this->selectionModel()->currentIndex();
+//     if(index.isValid())
 //          emit fileEntered("file://"+mModel->filePath(index));
 //     else
-          emit fileEntered("");
+//          emit fileEntered("");
 }
 
 /**************************************************************************************

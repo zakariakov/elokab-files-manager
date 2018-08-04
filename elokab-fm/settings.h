@@ -100,7 +100,7 @@ class Settings : public QSettings
 
      public slots:
           /*!< حجم الايقونات */
-          int  viewIconSize(){return value("ViewIconSize",48).toInt();}
+          int  viewIconSize(){return value("ViewIconSize",64).toInt();}
           int  treeIconSize(){return value("TreeIconSize",24).toInt();}
           void setIconSize(int arg){emit iconSizeChanged(arg);}
 

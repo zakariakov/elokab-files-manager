@@ -44,13 +44,13 @@ void Thumbnails::directoryChanged(const QString &path)
 {
     // qDebug()<<__FILE__<<__FUNCTION__<<mCurentPath<<path;
     if(mCurentPath!=path){
+
         mCurentPath=path;
 
         while (myMap.count()>10) {
             QString   filename = myMap.firstKey();
             myMap.remove(filename);
         }
-        //  myMap.clear();
 
     }
 
@@ -60,7 +60,11 @@ void Thumbnails::directoryChanged(const QString &path)
 void Thumbnails::addFileName(const QFileInfo &info,const QString &type)
 {
 
-   if(mListExclude.contains(info.filePath())){ return; }
+   if(mListExclude.contains(info.filePath())) { return; }
+
+   if(type==D_PDF_TYPE && !canReadPdf       ) { return; }
+
+   if(type==D_VIDEO_TYPE && !canReadVideo   ) { return; }
 
    qDebug()<<__FILE__<<__FUNCTION__<<info.fileName()<<type;
 
@@ -93,14 +97,6 @@ void Thumbnails::startRender()
     QString   filename = myMap.firstKey();
     QString   type = myMap.first();
     QFileInfo info(filename);
-
-    // qDebug()<<__FILE__<<__FUNCTION__<<filename<<type;
-
-    if(type==D_PDF_TYPE && !canReadPdf) {
-        {myMap.remove(info.filePath()); return;} }
-
-    if(type==D_VIDEO_TYPE && !canReadVideo){
-        {myMap.remove(info.filePath()); return;} }
 
     mThread->setFile(info,type);
     mThread->start();
@@ -163,7 +159,7 @@ void Thread::createImageThumbnail()
         if(image.hasAlphaChannel())
             format="png";
 
-        if(image.save(fileThumbnail,format,50))   {
+        if(image.save(fileThumbnail,format,90))   {
             qDebug()<<__FILE__<<__FUNCTION__<<"image saved"<<mInfo.fileName();
             emit terminated(mInfo.filePath());
 
@@ -200,14 +196,14 @@ void Thread::createPdfThumbnail()
     }
 
     // if(!QFile::exists(fileThumbnail+"pdf-000.png")){
-    if(!QFile::exists(fileThumbnail+".jpg")){
+    if(!QFile::exists(fileThumbnail+".png")){
         // qDebug()<<__FUNCTION__<<">> start prossec"<<mInfo.fileName();
         QProcess p;
         QStringList list;
 
         list<<"-thumbnail"<<"x128"
-           <<"-quality"<<"50"
-          <<mInfo.filePath()+"[0]"<<fileThumbnail+".jpg";
+//           <<"-quality"<<"100"
+          <<mInfo.filePath()+"[0]"<<fileThumbnail+".png";
         p.start("convert",list);
 
         //          list<<"-l"<<"1"<<"-png"<<info.filePath()<<fileThumbnail+"pdf";
@@ -223,7 +219,7 @@ void Thread::createPdfThumbnail()
     }
 
     //QString name=fileThumbnail+"pdf-000.png";
-    QString name=fileThumbnail+".jpg";
+    QString name=fileThumbnail+".png";
 
     QImage imagePdf;
     if( imagePdf.load(name))
@@ -231,19 +227,25 @@ void Thread::createPdfThumbnail()
 
         //qDebug()<<__FUNCTION__<<">> load image "<<mInfo.fileName();
         // imagePdf=imagePdf.scaled(QSize(128,128),Qt::KeepAspectRatio,Qt::SmoothTransformation);
-        QFile::remove(name);
+
         QImage imageIco;
+        QImage imageBack(imagePdf.width(),imagePdf.height(),QImage::Format_ARGB32);
         imageIco.load(":/icons/x-pdf.svg");
-        QPainter p(&imagePdf);
-        p.drawImage(0,0,imageIco);
-        imagePdf.setText(D_KEY_DATETIME,mInfo.lastModified().toString("dd MM yyyy hh:mm:ss"));
+        QPainter p(&imageBack);
+
+         p.fillRect(imagePdf.rect(),QColor(Qt::white));
+
+        p.drawImage(imagePdf.rect(),imagePdf);
+        p.drawImage(1,1,imageIco);
+        imageBack.setText(D_KEY_DATETIME,mInfo.lastModified().toString("dd MM yyyy hh:mm:ss"));
         QByteArray text=mInfo.filePath().toUtf8();
-        imagePdf.setText(D_KEY_FILEPATH,text.toHex());
+        imageBack.setText(D_KEY_FILEPATH,text.toHex());
 
-        if(imagePdf.save(fileThumbnail,"jpg",90))   {
+        if(imageBack.save(fileThumbnail,"jpg",90))   {
             qDebug()<<__FILE__<<__FUNCTION__<<"pdf saved"<<mInfo.fileName();
-            emit terminated(mInfo.filePath());
 
+            emit terminated(mInfo.filePath());
+            QFile::remove(name);
         }// image.save
 
     }
@@ -267,16 +269,27 @@ void Thread::createVideoThumbnail()
         // qDebug()<<__FUNCTION__<<"exist"<<fileThumbnail;
         return ;
     }
-
+QString vtime;
     if(!QFile::exists(fileThumbnail+".video")){
 
-        QString pos=  videoInfo();
-        QStringList list;
-        list<<"-i"<<mInfo.filePath()<<"-n"<<"-t"<<"1"<<"-r"<<"1"
-           <<"-ss"<<pos<<"-s"<<"128x128"<<"-f"<<"image2"<<fileThumbnail+".video";
+        QMap<QString, QString> map=  videoInfo();
+        QString pos=map.value("Pos");
+         vtime=map.value("Time");
 
-        QStringList list2;
-        list2<<"-i"<<mInfo.filePath();
+        qDebug()<<"thymb"<<pos<<vtime;
+
+        QString scal="scale='if(gt(a,1/1),128,-1)':'if(gt(a,1/1),-1,128)'";
+        QStringList list;
+//ffmpeg -i ./kofar-bi-amirica.mp4 -y -ss 10.0 -vframes 1 -vf  scale="'if(gt(a,1/1),128,-1)':'if(gt(a,1/1),-1,128)'"   out.png
+//        list<<"-i"<<mInfo.filePath()<<"-y"<<"-t"<<"1"<<"-r"<<"1"
+//           <<"-ss"<<pos<<"-s"<<"128x128"<<"-f"<<"image2"<<fileThumbnail+".video";
+        list<<"-i"<<mInfo.filePath() /*Input File Name*/
+           <<"-y"                    /*Overwrite*/
+           <<"-ss"<<pos              /* seeks in this position*/
+           <<"-vframes"<<"1"         /* Num Frames */
+           <<"-f"<<"image2"          /* file format.  */
+           <<"-s"<<"128x128"         /*<<"-vf"<<scal*/
+           <<fileThumbnail+".video"; /*output file Name */
 
         QProcess p;
         //-------------------------------------------
@@ -289,11 +302,12 @@ void Thread::createVideoThumbnail()
         if (!p.waitForFinished()){   return ;  }
 
         QString err=p.readAllStandardError();
+        QString read=p.readAll();
         if(err.contains("not contain any stream"))
             emit excluded(mInfo.filePath());
 
         //        if(!err.isEmpty())
-        //            qDebug()<<__FUNCTION__<<">> error: "<<err;
+             //     qDebug()<<__FUNCTION__<<">> error: "<<err;
 
     }
 
@@ -301,19 +315,30 @@ void Thread::createVideoThumbnail()
     if( imagevideo.load(fileThumbnail+".video"))
     {
 
+      //  imagevideo= imagevideo.scaled(QSize(128,128),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+
         QImage imageIcon;
         imageIcon.load(":/icons/video.svg");
         QPainter p(&imagevideo);
-        p.drawImage(32,32,imageIcon);
+        int imX=(imagevideo.width()-imageIcon.width())/2;
+        int imY=(imagevideo.height()-imageIcon.height())/2;
+        p.drawImage(imX,imY,imageIcon);
+        QRect rect(0,imY+imageIcon.height(),imagevideo.width(),imagevideo.height()-(imY+imageIcon.height()));
+        p.setPen(QColor(Qt::black));
+        p.drawText(rect,Qt::AlignHCenter|Qt::AlignVCenter,vtime);
+        rect.adjust(1,1,1,1);
+        p.setPen(QColor(Qt::white));
+        p.drawText(rect,Qt::AlignHCenter|Qt::AlignVCenter,vtime);
+
         imagevideo.setText(D_KEY_DATETIME,mInfo.lastModified().toString("dd MM yyyy hh:mm:ss"));
         QByteArray text=mInfo.filePath().toUtf8();
         imagevideo.setText(D_KEY_FILEPATH,text.toHex());
 
-        if(imagevideo.save(fileThumbnail,"jpg",50))   {
+        if(imagevideo.save(fileThumbnail,"jpg",90))   {
             qDebug()<<__FILE__<<__FUNCTION__<<"video saved"<<mInfo.fileName();
             emit terminated(mInfo.filePath());
-
-        }
+            QFile::remove(fileThumbnail+".video");
+         }
 
     }
 
@@ -321,21 +346,26 @@ void Thread::createVideoThumbnail()
 
 }
 
-QString Thread::videoInfo()
+QMap<QString, QString> Thread::videoInfo()
 {
+
+    QMap<QString, QString> map;
     QStringList list2;
     list2<<"-i"<<mInfo.filePath();
     QString ret="5.0";
+    QString time=QString();
+    map["Pos"]=ret;
+    map["Time"]=time;
     QProcess p;
     //-------------------------------------------
     p.start("ffmpeg",list2);
-    if (!p.waitForStarted()) {   return ret ;  }
+    if (!p.waitForStarted()) {   return map ;  }
 
-    if (!p.waitForFinished()){   return ret;   }
+    if (!p.waitForFinished()){   return map;   }
 
     QString error=p.readAllStandardError();
 
-    if(error.isEmpty())return ret;
+    if(error.isEmpty())return map;
 
     QStringList list=error.split("\n");
 
@@ -343,26 +373,34 @@ QString Thread::videoInfo()
         if(s.trimmed().startsWith("Duration")){
             s=s.remove("Duration:");
             QString name=s.section(",",0,0);
+
             QStringList listtime=name.trimmed().split(":");
             if(listtime.count()>=3){
                 QString h=listtime.at(0);
                 QString m=listtime.at(1);
                 QString s=listtime.at(2);
 
-                if     (h.toFloat()>0  )    ret= "10.0";
-                else if(m.toFloat()>0  )    ret=    ret;
+                if     (h.toFloat()>0  )    {ret= "15.0"; time+=h+":"; }
+                else if(m.toFloat()>0  )    {ret=  "7.0"; }
                 else if(s.toFloat()<=1 )    ret=  "0.1";
                 else if(s.toFloat()<=5 )    ret=  "1.0";
                 else if(s.toFloat()<=10)    ret=  "3.0";
                 else if(s.toFloat()>10 )    ret=    ret;
 
-                qDebug()<<ret;
-                return ret;
+
+               time+=m+":";
+               time+=s.leftRef(2);
+
+                qDebug()<<"info"<<ret+"|"+time;;
+
+map["Pos"]=ret;
+map["Time"]=time;
+                return map;
             }
 
         }
 
     }
-    return ret;
+    return map;
 
 }
