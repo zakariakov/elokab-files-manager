@@ -81,6 +81,22 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
     ui->setupUi(this);
 
 
+    QColor color=this->palette().dark().color();
+    QColor color2=this->palette().light().color();
+    QColor color3=this->palette().shadow().color();
+    QString style=QString("QWidget #mainToolBar {"
+                          "\n      border:1px inset rgba(%7, %8, %9, 150);"
+                          " border-radius: 5px;"
+                          "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,"
+                          "stop:0 rgba(%4, %5, %6, 80),"
+                          "stop:1 rgba(%1, %2, %3, 80));"
+                          "}"
+                          )
+              .arg(color.red()).arg(color.green()).arg(color.blue())
+              .arg(color2.red()).arg(color2.green()).arg(color2.blue())
+              .arg(color3.red()).arg(color3.green()).arg(color3.blue());
+
+  // ui->mainToolBar->setStyleSheet(style);
     if(QIcon::themeName()=="hicolor"||QIcon::themeName().isEmpty())
     {
 

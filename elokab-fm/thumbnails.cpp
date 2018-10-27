@@ -276,9 +276,9 @@ QString vtime;
         QString pos=map.value("Pos");
          vtime=map.value("Time");
 
-        qDebug()<<"thymb"<<pos<<vtime;
+        qDebug()<<"thumb"<<pos<<vtime;
 
-        QString scal="scale='if(gt(a,1/1),128,-1)':'if(gt(a,1/1),-1,128)'";
+       // QString scal="scale='if(gt(a,1/1),128,-1)':'if(gt(a,1/1),-1,128)'";
         QStringList list;
 //ffmpeg -i ./kofar-bi-amirica.mp4 -y -ss 10.0 -vframes 1 -vf  scale="'if(gt(a,1/1),128,-1)':'if(gt(a,1/1),-1,128)'"   out.png
 //        list<<"-i"<<mInfo.filePath()<<"-y"<<"-t"<<"1"<<"-r"<<"1"

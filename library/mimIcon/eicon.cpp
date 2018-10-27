@@ -45,9 +45,9 @@ QString themePath(const QString &path)
     foreach (QString p, QIcon::themeSearchPaths())
     {
         QDir dirS;
-        qDebug()<<"themePath" << p+"/"+path;
+       // qDebug()<<"themePath" << p+"/"+path;
         if(dirS.exists(p+"/"+path)){
-            qDebug()<<"return" << p+"/"+path;
+          //  qDebug()<<"return" << p+"/"+path;
             return  p+"/"+path;
         }
 

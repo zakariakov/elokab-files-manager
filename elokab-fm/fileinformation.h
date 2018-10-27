@@ -22,7 +22,7 @@
 
 #include <QWidget>
 #include <QFileInfo>
-
+#include <QMap>
 namespace Ui {
 class FileInformation;
 }
@@ -51,7 +51,7 @@ class FileInformation : public QWidget
 
           //!
           QString mFile;
-
+bool canReadAudio;
      public slots:
 
           //!
@@ -62,7 +62,7 @@ class FileInformation : public QWidget
           //!
           QString getDirSize(const QString &path);
 
-
+QMap<QString, QString> audioInfo();
           //!
           void setFileInformation(const QFileInfo &fi);
 

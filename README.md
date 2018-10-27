@@ -18,7 +18,7 @@ Image and pdf and video thumbnails
 
 
 
-Depends :Qt5-svg , file ,udisk2
+Depends :Qt5-svg , file ,udisks2
 
 Optional dependencies: imagemagick , ffmpeg
 

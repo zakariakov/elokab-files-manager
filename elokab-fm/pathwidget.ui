@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>496</width>
+    <width>558</width>
     <height>37</height>
    </rect>
   </property>
@@ -19,105 +19,96 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayoutMain">
-   <property name="margin">
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
     <number>0</number>
    </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>2</number>
+   </property>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QLineEdit" name="lineEdit"/>
-     </item>
-     <item>
-      <widget class="QWidget" name="widgetPath" native="true">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>5</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>5</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
+    <widget class="QWidget" name="widgetContent" native="true">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="spacing">
+       <number>3</number>
+      </property>
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayoutContent">
+        <item>
+         <widget class="QLineEdit" name="lineEdit">
+          <property name="frame">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QToolButton" name="toolButtonEdit">
-     <property name="text">
-      <string>Edit</string>
-     </property>
-     <property name="shortcut">
-      <string>Ctrl+L</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="autoRaise">
-      <bool>true</bool>
-     </property>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolButtonEdit">
+        <property name="toolTip">
+         <string>Ctrl+L</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>…</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+L</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
+        <property name="autoRaise">
+         <bool>false</bool>
+        </property>
+        <property name="arrowType">
+         <enum>Qt::NoArrow</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>toolButtonEdit</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lineEdit</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>610</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>393</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>toolButtonEdit</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>widgetPath</receiver>
-   <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>610</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>299</x>
-     <y>51</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>toolButtonEdit</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>lineEdit</receiver>
-   <slot>setFocus()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>593</x>
-     <y>25</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>402</x>
-     <y>13</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

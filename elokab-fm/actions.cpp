@@ -1267,7 +1267,7 @@ void Actions::addArchive()
     }
 
     list.insert(0,archName+".tar.gz");
-    list.insert(0,"-cvf");
+    list.insert(0,"-zcvf");
 
     QProcess p;
     p.startDetached("tar",list,m_dirPath);

@@ -45,7 +45,7 @@ PlaceTree::PlaceTree(QWidget *parent) :
          setContextMenuPolicy(Qt::CustomContextMenu);
      setStyleSheet("QTreeView{"
                    "background-color: transparent;"
-                   " border-color: palette(Window);"
+                   "border-color: palette(Window);"
                    "}");
      setFrameShape(QFrame::NoFrame);
      setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Expanding);

@@ -53,7 +53,7 @@ class PathWidget : public QWidget
           explicit PathWidget(QWidget *parent = nullptr);
 
           ~PathWidget();
-
+void changeEvent(QEvent *event);
      protected:
 
 
@@ -74,7 +74,7 @@ class PathWidget : public QWidget
 
      private slots:
 
-
+void changeStyleSheet();
           //! عند الضغط على ادات النص
           void on_lineEdit_returnPressed();
 
@@ -118,7 +118,7 @@ class PathWidget : public QWidget
 
           /*!< التكميل التلقائي */
           QCompleter  *completer ;
-
+  QString mColor;
 };
 
 #endif // PATHWIDGET_H

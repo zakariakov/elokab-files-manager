@@ -24,6 +24,7 @@
 #include <QFileInfo>
 #include <QDateTime>
 #include <QMessageAuthenticationCode>
+#include <QProcess>
 //#ifdef DEBUG_APP
 //#include <QDebug>
 //#endif
@@ -42,7 +43,7 @@ FileInformation::FileInformation(QWidget *parent) :
 
      ui->setupUi(this);
      setContextMenuPolicy(Qt::CustomContextMenu);
-
+ canReadAudio=EMimIcon::findProgram("ffmpeg");
 #ifdef DEBUG_APP
      Messages::showMessage(Messages::END,"FileInformation::FileInformation()");
 #endif
@@ -134,6 +135,7 @@ void FileInformation::setFileInformation(const QFileInfo &fi)
 
     QString mim=EMimIcon::mimeTyppe(fi);
     bool hasImage=false;
+    bool hasAudio=false;
     QPixmap pix;
     int scal=128;
 
@@ -161,6 +163,8 @@ void FileInformation::setFileInformation(const QFileInfo &fi)
 
         }
 
+    }else if(canReadAudio && mim.startsWith("audio")){
+        hasAudio=true;
     }
 
     if(pix.isNull())
@@ -185,10 +189,28 @@ void FileInformation::setFileInformation(const QFileInfo &fi)
             . arg(fi.permission(QFile::ExeUser) ? "x" : "-");
 
     if(hasImage){
+        infoStr+="\n";
         infoStr+= QString(tr("Width: %1 \n")).arg(pix.width());
         infoStr+= QString(tr("Height: %1 \n")).arg(pix.height());
     }
 
+    if(hasAudio){
+        QMap<QString, QString> map=audioInfo();
+         infoStr+="\n";
+//         if(!map["TITLE"].isEmpty())
+//              infoStr+= QString(tr("Title: %1 \n")).arg(map["TITLE"]);
+        if(!map["Duration"].isEmpty())
+             infoStr+= QString(tr("Duration: %1 \n")).arg(map["Duration"].leftRef(8));
+        if(!map["ARTIST"].isEmpty())
+             infoStr+= QString(tr("Artist: %1 \n")).arg(map["ARTIST"]);
+        if(!map["ALBUM"].isEmpty())
+             infoStr+= QString(tr("Album: %1 \n")).arg(map["ALBUM"]);
+        if(!map["GENRE"].isEmpty())
+             infoStr+= QString(tr("Genre: %1 \n")).arg(map["GENRE"]);
+
+        if(QFile::exists(fi.path()+"/.AlbumArt.png"))
+             ui->labelPixmap->setPixmap(QPixmap(fi.path()+"/.AlbumArt.png"));
+    }
     //-------------------------------------------------------------------
     ui->labelInfo->setText(infoStr);
 
@@ -218,4 +240,75 @@ QString FileInformation::getDirSize(const QString &path)
      return (QString::number(folders)+tr(" sub-folders ")+QString::number(files)+ tr(" files"));
 
      //return size;
+}
+
+QMap<QString, QString> FileInformation::audioInfo()
+{
+QFileInfo fi(mFile);
+    QMap<QString, QString> map;
+    QStringList list2;
+    list2<<"-i"<<mFile;
+    if(!QFile::exists(fi.path()+"/.AlbumArt.png"))
+        list2 <<"-n"<<"-s"<<"128x128"<<fi.path()+"/.AlbumArt.png";
+
+    QProcess p;
+    //-------------------------------------------
+    p.start("ffmpeg",list2);
+    if (!p.waitForStarted()) {   return map ;  }
+
+    if (!p.waitForFinished()){   return map;   }
+
+    QString error=p.readAllStandardError();
+
+    if(error.isEmpty())return map;
+
+    QStringList list=error.split("\n");
+
+    foreach (QString s, list) {
+        s=s.trimmed();
+        if(s.startsWith("Duration")){
+            s=s.remove("Duration:");
+            QString name=s.section(",",0,0).trimmed();
+
+            map["Duration"]=name;
+
+        }
+
+        else if(s.startsWith("ARTIST")|| s.startsWith("artist")){
+
+            QString name=s.section(":",1).trimmed();
+
+            map["ARTIST"]=name;
+
+        }
+
+        else if(s.startsWith("ALBUM")|| s.startsWith("album")){
+
+            QString name=s.section(":",1).trimmed();
+
+            map["ALBUM"]=name;
+
+        }
+
+        else if(s.startsWith("GENRE" ) || s.startsWith("genre")){
+
+            QString name=s.section(":",1).trimmed();
+
+            map["GENRE"]=name;
+
+        }
+
+        else if(s.startsWith("TITLE" ) || s.startsWith("title")){
+
+            QString name=s.section(":",1).trimmed();
+
+            map["TITLE"]=name;
+
+        }
+
+    }
+
+
+    return map;
+
 }

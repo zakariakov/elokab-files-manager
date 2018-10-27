@@ -35,23 +35,9 @@ PathWidget::PathWidget(QWidget *parent) :
      ui(new Ui::PathWidget)
 {
      ui->setupUi(this);
-     QColor color=this->palette().dark().color();
-     QColor color2=this->palette().light().color();
-     QColor color3=this->palette().shadow().color();
-     QString style=QString("QWidget #widgetPath {"
-                           "\n      border:1px inset rgba(%7, %8, %9, 150);"
-                           " border-radius: 5px;"
-                           "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,"
-                           "stop:0 rgba(%4, %5, %6, 80),"
-                           "stop:1 rgba(%1, %2, %3, 80));"
-                           "}"
-                           )
-               .arg(color.red()).arg(color.green()).arg(color.blue())
-               .arg(color2.red()).arg(color2.green()).arg(color2.blue())
-               .arg(color3.red()).arg(color3.green()).arg(color3.blue());
-
-     setStyleSheet(style);
+     ui->toolButtonEdit->setObjectName("toolButtonEdit");
      // setLayoutDirection(Qt::LeftToRight);
+
      ui->toolButtonEdit->setIcon(EIcon::fromTheme("document-edit","edit-rename"));
      connect( ui->toolButtonEdit,SIGNAL(toggled(bool)),this,SLOT(toolbarVisible(bool)));
 
@@ -63,11 +49,13 @@ PathWidget::PathWidget(QWidget *parent) :
 //     connect(mactRoot,SIGNAL(triggered()),this,SLOT(goActionPath()));
 
      mToolBar=new QToolBar(this);
-     ui->horizontalLayout->addWidget(mToolBar);
+     ui->verticalLayoutContent->addWidget(mToolBar);
      mToolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
      mToolBar->setIconSize(QSize(16,16));
-
+     mToolBar->setContentsMargins(0,0,0,0);
      //wButtons=new WidgetButtons(ui->widget);
+
+
      actionsGroup = new QActionGroup(this);
 
      //wButtons->move(0,1);
@@ -87,6 +75,8 @@ PathWidget::PathWidget(QWidget *parent) :
      settings.beginGroup("Main");
      ui->toolButtonEdit->setChecked(settings.value("ShowEditLocation",false).toBool());
      settings.endGroup();
+
+      changeStyleSheet();
 
 }
 /*********************************************************************************
@@ -114,6 +104,57 @@ void  PathWidget::resizeEvent(QResizeEvent */*event*/)
 
 }
 
+void PathWidget::changeEvent(QEvent *event)
+{
+    if(event->type()==QEvent::StyleChange)
+    {
+        changeStyleSheet();
+    }
+}
+void PathWidget::changeStyleSheet()
+{
+
+    QColor color=this->palette().base().color();
+    QColor color2=this->palette().highlight().color();
+   QString strColor= color.name()+color2.name();
+   if(mColor==strColor)return;
+
+    mColor=strColor;
+   // QColor color3=this->palette().shadow().color();
+//    int h=ui->lineEdit->height()/2;
+//    int h2=mToolBar->height()/2;
+    int mH=ui->widgetContent->height()/2;
+    QString style=QString("QWidget #widgetContent {"
+                            "border:1px solid rgba(%4, %5, %6, 150);"
+                            "border-radius: %7px;"
+                            "background-color: rgb(%1, %2, %3);"
+                          "}"
+                          " QToolButton{ "
+                            " border:1px solid transparent;"
+                          "}"
+                          " QToolButton:hover{ "
+                            " border-bottom-color: rgba(%4, %5, %6, 150);"
+                          "}"
+                          " QToolButton:checked{ "
+                            " background-color:rgba(%4, %5, %6,100);"
+                            " border-bottom-color: rgba(%4, %5, %6, 255);"
+                          "}"
+
+                         " QToolButton#toolButtonEdit{ "
+                             " border: 0px ;"
+                             " background-color:rgb(%1, %2, %3);"
+                             "}"
+                          " QToolButton:checked#toolButtonEdit{"
+                             " background-color:rgba(%1, %2, %3,0);"
+                          "}"
+                          )
+              .arg(color.red()).arg(color.green()).arg(color.blue())
+              .arg(color2.red()).arg(color2.green()).arg(color2.blue())
+              .arg(mH);
+qDebug()<<"line height"<<mH;
+    setStyleSheet(style);
+
+}
 /*********************************************************************************
  *
  ********************************************************************************/
@@ -161,6 +202,9 @@ void PathWidget::on_lineEdit_returnPressed()
 
 void PathWidget::toolbarVisible(bool checked)
 {
+    mToolBar->setVisible(!checked);
+    ui->lineEdit->setVisible(checked);
+     ui->lineEdit->setFocus();
      if(!checked){
          QDir dir(ui->lineEdit->text());
          if(!dir.exists()){

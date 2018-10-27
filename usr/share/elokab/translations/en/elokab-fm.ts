@@ -616,12 +616,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="357"/>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="331"/>
+        <source>Select/Unselect All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="344"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Down&lt;/p&gt;&lt;p&gt;Shift+Down&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="347"/>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="350"/>
+        <source>Shift+Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="366"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Up&lt;/p&gt;&lt;p&gt;Shift+Up&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="369"/>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="372"/>
+        <source>Shift+Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="409"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="362"/>
+        <location filename="../../../../../elokab-fm/dialogrenamefiles.ui" line="414"/>
         <source>New name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -727,55 +762,79 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="172"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="176"/>
         <source>Point To: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="173"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="177"/>
         <source>Type: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="176"/>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="178"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="180"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="182"/>
         <source>Size: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="180"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="184"/>
         <source>Modified: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="182"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="186"/>
         <source>User Permission: %1  %2  %3
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="188"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="193"/>
         <source>Width: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="189"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="194"/>
         <source>Height: %1 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="218"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="203"/>
+        <source>Duration: %1 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="205"/>
+        <source>Artist: %1 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="207"/>
+        <source>Album: %1 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="209"/>
+        <source>Genre: %1 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="237"/>
         <source> sub-folders </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="218"/>
+        <location filename="../../../../../elokab-fm/fileinformation.cpp" line="237"/>
         <source> files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1010,23 +1069,23 @@
 <context>
     <name>PageWidget</name>
     <message>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="438"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="406"/>
         <source>%1 Folders selected %2 Files selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="540"/>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="602"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="508"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="570"/>
         <source>this path is no valid </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="786"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="754"/>
         <source>Rename file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="787"/>
+        <location filename="../../../../../elokab-fm/pagewidget.cpp" line="755"/>
         <source>file Name:</source>
         <translation type="unfinished"></translation>
     </message>
