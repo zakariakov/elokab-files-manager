@@ -40,11 +40,11 @@ linux-g++*: {
  applicationsData.files=usr/share/applications/*
  applicationsData.path=/usr/share/applications/
 
-  elokablib.files=usr/lib/elokab/*
- elokablib.path=/usr/lib/elokab
+#  elokablib.files=usr/lib/elokab/*
+# elokablib.path=/usr/lib/elokab
 
  INSTALLS +=    elokabConfig \
                 elokabData \
-                applicationsData \
-                elokablib
+                applicationsData
+#                elokablib
 

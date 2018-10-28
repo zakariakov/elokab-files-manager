@@ -1322,10 +1322,10 @@ QFileInfo info=actExtractHere->data().toString();
 
     if(!exist)
     {
-        prog=Edir::libDir()+"/atool";
-        arg="-x";
-        p.startDetached("perl",QStringList()<<prog<<arg<<info.filePath(),info.path());
-        return;
+//        prog=Edir::libDir()+"/atool";
+//        arg="-x";
+//        p.startDetached("perl",QStringList()<<prog<<arg<<info.filePath(),info.path());
+//        return;
     }
 
 
