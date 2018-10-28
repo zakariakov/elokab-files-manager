@@ -24,10 +24,10 @@ linux-g++*: {
 #                   INSTALL
 #---------------------------------------------
 
- MKDIR = mkdir -p /etc/xdg/elokab
- MKDIR = mkdir -p /usr/share/elokab
- MKDIR = mkdir -p /usr/share/applications
- MKDIR = mkdir -p /usr/lib/elokab
+# MKDIR = mkdir -p /etc/xdg/elokab
+# MKDIR = mkdir -p /usr/share/elokab
+# MKDIR = mkdir -p /usr/share/applications
+# MKDIR = mkdir -p /usr/lib/elokab
 
 #---config files---------
  elokabConfig.files =etc/xdg/elokab/*
