@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>433</width>
-    <height>331</height>
+    <height>366</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -94,7 +94,7 @@
        <item row="0" column="0">
         <widget class="QCheckBox" name="checkBoxPdfThumb">
          <property name="text">
-          <string>Pdf Thumbnails &quot;require imagemagick&quot;</string>
+          <string>Pdf Thumbnails</string>
          </property>
         </widget>
        </item>

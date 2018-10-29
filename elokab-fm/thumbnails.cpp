@@ -22,8 +22,8 @@ QString codeMd5(QString fileName)
 Thumbnails::Thumbnails(QObject *parent) : QObject(parent)
 {
     canReadPdf=EMimIcon::findProgram("convert");
-    //canReadPdf=EMimIcon::findProgram("pdfimages");
-    canReadVideo=EMimIcon::findProgram("ffmpeg");
+    canReadPdf=EMimIcon::findProgram("pdfimages");
+   // canReadVideo=EMimIcon::findProgram("ffmpeg");
 
     mThread=new Thread;
     // connect(mThread,SIGNAL(canceled(QString)),this,SLOT(cancel(QString)));
@@ -195,38 +195,38 @@ void Thread::createPdfThumbnail()
         }
     }
 
-    // if(!QFile::exists(fileThumbnail+"pdf-000.png")){
-    if(!QFile::exists(fileThumbnail+".png")){
+     if(!QFile::exists(fileThumbnail+"pdf-000.png")){
+    //if(!QFile::exists(fileThumbnail+".png")){
         // qDebug()<<__FUNCTION__<<">> start prossec"<<mInfo.fileName();
         QProcess p;
         QStringList list;
 
-        list<<"-thumbnail"<<"x128"
-//           <<"-quality"<<"100"
-          <<mInfo.filePath()+"[0]"<<fileThumbnail+".png";
-        p.start("convert",list);
-
-        //          list<<"-l"<<"1"<<"-png"<<info.filePath()<<fileThumbnail+"pdf";
-        //          p.start("pdfimages",list);
+//        list<<"-thumbnail"<<"x128"
+////           <<"-quality"<<"100"
+//          <<mInfo.filePath()+"[0]"<<fileThumbnail+".png";
+//        p.start("convert",list);
+ //qDebug()<<"thumbnail:"<<list;
+                  list<<"-l"<<"1"<<"-png"<<mInfo.filePath()<<fileThumbnail+"pdf";
+                  p.start("pdfimages",list);
         if (!p.waitForStarted()) {  return ; }
 
         if (!p.waitForFinished()){  return ; }
-        QString err=p.readAllStandardOutput();
+        QString err=p.readAllStandardOutput()+p.readAllStandardError();
         if(!err.isEmpty())
             qDebug()<<"error:"<<err;
         // qDebug()<<__FUNCTION__<<">> finish prossec"<<mInfo.fileName();
 
     }
 
-    //QString name=fileThumbnail+"pdf-000.png";
-    QString name=fileThumbnail+".png";
-
+   QString name=fileThumbnail+"pdf-000.png";
+    // QString name=fileThumbnail+".png";
+ qDebug()<<__FILE__<<__FUNCTION__<<fileThumbnail;
     QImage imagePdf;
     if( imagePdf.load(name))
     {
 
         //qDebug()<<__FUNCTION__<<">> load image "<<mInfo.fileName();
-        // imagePdf=imagePdf.scaled(QSize(128,128),Qt::KeepAspectRatio,Qt::SmoothTransformation);
+        imagePdf=imagePdf.scaled(QSize(128,128),Qt::KeepAspectRatio,Qt::SmoothTransformation);
 
         QImage imageIco;
         QImage imageBack(imagePdf.width(),imagePdf.height(),QImage::Format_ARGB32);
@@ -240,7 +240,7 @@ void Thread::createPdfThumbnail()
         imageBack.setText(D_KEY_DATETIME,mInfo.lastModified().toString("dd MM yyyy hh:mm:ss"));
         QByteArray text=mInfo.filePath().toUtf8();
         imageBack.setText(D_KEY_FILEPATH,text.toHex());
-
+ qDebug()<<__FILE__<<__FUNCTION__<<fileThumbnail;
         if(imageBack.save(fileThumbnail,"jpg",90))   {
             qDebug()<<__FILE__<<__FUNCTION__<<"pdf saved"<<mInfo.fileName();
 
