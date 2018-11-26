@@ -30,8 +30,8 @@ linux-g++*: {
 # MKDIR = mkdir -p /usr/lib/elokab
 
 #---config files---------
- elokabConfig.files =etc/xdg/elokab/*
- elokabConfig.path=/etc/xdg/elokab
+ elokabConfig.files =etc/xdg/*
+ elokabConfig.path=/etc/xdg/
 
 #---DATA files---------------
  elokabData.files=usr/share/elokab/*
