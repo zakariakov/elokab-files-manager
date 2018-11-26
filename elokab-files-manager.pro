@@ -31,7 +31,7 @@ linux-g++*: {
 
 #---config files---------
  elokabConfig.files =etc/xdg/elokab/*
- elokabConfig.path=/etc/xdg/
+ elokabConfig.path=/etc/xdg/elokab
 
 #---DATA files---------------
  elokabData.files=usr/share/elokab/*
