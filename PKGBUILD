@@ -4,7 +4,7 @@
 # then please put 'unknown'.
 #Maintainer: Abouzakaria <zkariakov@gmail.com>
 pkgname=elokab-files-manager
-pkgver=0.2
+pkgver=0.2.1
 pkgrel=1
 epoch=
 pkgdesc="A lightweight file manager for Linux desktops built in Qt."
