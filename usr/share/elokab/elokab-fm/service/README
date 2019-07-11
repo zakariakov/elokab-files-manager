@@ -1,23 +1,33 @@
 Servise Name
 ============
 
-ex : ark_ZIP_TAR__Archive.desktop
-ark=programme and "_" and any name and .desktop
 
 MimeType
 ========
 
-all/all = all files and folders
+all/all = all files and folders or any mimetype
+inode/directory=for directory
 
-or any mimetype
-ex: application/gzip
-
-ex:application/png
+ex: MimeType=inode/directory
+ex: MimeType=application/gzip
+ex:MimeType=application/png,application/jpg
 
 ARG
 ===
 
-%F= files
-%f= file
-%u or %U=file
-%n= filename
+%f= file path
+%n= file name
+
+
+Example:
+===========
+
+[Desktop Entry]
+Type=Service
+
+MimeType=video/*,audio/*
+Icon=audio-mp3
+Name=Convert to *.mp3
+
+#Exec=konsole --noclose -e  ffmpeg -hide_banner  -i  %f  -ab 50k -f mp3  "%n.mp3"
+Exec=elokab-terminal -e  ffmpeg -hide_banner  -i  %f  -ab 50k -f mp3  %n.mp3

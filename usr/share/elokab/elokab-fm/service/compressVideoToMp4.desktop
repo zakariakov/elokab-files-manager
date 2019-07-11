@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+
+MimeType=video/*
+Icon=video-mp4
+
+
+Name=Compress and Convert to *.mp4
+Name[hr]=Pretvoriti u *.mp4
+Name[ar]=ضغط وتحويل الى *.mp4
+Icon=video-mp4
+TryExec=ffmpeg
+#Exec=file=%f; konsole --noclose -e  ffmpeg -hide_banner -i %f -codec copy -strict -2 "${file%.*}.mp4"
+Exec= konsole --noclose -e  ffmpeg -hide_banner -i %f  "n%.mp4"

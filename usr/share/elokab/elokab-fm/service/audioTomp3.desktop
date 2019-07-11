@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+
+MimeType=application/ogg,application/x-ogg,application/vnd.rn-realmedia,application/vnd.rn-realmedia-vbr,application/mpeg4-muxcodetable,application/x-extension-m4a,application/x-extension-mp4,application/x-quicktime-media-link,application/x-quicktimeplayer,application/x-matroska,audio/x-matroska,application/vnd.apple.mpegurl,application/vnd.ms-asf,application/vnd.ms-wpl,application/sdp,video/*,audio/*,
+Icon=audio-mp3
+Actions=mp3
+
+Name=Convert to *.mp3
+Name[ar]=تحويل الى *.mp3
+Name[de]=Konvertiere zu *.mp3
+Name[hr]=Pretvoriti u *.mp3
+Icon=audio-mp3
+#Exec=konsole --noclose -e  ffmpeg -hide_banner  -i  %f  -ab 50k -f mp3  "%n.mp3"
+Exec=elokab-terminal -e  ffmpeg -hide_banner  -i  %f  -ab 50k -f mp3  %n.mp3

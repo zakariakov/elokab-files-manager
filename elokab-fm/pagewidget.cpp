@@ -198,7 +198,9 @@ void PageWidget::customContextMenu(QPoint)
     case WListView:
         selectedPath=myModel->filePath(listView->currentIndex());
         info=myModel->fileInfo(listView->currentIndex());
-        count=listSelectionModel->selectedIndexes().count();
+       // count=listSelectionModel->selectedIndexes().count();
+        count=selectedFiles().count();
+         qDebug()<<"count"<<count;
         break;
 
     case WTreeView:
@@ -206,6 +208,7 @@ void PageWidget::customContextMenu(QPoint)
         info=myModel->fileInfo(treeView->currentIndex());
         // count=listSelectionModel->selectedIndexes().count();
         count=listSelectionModel->selectedRows(0).count();
+        // count=selectedFiles().count();
         qDebug()<<"count"<<count;
         break;
 
@@ -214,6 +217,7 @@ void PageWidget::customContextMenu(QPoint)
         info=QFileInfo(selectedPath);
         count=searchView->selectedFilesCount();
         isSearch=true;
+          qDebug()<<"count"<<count;
         break;
 
     default:
@@ -293,11 +297,11 @@ void PageWidget::customContextMenu(QPoint)
             if(mim!= "application/x-executable" )
                 menu.addMenu(mActions->menuOpenWith(selectedPath, mim))  ;
         }
-         menu.addAction(mActions->openTerminalAction());
-        menu.addMenu(mActions->menuService(QStringList()<<m_dirPath,mim));
-    }else{ // count>1
+        menu.addAction(mActions->openTerminalAction());
         menu.addMenu(mActions->menuService(selectedFiles(),mim));
-    }
+    }/*else{ // count>1
+        menu.addMenu(mActions->menuService(selectedFiles(),mim));
+    }*/
     menu.addSeparator();
     // EDIT ----------------------------------------
     menu.addActions(mActions->menuEditePopup()->actions());

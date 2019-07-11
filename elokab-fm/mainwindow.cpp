@@ -97,15 +97,18 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
               .arg(color3.red()).arg(color3.green()).arg(color3.blue());
 
   // ui->mainToolBar->setStyleSheet(style);
+    qDebug()<<"mainwindow QIcon::themeName()"<<QIcon::themeName();
+;
     if(QIcon::themeName()=="hicolor"||QIcon::themeName().isEmpty())
     {
 
         mElokabSettings=new ElokabSettings(this);
         mElokabSettings->sync();
         connect(mElokabSettings,SIGNAL(iconThemeChanged()) ,this,SLOT(refreshIcons()));
-           loadIconThems();
+
 
     }
+      loadIconThems();
     mSettings=new Settings ;
 
     EMimIcon::setlocale(locale().name().section("_",0,0));
@@ -508,6 +511,20 @@ Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__,"End");
 /*****************************************************************************************************
  *
  *****************************************************************************************************/
+
+bool iconsExist(QString icnThem)
+{
+    QStringList list=QIcon::themeSearchPaths();
+      qDebug()<<"QIcon::themeSearchPaths():"<<list<<icnThem;
+
+      foreach (QString s, list) {
+          if(QFile::exists(s+"/"+icnThem+"/index.theme")){
+
+              return  true;
+          }
+      }
+      return false;
+}
 void MainWindow::loadIconThems()
 {
     Messages::debugMe(0,__LINE__,"MainWindow",__FUNCTION__);
@@ -525,10 +542,33 @@ void MainWindow::loadIconThems()
     }
 
 
-    if(icnThem=="hicolor"||icnThem.isEmpty()){
+ QIcon::setThemeName(icnThem);
+      QIcon icon=QIcon::fromTheme("folder");
+
+ if(icnThem=="hicolor"||icnThem.isEmpty()||!iconsExist(icnThem)){
+     QString gtkFile=QDir::homePath()+"/.gtkrc-2.0";
+     qDebug()<<"gtkFile:"<<gtkFile<<icnThem;
+     if(QFile::exists(gtkFile)){
+        QSettings setting( gtkFile,QSettings::IniFormat);
+         icnThem=  setting.value("gtk-icon-theme-name",QIcon::themeName()).toString();
+qDebug()<<"gtkFile2:"<<gtkFile<<icnThem;
+     }
+ }
+
+ if(icnThem=="hicolor"||icnThem.isEmpty()||!iconsExist(icnThem)){
+     QString gtkFile=QDir::homePath()+"/.config/gtk-3.0/settings.ini";
+     qDebug()<<"gtkFile:"<<gtkFile<<icnThem;
+     if(QFile::exists(gtkFile)){
+        QSettings setting( gtkFile,QSettings::IniFormat);
+         icnThem=  setting.value("gtk-icon-theme-name",QIcon::themeName()).toString();
+qDebug()<<"gtkFile3:"<<gtkFile<<icnThem;
+     }
+ }
+
+    if(icnThem=="hicolor"||icnThem=="Tango"||icnThem.isEmpty()||!iconsExist(icnThem)){
 
         QStringList failback;
-        failback <<"Adwaita"<< "oxygen"<< "Mint-X"<< "Humanity"<< "Tango"<< "Prudence-icon"<< "elementary"<< "gnome";
+        failback <<"Adwaita"<< "oxygen"<< "Mint-X"<< "Humanity"<< "Prudence-icon"<< "elementary"<< "gnome";
 
         QDir dir("/usr/share/icons/");
         foreach (QString s, failback)
@@ -543,6 +583,7 @@ void MainWindow::loadIconThems()
     }
     if(icnThem.isEmpty())
         icnThem="hicolor";
+
     QIcon::setThemeName(icnThem);
 
 

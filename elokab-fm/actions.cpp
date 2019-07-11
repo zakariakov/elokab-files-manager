@@ -495,6 +495,10 @@ Actions::Actions(Settings *setting, const QString &lc, QObject *parent) :
 
 
      QString serviceLocal=Edir::dataHomeAppDir()+"/service/";
+     QDir dir(serviceLocal);
+     if(!dir.exists())
+        dir.mkpath(serviceLocal);
+
      QString serviceUser=  Edir::dataAppDir()+"/service/";
      chargeAppService(serviceLocal);
      chargeAppService (serviceUser);
@@ -1115,25 +1119,26 @@ void Actions::addClosedTab(const QString &url)
  *********************************************************************/
 void Actions::chargeAppService(const QString &path)
 {
-
+qDebug()<<"chargeAppService"<<path;
     QDirIterator it(path, QStringList("*.desktop"),
                     QDir::Files | QDir::NoDotAndDotDot);
     while (it.hasNext())
     {
-         it.next();
-         QString prog=it.fileName().section("_",0,0);
-         if(!EMimIcon::findProgram(prog))
-             continue;
-         QString fileName=it.fileName();
-        bool exist=false;
-         foreach (QString s, mListService) {
-             if(QFile(s).fileName()==fileName)
-                 exist=true;
 
-         }
-         if(!exist)
+//         QString prog=it.fileName().section("_",0,0);
+//         if(!EMimIcon::findProgram(prog))
+//             continue;
+//         QString fileName=it.fileName();
+//        bool exist=false;
+//         foreach (QString s, mListService) {
+//             if(QFile(s).fileName()==fileName)
+//                 exist=true;
+
+//         }
+//         if(!exist)
+        qDebug()<<"chargeAppService"<<it.filePath();
             mListService.append(it.filePath());
-
+ it.next();
 
     }
 
@@ -1144,7 +1149,7 @@ void Actions::chargeAppService(const QString &path)
 QMenu *Actions::menuService(const QStringList &files,const QString &mim)
 {
 
-
+qDebug()<<"menuService files"<<files;
      foreach (QAction *act, mMenuService->actions()) {
           delete act;
      }
@@ -1153,29 +1158,55 @@ QMenu *Actions::menuService(const QStringList &files,const QString &mim)
      foreach (QString filePath, mListService)
      {
 
-          QSettings setting(filePath,QSettings::IniFormat);
-          setting.beginGroup("Desktop Entry");
-          setting.setIniCodec(QTextCodec::codecForName("UTF-8"));
-          QStringList list=setting.value("MimeType").toStringList();
-     //  qDebug()<<mim<<filePath;
-          if(list.contains(mim)||list.contains("all/all"))
-          {
-               QString icon=setting.value("Icon").toString();
-               QString txt=setting.value("Name").toString();
-               QString txtLng=setting.value("Name["+m_lC+"]",txt).toString();
-               QAction *act=new QAction(EIcon::fromTheme(icon),txtLng,this);
-               QString exec=setting.value("Exec").toString();
-               QString arg=files.join("\" \"");
-               exec.replace("%F","\""+arg+"\"");
-               exec.replace("%f","\""+files.at(0)+"\"");
-               exec.replace("%U","\""+files.at(0)+"\"");
-               QFileInfo fi(files.at(0));
-               exec.replace("%n","\""+fi.fileName()+"\"");
-               act->setData(exec);
-               connect(act,SIGNAL(triggered()),this,SLOT(execService()));
-               mMenuService->addAction(act);
-          }
-          setting.endGroup();
+         QSettings setting(filePath,QSettings::IniFormat);
+         setting.beginGroup("Desktop Entry");
+         setting.setIniCodec(QTextCodec::codecForName("UTF-8"));
+         QStringList list=setting.value("MimeType").toStringList();
+         // QString str=setting.value("MimeType").toString();
+         //QStringList list;
+         // list=str.split(";");
+
+         //  qDebug()<<mim<<filePath;
+
+         bool exist=false;
+         foreach (QString s, list) {
+             if(s==mim){exist=true;break;}
+             if(s=="all/all"){exist=true;break;}
+             if(s.endsWith("/*")){
+                 QString mimstart=mim.section("/",0,0);
+                 qDebug()<<"mimstart"<<mimstart;
+                 if(s.startsWith(mimstart)){exist=true;break;}
+             }
+         }
+         if(exist)
+         {
+             QString icon=setting.value("Icon").toString();
+             QString txt=setting.value("Name").toString();
+             QString txtLng=setting.value("Name["+m_lC+"]",txt).toString();
+             QAction *act=new QAction(EIcon::fromTheme(icon),txtLng,this);
+             QString exec=setting.value("Exec").toString();
+             QString arg=files.join("\" \"");
+             exec.replace("%F","\""+arg+"\"");
+             QString file=files.at(0).trimmed();
+
+             if(exec.startsWith("elokab-terminal"))
+                 exec.replace("%f"," \"'"+file+"'\" ");
+             else
+                 exec.replace("%f"," \""+file+"\" ");
+
+             QFileInfo fi(files.at(0));
+
+             if(exec.startsWith("elokab-terminal"))
+                 exec.replace("%n","\"'"+fi.baseName()+"'\"");
+             else
+                 exec.replace("%n","\""+fi.baseName()+"\"");
+
+             act->setData(exec);
+             qDebug()<<"act->setData"<<exec;
+             connect(act,SIGNAL(triggered()),this,SLOT(execService()));
+             mMenuService->addAction(act);
+         }
+         setting.endGroup();
 
      }
      return mMenuService;
@@ -1196,7 +1227,7 @@ void Actions::execService()
           QString data=action->data().toString();
 
           QProcess proc;
-
+qDebug()<<"data exec"<<data;
 
           proc.setWorkingDirectory(m_dirPath);
           QDir::setCurrent(m_dirPath);

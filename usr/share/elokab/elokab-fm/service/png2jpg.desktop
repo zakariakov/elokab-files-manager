@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+MimeType=image/png
+Name=JPEG image
+Name[it]=Immagine JPEG
+Name[ar]=تحويل الى *.jpg
+Icon=image-jpeg
+Exec= convert %f %n.jpg
+

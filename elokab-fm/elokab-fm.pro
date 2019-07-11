@@ -59,7 +59,8 @@ SOURCES += \
     settingsdlg.cpp \
     trash.cpp \
     thumbnails.cpp \
-    dialogrenamefiles.cpp
+    dialogrenamefiles.cpp \
+    dialogaddaction.cpp
 
 
 HEADERS  += \
@@ -93,7 +94,8 @@ HEADERS  += \
     settingsdlg.h \
     trash.h \
     thumbnails.h \
-    dialogrenamefiles.h
+    dialogrenamefiles.h \
+    dialogaddaction.h
 
 
 FORMS    += mainwindow.ui \
@@ -109,7 +111,8 @@ FORMS    += mainwindow.ui \
     ../common/filesutils/symlinkdlg.ui \
     ../common/filesutils/dialogxdesktop.ui \
     ../common/filesutils/dialogfoldericons.ui \
-    dialogrenamefiles.ui
+    dialogrenamefiles.ui \
+    dialogaddaction.ui
 
 RESOURCES += \
     icons.qrc
