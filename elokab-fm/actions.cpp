@@ -1124,21 +1124,10 @@ qDebug()<<"chargeAppService"<<path;
                     QDir::Files | QDir::NoDotAndDotDot);
     while (it.hasNext())
     {
-
-//         QString prog=it.fileName().section("_",0,0);
-//         if(!EMimIcon::findProgram(prog))
-//             continue;
-//         QString fileName=it.fileName();
-//        bool exist=false;
-//         foreach (QString s, mListService) {
-//             if(QFile(s).fileName()==fileName)
-//                 exist=true;
-
-//         }
-//         if(!exist)
-        qDebug()<<"chargeAppService"<<it.filePath();
-            mListService.append(it.filePath());
  it.next();
+        qDebug()<<"chargeAppService"<<it.filePath();
+        mListService.append(it.filePath());
+
 
     }
 

@@ -297,7 +297,10 @@ void PageWidget::customContextMenu(QPoint)
             if(mim!= "application/x-executable" )
                 menu.addMenu(mActions->menuOpenWith(selectedPath, mim))  ;
         }
+
         menu.addAction(mActions->openTerminalAction());
+        qDebug()<<"count"<<count<<"mim"<<mim<<selectedFiles().at(0);
+
         menu.addMenu(mActions->menuService(selectedFiles(),mim));
     }/*else{ // count>1
         menu.addMenu(mActions->menuService(selectedFiles(),mim));
